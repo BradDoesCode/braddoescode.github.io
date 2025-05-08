@@ -9,15 +9,28 @@
     <script defer src="script.js"></script>
 </head>
 
-<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition duration-300">
-    <header class="p-6 shadow-md flex justify-center space-x-8 items-center bg-gray-100 dark:bg-gray-800">
-        <div class="relative w-50 h-50 rounded-full overflow-hidden bg-red-500">
+<body id="background" class="text-gray-800 bg-slate-500 dark:text-gray-100 transition duration-300 relative">
+    <div id="grid-background" class="absolute inset-0 pointer-events-none"
+        style="background-color: black; background-image: linear-gradient(rgba(255, 255, 255, 0.292) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.292) 1px, transparent 1px); background-size: 40px 40px; background-position: 10px, 10px; opacity: 1; z-index: -50;">
+    </div>
+
+    <header class="p-6 flex justify-center space-x-16 items-center">
+        <div class="my-10 relative w-50 h-50 rounded-full overflow-hidden bg-red-500">
             <img src="assets/images/profile_image.jpg" alt="Profile Image" class="absolute -top-9">
         </div>
         <div>
-            <h1 class="text-4xl font-bold">Hi, I'm Bradley Barbrook</h1>
-            <h4 class="text-2xl">Flutter and Full-Stack Developer</h4>
-            <button>Get in touch</button>
+            <div class="relative">
+                <!-- Text -->
+                <h1 class="text-4xl font-bold relative z-10">Hi, I'm Bradley Barbrook</h1>
+                <div class="absolute bottom-0 left-20 w-64 h-4 rounded-full bg-blue-500 -z-10">
+                </div>
+                <div class="absolute -bottom-5 left-40 w-64 h-6 rounded-full bg-blue-500 -z-10">
+                </div>
+            </div>
+            <h4 class="text-2xl my-6">Flutter and Full-Stack Developer</h4>
+            <a href="#"><button type="button"
+                    class="ml-auto inline-flex px-6 py-2 bg-blue-500 rounded-md cursor-pointer">Get in
+                    touch</button></a>
         </div>
     </header>
 
@@ -65,5 +78,14 @@
         </section>
     </main>
 </body>
+<script>
+    document.addEventListener("scroll", () => {
+        const scrollPosition = window.scrollY; // Get the vertical scroll position
+        const maxScroll = 300; // Adjust this value to control the fade effect
+        const opacity = Math.max(1 - scrollPosition / maxScroll, 0); // Calculate opacity
+        document.getElementById("grid-background").style.opacity = opacity; // Apply opacity
+    });
+</script>
+
 
 </html>
