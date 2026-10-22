@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 // User site on GitHub Pages: served from the domain root, so no `base`.
@@ -17,5 +18,5 @@ export default defineConfig({
     // (style-src 'self') blocks. Code blocks are styled by global.css instead.
     syntaxHighlight: false,
   },
-  integrations: [sitemap()],
+  integrations: [mdx(), sitemap()],
 });
