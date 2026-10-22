@@ -1,0 +1,73 @@
+---
+title: "The festival app I learned Flutter on"
+summary: "I built the Flutter mobile app for Find Your Event, an events app for a start-up, learning Flutter and Dart as I went."
+date: 2026-10-22
+role: "Flutter app developer; helped build the Laravel backend"
+tech: ["Flutter", "Dart", "Laravel"]
+draft: true
+---
+
+import CaseFigure from '../../components/CaseFigure.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import strip from '../../assets/find-your-event-strip.jpg';
+import mapPhone from '../../assets/find-your-event-map.jpg';
+
+## What it was
+
+The other case studies here are about a platform I've been working on since April 2026. This one is from an earlier job, and it's about my first Flutter app.
+
+Find Your Event is a mobile app for festival and event-goers. We built it at Digitwell Solutions, where I worked from 2022 to 2025, for a start-up called <ExternalLink href="https://mapyourevent.co.uk/">Map Your Event</ExternalLink>.
+
+Organisers create their event in a web app, with the details, maps, guides and times, and push it to the mobile app. Attendees then use the app for:
+
+- event listings
+- an interactive map of the site
+- a personalised schedule
+- push notifications for updates
+- scanning a QR code to open an event
+
+Between them, those put an event's details, its map and its schedule in an attendee's pocket, and let the organiser keep them up to date.
+
+<CaseFigure
+  image={strip}
+  alt="An app store image strip showing the Find Your Event app: the event home screen, scanning a QR code, an event page, the interactive map and the activities schedule."
+  widths={[1700, 3322]}
+  sizes="1700px"
+  scroll
+  eager
+  regionLabel="Find Your Event app screens, scrolls sideways"
+>
+  Images from the app's Play Store listing. Scroll sideways to see all of it.
+</CaseFigure>
+
+The screens in those images use the details of a real festival, The Slipshod Gathering, which agreed to us setting up a demo to show what the app could do. {/* Source: confirmed by Brad in chat */}
+
+## My part
+
+I built the Flutter mobile app. It's the part attendees hold in their hands: the listings, the map, the schedule, the notifications and the QR code scanning described above. Flutter is a framework for building mobile apps, and Dart is the language it uses. I also helped build the Laravel backend, which is a PHP framework, working with the start-up's CEO. I'm grateful to them for the work we did on it together.
+
+I also built MYE Ticket Scanner, a companion ticket-scanning app on the Play Store. So my part was three pieces of work: the mobile app, a share of the backend, and the scanner.
+
+<CaseFigure
+  image={mapPhone}
+  alt="A phone screen from the Find Your Event app showing the interactive map of an event site, with coloured pins marking points around the site."
+  widths={[224, 424]}
+  sizes="224px"
+  shape="tall"
+>
+  The interactive map. Image from the app's Play Store listing.
+</CaseFigure>
+
+## What was hard
+
+It was my first Flutter app. I had to learn Flutter and Dart from scratch while building the real app to a timeline, so the learning and the delivering happened at the same time.
+
+That's a different thing from working through a tutorial. The app has to work, and it has to be ready on time, so each new idea had to turn into working code quickly. I'd rather say plainly that it was hard than pretend I arrived knowing the framework.
+
+## How it ended up
+
+Find Your Event never got the funding it needed to reach the market, so it didn't get the marketing push to put it in front of events. It's still on the <ExternalLink href="https://play.google.com/store/apps/details?id=uk.co.myeenterprises.findyourevent&hl=en_GB">Play Store</ExternalLink>.
+
+For me, it's where I learned Flutter properly, under real deadlines. That fits what's on [my CV](/cv/) for Digitwell: learning Flutter and Dart from scratch, and leading the adoption of Flutter to replace a long-standing legacy platform.
+
+It was all built before AI tools. Looking back, it's a useful marker for how differently I work now. {/* Source: confirmed by Brad in chat */}
