@@ -496,8 +496,8 @@ main .case-figure section.case-figure__scroll {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   border: 1px solid var(--hairline);
-  /* One row. The gap between groups of panels shows the page background, so a
-     break in the strip reads as intended. */
+  /* One row. The gap between panels shows the page background, so each
+     panel stands apart. */
   display: flex;
   gap: 1rem;
   background: var(--bg);

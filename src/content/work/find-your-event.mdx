@@ -11,8 +11,11 @@ draft: false
 
 import CaseFigure from '../../components/CaseFigure.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
-import panelsA from '../../assets/find-your-event-panels-a.jpg';
-import panelsB from '../../assets/find-your-event-panels-b.jpg';
+import panel1 from '../../assets/find-your-event-panel-1.jpg';
+import panel2 from '../../assets/find-your-event-panel-2.jpg';
+import panel6 from '../../assets/find-your-event-panel-6.jpg';
+import panel7 from '../../assets/find-your-event-panel-7.jpg';
+import panel8 from '../../assets/find-your-event-panel-8.jpg';
 
 ## What it was
 
@@ -33,30 +36,48 @@ Between them, those put an event's details, its map and its schedule in an atten
 <CaseFigure
   panels={[
     {
-      image: panelsA,
-      alt: 'Two Play Store panels for the Find Your Event app: the event home screen, listing two events, and the QR code scanner, captioned as a way to find and join events by scanning an event QR code.',
-      widths: [415, 830],
-      sizes: '(min-width: 40rem) 413px, 354px',
+      image: panel1,
+      alt: 'The Find Your Event home screen, listing two events.',
+      widths: [207, 415],
+      sizes: '(min-width: 40rem) 207px, 177px',
     },
     {
-      image: panelsB,
-      alt: 'Three more Play Store panels: the activities schedule for a festival, the festival\'s list of stalls, and a closing "Download now" panel.',
-      widths: [623, 1246],
-      sizes: '(min-width: 40rem) 620px, 531px',
+      image: panel2,
+      alt: 'The app\'s QR code scanner, with the caption "Find and join events near you by scanning an event QR code".',
+      widths: [207, 415],
+      sizes: '(min-width: 40rem) 207px, 177px',
+    },
+    {
+      image: panel6,
+      alt: 'A "Get Involved" panel about seeing what\'s happening, with the start of an activities schedule on a phone.',
+      widths: [207, 415],
+      sizes: '(min-width: 40rem) 207px, 177px',
+    },
+    {
+      image: panel7,
+      alt: 'The activities schedule, a list of activities for a festival, next to the start of a list of stalls.',
+      widths: [207, 415],
+      sizes: '(min-width: 40rem) 207px, 177px',
+    },
+    {
+      image: panel8,
+      alt: 'The festival\'s list of stalls, with a "Download now" heading.',
+      widths: [207, 415],
+      sizes: '(min-width: 40rem) 207px, 177px',
     },
   ]}
   scroll
   eager
   regionLabel="Find Your Event app screens, scrolls sideways"
 >
-  Images from the app's Play Store listing, in two groups. Scroll sideways to see all of them.
+  Images from the app's Play Store listing. Scroll sideways to see all of them.
 </CaseFigure>
 
 The activities and stalls screens in those images use the details of a real festival, The Slipshod Gathering, which agreed to us setting up a demo to show what the app could do. The home screen lists it alongside a second event. {/* Source: confirmed by Brad in chat */}
 
 ## My part
 
-I built the Flutter mobile app. It's the part attendees hold in their hands: the listings, the map, the schedule, the notifications and the QR code scanning described above. Flutter is a framework for building mobile apps, and Dart is the language you write them in. I also helped build the Laravel backend, working with our CEO. I'm grateful to them for the work we did on it together.
+I built the Flutter mobile app. It's the part attendees hold in their hands: the listings, the map, the schedule, the notifications and the QR code scanning described above. Flutter is a framework for building mobile apps, and Dart is the language you write them in. I also helped build the Laravel backend, working with our CEO.
 
 I also built MYE Ticket Scanner, a companion ticket-scanning app on the Play Store.
 
