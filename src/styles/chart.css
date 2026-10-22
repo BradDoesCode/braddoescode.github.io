@@ -8,15 +8,24 @@
 */
 
 .activity {
-  --marker-h: 2.75rem; /* the row above the plot that holds the marker label */
+  --tier: 2.1rem; /* one two-line marker label */
+  --marker-h: calc(var(--tier) * 2); /* the rows above the plot: April's label on the lower tier, August's on the upper */
+  --change-top: var(--tier);
   --plot-h: 8rem;
   --tick-h: 1.75rem;
+  --phase-h: 1.75rem;
   margin: 0 0 var(--space-4);
   max-width: none;
 }
 
 .activity--compact {
   --plot-h: 5.5rem;
+}
+
+/* With April's marker alone there is one tier. */
+.activity--single {
+  --marker-h: var(--tier);
+  --change-top: 0rem;
 }
 
 @media (min-width: 40rem) {
@@ -29,12 +38,12 @@
   }
 }
 
-/* Row 1 holds the marker label, row 2 the bars, row 3 the tick labels. There is
-   no y axis: the chart shows shape only. */
+/* Row 1 holds the marker labels, row 2 the bars, row 3 the tick labels and row 4
+   the phase labels. There is no y axis: the chart shows shape only. */
 .activity__chart {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: var(--marker-h) var(--plot-h) var(--tick-h);
+  grid-template-rows: var(--marker-h) var(--plot-h) var(--tick-h) var(--phase-h);
   font-family: var(--font-sans);
   font-size: var(--step--2);
   line-height: 1;
@@ -58,7 +67,8 @@
 }
 
 .activity__markers,
-.activity__ticks {
+.activity__ticks,
+.activity__phases {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
@@ -70,6 +80,10 @@
 
 .activity__ticks {
   grid-row: 3;
+}
+
+.activity__phases {
+  grid-row: 4;
 }
 
 .activity__svg {
@@ -98,19 +112,20 @@
   white-space: nowrap;
 }
 
-/* The marker is a hairline from the top of its row to the baseline, with its
-   label to the left of it. */
+/* Each marker is a hairline from the top of its tier to the baseline, with its
+   label to the left of it. April's sits on the lower tier and August's on the
+   upper one (the line is set below), so a label never meets the other line. */
 .activity__marker-line {
   position: absolute;
-  top: 0;
+  top: var(--marker-top);
   left: 0;
-  height: calc(var(--marker-h) + var(--plot-h));
+  height: calc(var(--marker-h) - var(--marker-top) + var(--plot-h));
   border-left: 1px solid var(--fg);
 }
 
 .activity__marker-label {
   position: absolute;
-  top: 0;
+  top: var(--marker-top);
   right: calc(100% + var(--space-2));
   text-align: right;
   white-space: nowrap;
@@ -118,8 +133,22 @@
   color: var(--fg);
 }
 
+.activity__marker--change {
+  --marker-top: var(--change-top);
+}
+
+.activity__marker--limits {
+  --marker-top: 0rem;
+}
+
 .activity__marker-text {
   display: block;
+}
+
+/* A quiet panel behind the weeks since April. It is not text and not a bar, so
+   it sits well under the bars' contrast needs. */
+.activity__band {
+  fill: var(--surface);
 }
 
 .activity__bar {
@@ -130,6 +159,35 @@
   fill: var(--accent);
 }
 
+/* Phase labels sit under a short rule that matches the bars above it. */
+.activity__phase {
+  border-top: 1px solid var(--border);
+}
+
+.activity__phase--after {
+  border-top: 2px solid var(--accent);
+}
+
+.activity__phase-label {
+  position: absolute;
+  top: var(--space-2);
+  left: 0;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* The later phase's label ends at the chart's right edge, so it stays inside
+   the page on a phone. */
+.activity__phase--after .activity__phase-label {
+  left: auto;
+  right: 0;
+}
+
+.activity__phase--after .activity__phase-label {
+  color: var(--accent);
+}
+
 .activity__caption {
   font-family: var(--font-sans);
   font-size: var(--step--1);
@@ -137,4 +195,119 @@
   margin: var(--space-3) 0 0;
   color: var(--muted);
   max-width: var(--measure);
+}
+
+/*
+  The story around the chart (components/ActivityStory.astro): a display
+  headline, a lede, the chart, a short table of what changed set in words, and
+  a small-type note on how the chart is made. Everything is text and rules; the
+  numbers an infographic would put here are deliberately not there.
+*/
+
+.activity-story > * {
+  max-width: none;
+}
+
+.activity-story__headline {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: calc(var(--step-3) * var(--display-scale));
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  max-width: 14em;
+}
+
+.activity-story--full .activity-story__headline {
+  font-size: calc(var(--step-4) * var(--display-scale));
+  line-height: 0.92;
+  margin-bottom: var(--space-4);
+}
+
+.activity-story__lede {
+  margin: 0 0 var(--space-5);
+  max-width: var(--measure);
+  font-size: var(--step-1);
+  line-height: 1.35;
+  font-weight: 350;
+}
+
+.activity-story--compact .activity-story__lede {
+  font-size: var(--step-0);
+  margin-bottom: var(--space-4);
+}
+
+/* What changed: label on the left, one line on the right, hairlines between,
+   like the rows of a stats table with words where the figures would be. */
+.activity-story__points {
+  margin: var(--space-5) 0 var(--space-4);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.activity-story__point {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--hairline);
+}
+
+.activity-story__point dt {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.activity-story__point dd {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: 1.3;
+  max-width: 32rem;
+}
+
+.activity-story__practice {
+  margin: 0 0 var(--space-5);
+  font-size: var(--step-0);
+}
+
+.activity-story__practice a {
+  display: inline-block;
+  padding-block: var(--space-1);
+}
+
+.activity-story__note {
+  margin: 0;
+  max-width: var(--measure);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.activity-story__note strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.activity-story__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  margin: var(--space-3) 0 0;
+}
+
+.activity-story__links a {
+  display: inline-block;
+  padding-block: var(--space-1);
+}
+
+@media (min-width: 40rem) {
+  .activity-story__point {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    align-items: baseline;
+  }
 }

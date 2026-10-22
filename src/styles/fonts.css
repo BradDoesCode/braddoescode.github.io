@@ -7,8 +7,8 @@
     italic  weight 200-800
   Characters outside Latin fall back to the next serif in --font-serif.
 
-  Cormorant Garamond, the display face for the name only (see --font-display in
-  tokens.css), from @fontsource/cormorant-garamond. Static, weight 600, Latin
+  Cormorant Garamond, the display face for the name and the Activity headline (see
+  --font-display in tokens.css), from @fontsource/cormorant-garamond. Static, weight 600, Latin
   subset, roman and italic (about 23 kB each). Nothing else on the site uses it.
 */
 

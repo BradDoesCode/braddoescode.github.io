@@ -1,0 +1,99 @@
+---
+// The Activity section's content: a headline, a lede, the annotated chart and,
+// in the full version, what changed and an honest note on how the chart is
+// made. The compact version (home page) is the headline, one line, the chart
+// and two links. The page supplies the section and its "Activity" label.
+//
+// Shape only: nothing here states a count, an average, a ratio or a figure of
+// any kind. The case-study link and the point that rests on it are drawn only
+// when that case study is published, so neither can point at a missing page.
+import ActivityChart from './ActivityChart.astro';
+import { getPublishedWork } from '../lib/work';
+
+interface Props {
+  variant?: 'full' | 'compact';
+}
+
+const { variant = 'full' } = Astro.props;
+const full = variant === 'full';
+const study = await getPublishedWork('job-visibility');
+const studyHref = study ? `/work/${study.id}/` : undefined;
+---
+
+<div class:list={['activity-story', `activity-story--${variant}`]}>
+  <h3 class="activity-story__headline">How the way I work changed</h3>
+  {/* Source: the lede wording follows Brad's approved caption (April 2026, then once usage limits were no longer a constraint). */}
+  {
+    full ? (
+      <p class="activity-story__lede">
+        Once we started building with AI agents in April 2026, my weeks looked different. They changed again from August, once
+        usage limits were no longer a constraint.
+      </p>
+    ) : (
+      <p class="activity-story__lede">
+        My weeks changed shape when we started building with AI agents in April 2026, and again once usage limits were no longer
+        a constraint.
+      </p>
+    )
+  }
+
+  <ActivityChart variant={variant} caption={!full} limits />
+
+  {
+    full && (
+      <>
+        <dl class="activity-story__points">
+          <div class="activity-story__point">
+            <dt>Pace</dt>
+            {/* Source: Brad's own phrase, also used on the home page. */}
+            <dd>Speed without compromise on quality.</dd>
+          </div>
+          <div class="activity-story__point">
+            <dt>Judgement</dt>
+            {/* Source: confirmed wording. */}
+            <dd>People make the design decisions and review what ships.</dd>
+          </div>
+          {study && (
+            <div class="activity-story__point">
+              <dt>Visibility</dt>
+              {/* Source: confirmed in the case study. */}
+              <dd>
+                Customer service can now <a href={studyHref}>see a stuck job before the customer asks about it</a>.
+              </dd>
+            </div>
+          )}
+          <div class="activity-story__point">
+            <dt>Hours</dt>
+            {/* Source: confirmed by Brad in chat */}
+            <dd>Same job, same hours.</dd>
+          </div>
+        </dl>
+
+        {study && (
+          <p class="activity-story__practice">
+            <a href={studyHref}>See it in practice: {study.data.title}</a>
+          </p>
+        )}
+
+        <p class="activity-story__note">
+          <strong>How this is measured.</strong>{' '}
+          {/* Source: Brad's approved caption, with "shown relative to the busiest week" from the chart's own summary. */}
+          Pull requests opened per week across my GitHub account, including private work, shown relative to the busiest week.
+          It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and
+          picked up from August, once usage limits were no longer a constraint.{' '}
+          {/* Source: confirmed by Brad in chat */}
+          Most of my work since April has been on newer projects, which grow faster than maintenance on a mature codebase.
+        </p>
+      </>
+    )
+  }
+
+  {
+    !full && (
+      <p class="activity-story__links">
+        <a href="/about-this-site/#activity">See the full chart and what changed</a>
+        {studyHref && <a href={studyHref}>See it in practice</a>}
+      </p>
+    )
+  }
+</div>

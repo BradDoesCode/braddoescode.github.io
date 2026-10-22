@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ActivityChart from '../components/ActivityChart.astro';
+import ActivityStory from '../components/ActivityStory.astro';
 import Hero from '../components/Hero.astro';
 import WorkList from '../components/WorkList.astro';
 import ExternalLink from '../components/ExternalLink.astro';
@@ -38,8 +38,7 @@ const featured = (await getWork()).slice(0, 3);
 
   <section aria-labelledby="activity-heading">
     <h2 id="activity-heading">Activity</h2>
-    <ActivityChart variant="compact" />
-    <p><a href="/about-this-site/#activity">See the full chart</a></p>
+    <ActivityStory variant="compact" />
   </section>
 
   <section aria-labelledby="elsewhere-heading">
