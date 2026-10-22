@@ -1,0 +1,67 @@
+---
+title: "The artwork nobody could find"
+summary: "We're building artwork upload, automatic checks and proof approval to replace a process of lost files and endless emails."
+date: 2026-10-22
+role: "Technical lead for artwork, from upload to proof"
+tech: ["Claude Code", "Full-stack web development"]
+draft: true
+---
+
+import ArtworkJourney from '../../components/ArtworkJourney.astro';
+import PreflightMessage from '../../components/PreflightMessage.astro';
+import PullQuote from '../../components/PullQuote.astro';
+
+## The problem
+
+Under our older systems, artwork could go wrong in a lot of ways. Customers sent the wrong file type. Files arrived without bleed, the extra image beyond the trim edge that stops a thin white line showing once a job is cut. Sorting it out meant endless emails back and forth. Proofs got lost. And jobs stalled while they waited on artwork.
+
+There was also an old automation system. It could easily go wrong, and it kept no logs of where it had. Files ended up lost, and someone had to find and fix them with nothing to tell them what had happened.
+
+A job waiting on artwork is one of the stuck jobs I described in [the first case study](/work/job-visibility/). This one goes a layer deeper, into how the artwork itself is handled.
+
+## My part
+
+I was in charge of how artwork is handled through the business, from the customer's upload through to proofing. It's the same platform I described in the first case study, and I'm still the technical lead for my area.
+
+What I built includes:
+
+- customer upload
+- automatic file checks (preflight)
+- proof generation
+- customer approval
+- revision rounds
+- notifications
+- a connection to the industry-standard preflight and proofing software the business uses
+- checkpoints that artwork has to pass at stages along the way
+
+Together, those cover the path artwork takes from the customer's upload to a proof they can approve. The drawing below shows how those pieces fit together. It uses a made-up piece of artwork and a generic print workflow, not anything taken from a real system.
+
+<ArtworkJourney />
+
+## How we approached it
+
+Artwork touches several teams, so I didn't work it out alone. IT, IT leadership, prepress and customer service were all involved, and I'm grateful to each of them for their time and help.
+
+One weakness of the old automation system was that it kept no logs. When a file got lost, there was nothing to show where or why. The new system logs every step, and the reason for anything that goes wrong, giving us a clear view of what needs to be fixed. {/* Source: confirmed by Brad in chat */}
+
+That's the direct answer to the old problem. Someone looking for a lost file now has a trail to follow, instead of starting from nothing.
+
+As with the rest of the platform, we build this with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships. I say more about that in [the first case study](/work/job-visibility/#how-we-approached-it).
+
+## What was hard
+
+The hardest part was learning the world around prepress. I covered that in [the first case study](/work/job-visibility/#what-was-hard), so I won't repeat it here.
+
+## Where it's at
+
+It's in testing, and it isn't live yet. So everything below is what we've seen in testing, not what we've seen in daily use.
+
+<PullQuote>Friendly, non-technical language: what they need to fix, or what we've fixed for them.</PullQuote>
+
+Preflight checks are almost instant. The results go back to the customer in friendly, non-technical language about their artwork: what they need to fix, or what we've fixed for them, such as bleed.
+
+The example below is made up, but it shows the idea. The first line is the kind of terse finding a check produces. The second is how we'd say the same thing to a customer.
+
+<PreflightMessage />
+
+It's too early to say more than that, and I'd rather say so than guess. Testing isn't the same as people relying on it every day, and I don't want to describe it as though it were.
