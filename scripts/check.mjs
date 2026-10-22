@@ -6,7 +6,7 @@
 //   3. output assertions  .nojekyll, CSP meta on every page, no inline
 //                         script/style, no third-party runtime resources,
 //                         no draft markers (UNVERIFIED, Source: comments),
-//                         and the activity data holds only dates and relative levels
+//                         and the activity data holds only dates, relative levels and rounded multipliers
 //   4. html-validate      HTML validity of every built page
 //   5. linkinator         internal links and fragments, against a local server
 //   6. pa11y-ci           WCAG 2.2 AA via axe and HTML_CodeSniffer, in light
@@ -89,10 +89,13 @@ const REQUIRED_CSP = [
 
 // The activity chart is built from src/data/activity.json, which `npm run stats`
 // writes from GitHub. It may hold dates, relative levels (whole numbers from 0 to 100, scaled to
-// the busiest week, so no raw count is ever published) and one of two
-// metric names, and nothing else: no repository or organisation names, titles,
+// the busiest week, so no raw count is ever published), one of two
+// metric names and a `multipliers` object of whole numbers from 1 to 1000 (each
+// period's average week against the average before April 2026, rounded), and
+// nothing else: no repository or organisation names, titles,
 // URLs or any other text from GitHub. Anything extra fails the build.
 const ACTIVITY_METRICS = ['contributions', 'pull-requests'];
+const ACTIVITY_MULTIPLIERS = ['aprilToJuly', 'fromAugust', 'fromApril'];
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function isIsoDate(value) {
@@ -118,8 +121,20 @@ async function activityProblems() {
   if (data === null || typeof data !== 'object' || Array.isArray(data)) {
     return [`${file}: must be an object`];
   }
-  if (!sameKeys(data, ['generatedAt', 'metric', 'from', 'weeks'])) {
-    problems.push(`${file}: top-level keys must be exactly generatedAt, metric, from, weeks (found ${Object.keys(data).join(', ') || 'none'})`);
+  if (!sameKeys(data, ['generatedAt', 'metric', 'from', 'multipliers', 'weeks'])) {
+    problems.push(`${file}: top-level keys must be exactly generatedAt, metric, from, multipliers, weeks (found ${Object.keys(data).join(', ') || 'none'})`);
+  }
+  const multipliers = data.multipliers;
+  if (multipliers === null || typeof multipliers !== 'object' || Array.isArray(multipliers)) {
+    problems.push(`${file}: multipliers must be an object`);
+  } else {
+    for (const [name, value] of Object.entries(multipliers)) {
+      if (!ACTIVITY_MULTIPLIERS.includes(name)) {
+        problems.push(`${file}: multipliers.${name} is not allowed (allowed: ${ACTIVITY_MULTIPLIERS.join(', ')})`);
+      } else if (!Number.isInteger(value) || value < 1 || value > 1000) {
+        problems.push(`${file}: multipliers.${name} must be an integer from 1 to 1000`);
+      }
+    }
   }
   if (!isIsoDate(data.generatedAt)) problems.push(`${file}: generatedAt is not an ISO date`);
   if (!ACTIVITY_METRICS.includes(data.metric)) {
@@ -256,7 +271,7 @@ async function assertOutput() {
   problems.push(...(await activityProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, activity data holds only dates and relative levels`);
+  if (!problems.length) out(`  ${pages.length} pages checked, activity data holds only dates, relative levels and rounded multipliers`);
   return problems.length === 0;
 }
 

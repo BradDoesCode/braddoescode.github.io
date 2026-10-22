@@ -2,6 +2,11 @@
   "generatedAt": "2026-10-22",
   "metric": "pull-requests",
   "from": "2025-06-02",
+  "multipliers": {
+    "aprilToJuly": 2,
+    "fromAugust": 20,
+    "fromApril": 9
+  },
   "weeks": [
     {
       "week": "2025-06-02",

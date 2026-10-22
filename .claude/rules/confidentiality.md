@@ -11,6 +11,7 @@ This repo and the site are public. Brad works for William Pollard & Co, and thei
 - Internal architecture specifics, infrastructure names, data models, schemas, endpoints, or screenshots of internal tools.
 - Internal metrics: volumes, revenue, savings, PR counts, commit counts, review counts, agent run counts, from private repos.
   - Exception: the activity chart may show the *shape* of Brad's weekly pull-request activity: relative values only, no counts, axis values or averages, in the UI or in committed data.
+  - Brad decided (22 October 2026) that the Activity section may also show rounded multipliers of pull requests per week, relative to Brad's own average before April 2026. Never counts, averages or totals.
 
 ## Where this applies
 
