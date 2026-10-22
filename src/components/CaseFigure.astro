@@ -24,14 +24,12 @@ interface Props {
   regionLabel?: string;
   /** Load straight away, for an image near the top of the page. */
   eager?: boolean;
-  /** 'strip' or 'tall': picks the display size in figures.css. */
-  shape?: 'strip' | 'tall';
 }
 
-const { image, alt, widths, sizes, scroll = false, regionLabel, eager = false, shape = 'strip' } = Astro.props;
+const { image, alt, widths, sizes, scroll = false, regionLabel, eager = false } = Astro.props;
 ---
 
-<figure class:list={['case-figure', `case-figure--${shape}`]}>
+<figure class="case-figure case-figure--strip">
   {
     scroll ? (
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">

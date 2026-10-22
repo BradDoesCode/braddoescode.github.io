@@ -485,7 +485,14 @@
 /* A wide strip: its own scrollable region, shown at a fixed height so the
    artwork stays legible, and scrolled sideways rather than shrunk. The region
    is a real stop for the keyboard, and the page never scrolls sideways. */
-.case-figure__scroll {
+/* It is a <section> (the region role), and the site styles every `main section`
+   as a grid with a label rail, a heavy top rule and spacing. From 52rem that rail
+   pushed the picture about 200px in from the left. Reset all of it here, with a
+   selector specific enough to win. */
+main .case-figure section.case-figure__scroll {
+  display: block;
+  margin: 0;
+  padding: 0;
   max-width: 100%;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -496,14 +503,6 @@
   max-width: none;
   width: auto;
   height: 24rem;
-}
-
-/* The map phone: a tall picture, kept small. */
-.case-figure--tall .case-figure__img {
-  width: 100%;
-  max-width: 14rem;
-  height: auto;
-  border: 1px solid var(--hairline);
 }
 
 @media (min-width: 40rem) {
