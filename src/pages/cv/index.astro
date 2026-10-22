@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
 import { cv } from '../../data/cv';
+import { staticPages } from '../../data/pages';
 import { formatDate, isoDate } from '../../lib/format';
 import '../../styles/cv.css';
 
@@ -9,8 +10,8 @@ const flagged = cv.experience.filter((role) => role.needsUpdate);
 ---
 
 <BaseLayout
-  title="CV"
-  description="Curriculum vitae of Bradley Barbrook, software developer: profile, skills, experience and education."
+  title={staticPages.cv.title}
+  description={staticPages.cv.description}
   displayName="roman"
 >
   <div class="cv">

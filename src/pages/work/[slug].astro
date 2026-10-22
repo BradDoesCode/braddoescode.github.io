@@ -15,7 +15,7 @@ const { title, summary, date, role, tech, draft } = entry.data;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={title} description={summary}>
+<BaseLayout title={title} description={summary} ogType="article">
   <article>
     <header class="page-head">
       <p class="eyebrow"><a href="/work/">All work</a></p>

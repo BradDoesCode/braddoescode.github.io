@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { staticPages } from '../data/pages';
 ---
 
-<BaseLayout title="Page not found" description="The page you asked for does not exist on this site." noindex>
+<BaseLayout title={staticPages['404'].title} description={staticPages['404'].description} noindex>
   <div class="page-head">
     <h1>Page not found</h1>
     <p class="lede">That address does not match a page on this site. It may have moved, or the link may be wrong.</p>

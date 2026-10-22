@@ -6,6 +6,8 @@ import nameItalic from '../../node_modules/@fontsource/cormorant-garamond/files/
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { contentSecurityPolicy, siteName } from '../data/site';
+import { OG_HEIGHT, OG_WIDTH } from '../lib/ogSize';
+import { cardPath } from '../lib/ogPath';
 
 interface Props {
   /** Page-specific title. Becomes "<title> | Bradley Barbrook". */
@@ -21,12 +23,19 @@ interface Props {
    * the CV, 'both' for the home hero, which also sets the surname in italic.
    */
   displayName?: 'roman' | 'both';
+  /** Open Graph type: 'article' for a case study, 'website' for everything else. */
+  ogType?: 'website' | 'article';
 }
 
-const { title, description, isHome = false, noindex = false, displayName } = Astro.props;
+const { title, description, isHome = false, noindex = false, displayName, ogType = 'website' } = Astro.props;
 
 const fullTitle = isHome ? `${siteName}, software developer` : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// The link-preview card for this page, drawn at build time (src/pages/og/).
+// Built from the `site` config, so a custom domain changes in one place only.
+const cardTitle = isHome ? siteName : title;
+const ogImage = new URL(cardPath(Astro.url.pathname), Astro.site);
+const ogImageAlt = `Preview card titled "${cardTitle}". ${description}`;
 ---
 
 <!doctype html>
@@ -53,11 +62,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical.href} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(OG_WIDTH)} />
+    <meta property="og:image:height" content={String(OG_HEIGHT)} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>

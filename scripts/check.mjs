@@ -5,6 +5,8 @@
 //   2. astro build        static build into dist/
 //   3. output assertions  .nojekyll, CSP meta on every page, no inline
 //                         script/style, no third-party runtime resources,
+//                         a link-preview card (og:image) on every page that
+//                         exists in dist/ as a 1200x630 PNG under 300 KB,
 //                         no draft markers (UNVERIFIED, Source: comments),
 //                         and the activity data holds only dates, relative levels and rounded multipliers
 //   4. html-validate      HTML validity of every built page
@@ -18,7 +20,7 @@
 // Exits non-zero if any stage fails. External links are listed but not
 // followed, because the check must not need a network.
 import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve } from 'node:path';
@@ -182,6 +184,79 @@ async function activityProblems() {
   return problems;
 }
 
+// Link-preview cards (src/pages/og/). Every page must name one in og:image,
+// as an absolute URL on its own origin; the PNG must exist in dist/ at that
+// path, be 1200x630 and stay under the size cap. The cards are same-origin
+// files fetched by the sharing site, never by the page, so the CSP is untouched.
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+const OG_MAX_BYTES = 300 * 1024;
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+function metaContent(html, attribute, name) {
+  for (const [tag] of html.matchAll(/<meta\s[^>]*>/gi)) {
+    const key = tag.match(new RegExp(`\\s${attribute}=["']([^"']*)["']`, 'i'))?.[1];
+    if (key === name) return tag.match(/\scontent=["']([^"']*)["']/i)?.[1];
+  }
+  return undefined;
+}
+
+async function ogProblems(html, name) {
+  const problems = [];
+  const image = metaContent(html, 'property', 'og:image');
+  if (!image) return [`${name}: no og:image meta tag`];
+  let url;
+  try {
+    url = new URL(image);
+  } catch {
+    return [`${name}: og:image is not an absolute URL: ${image}`];
+  }
+  const canonicalTag = html.match(/<link\s[^>]*rel=["']canonical["'][^>]*>/i)?.[0];
+  const canonical = canonicalTag?.match(/\shref=["']([^"']*)["']/i)?.[1];
+  if (!canonical) problems.push(`${name}: no canonical link`);
+  else if (new URL(canonical).origin !== url.origin) {
+    problems.push(`${name}: og:image is not on the page's own origin (${image})`);
+  }
+  if (url.protocol !== 'https:') problems.push(`${name}: og:image is not https (${image})`);
+  if (metaContent(html, 'property', 'og:image:width') !== String(OG_WIDTH)) {
+    problems.push(`${name}: og:image:width is not ${OG_WIDTH}`);
+  }
+  if (metaContent(html, 'property', 'og:image:height') !== String(OG_HEIGHT)) {
+    problems.push(`${name}: og:image:height is not ${OG_HEIGHT}`);
+  }
+  if (!metaContent(html, 'property', 'og:image:alt')) problems.push(`${name}: no og:image:alt`);
+  if (metaContent(html, 'name', 'twitter:card') !== 'summary_large_image') {
+    problems.push(`${name}: twitter:card is not summary_large_image`);
+  }
+  for (const property of ['og:title', 'og:description', 'og:type', 'og:url']) {
+    if (!metaContent(html, 'property', property)) problems.push(`${name}: no ${property} meta tag`);
+  }
+
+  const file = join(dist, decodeURIComponent(url.pathname));
+  if (!file.startsWith(dist + '/') || !url.pathname.endsWith('.png')) {
+    problems.push(`${name}: og:image path is not a PNG inside the site (${url.pathname})`);
+  } else if (!existsSync(file)) {
+    problems.push(`${name}: og:image points at ${url.pathname}, which is missing from dist/`);
+  } else {
+    const bytes = await readFile(file);
+    if (!bytes.subarray(0, 8).equals(PNG_SIGNATURE)) {
+      problems.push(`dist${url.pathname}: not a PNG file`);
+    } else {
+      // The IHDR chunk follows the signature: width, then height, big-endian.
+      const width = bytes.readUInt32BE(16);
+      const height = bytes.readUInt32BE(20);
+      if (width !== OG_WIDTH || height !== OG_HEIGHT) {
+        problems.push(`dist${url.pathname}: is ${width}x${height}, not ${OG_WIDTH}x${OG_HEIGHT}`);
+      }
+    }
+    const size = statSync(file).size;
+    if (size > OG_MAX_BYTES) {
+      problems.push(`dist${url.pathname}: is ${Math.round(size / 1024)} KB, over the ${OG_MAX_BYTES / 1024} KB cap`);
+    }
+  }
+  return problems;
+}
+
 async function assertOutput() {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -215,6 +290,8 @@ async function assertOutput() {
         fail(`${name}: CSP allows unsafe-inline or unsafe-eval`);
       }
     }
+
+    problems.push(...(await ogProblems(html, name)));
 
     // Draft markers belong in source only. In .astro files they are JSX
     // comments ({/* UNVERIFIED: ask Brad */}), which the build drops; an HTML
@@ -271,7 +348,7 @@ async function assertOutput() {
   problems.push(...(await activityProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, activity data holds only dates, relative levels and rounded multipliers`);
+  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; activity data holds only dates, relative levels and rounded multipliers`);
   return problems.length === 0;
 }
 

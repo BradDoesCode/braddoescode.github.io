@@ -2,12 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ActivityStory from '../../components/ActivityStory.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
+import { staticPages } from '../../data/pages';
 import { repoUrl } from '../../data/site';
 ---
 
 <BaseLayout
-  title="About this site"
-  description="How this site is built, and the part Claude Code and I each play in building it."
+  title={staticPages['about-this-site'].title}
+  description={staticPages['about-this-site'].description}
   displayName="roman"
 >
   <div class="page-head">

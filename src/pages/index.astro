@@ -5,6 +5,7 @@ import Hero from '../components/Hero.astro';
 import WorkList from '../components/WorkList.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import { cv } from '../data/cv';
+import { staticPages } from '../data/pages';
 import { githubUrl } from '../data/site';
 import { getWork, hasPublishedWork } from '../lib/work';
 
@@ -13,8 +14,8 @@ const featured = (await getWork()).slice(0, 3);
 ---
 
 <BaseLayout
-  title="Home"
-  description="Portfolio of Bradley Barbrook, a software developer in Barnstaple, Devon."
+  title={staticPages.home.title}
+  description={staticPages.home.description}
   isHome
   displayName="both"
 >
