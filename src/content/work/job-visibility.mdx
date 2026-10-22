@@ -1,5 +1,5 @@
 ---
-title: "From chasing jobs to knowing where they are"
+title: "The job nobody knew was stuck"
 summary: "We're building a new internal platform so the business hears about a stuck job before the customer has to chase it."
 date: 2026-10-22
 role: "Technical lead and sole developer for my area"
@@ -8,6 +8,9 @@ draft: true
 ---
 
 import JobJourney from '../../components/JobJourney.astro';
+import ReactiveProactive from '../../components/ReactiveProactive.astro';
+import ProblemToFeature from '../../components/ProblemToFeature.astro';
+import PullQuote from '../../components/PullQuote.astro';
 
 ## The problem
 
@@ -20,6 +23,8 @@ The drawing below shows the idea with a made-up job. It's a generic print workfl
 <JobJourney />
 
 The aim was to move from that reactive model to a proactive one. The system should tell people where a job is, and highlight any issue to the person who needs to know about it.
+
+<ReactiveProactive />
 
 ## My part
 
@@ -51,6 +56,8 @@ The hardest part wasn't the building. It was defining the issues with the old sy
 
 Someone describes a problem from their day-to-day work. My job is to turn that into a feature that actually fixes it, which is a different thing from a feature that sounds like it should. Getting from the first to the second took the most care.
 
+<ProblemToFeature />
+
 I was also in charge of how artwork is handled through the business, from the customer's upload through to proofing, and that was the steepest part. To get it right, I had to learn how prepress and production really work: what happens to a file after a customer uploads it, and what has to be true before a proof can go out. That took time, and a lot of questions to the people who do it every day.
 
 ## Where it's at
@@ -60,5 +67,7 @@ It's not fully in use yet.
 Some screens are live and in daily use. The customer service dashboard is one: it gives better visibility of jobs going through the business. The customer portal and the production pipelines are built and in testing.
 
 Because people use the live screens, we hear quickly what works and what doesn't, and we change them quickly in response. A screen that isn't quite right doesn't have to stay that way for long.
+
+<PullQuote>The business should hear about a problem with a job from its own systems, not from a customer who had to chase.</PullQuote>
 
 It's too early to say how much the platform as a whole has changed things, and I'd rather say that than guess. But we're already seeing benefits from the customer service dashboard and the alerts: customer service can now see a stuck job before the customer asks about it, and they're alerted to it. And the aim hasn't changed: the business should hear about a problem with a job from its own systems, not from a customer who had to chase.
