@@ -1,6 +1,6 @@
 ---
 import ExternalLink from './ExternalLink.astro';
-import { githubUrl } from '../data/site';
+import { githubUrl, linkedinUrl } from '../data/site';
 ---
 
 <footer class="site-footer">
@@ -8,6 +8,7 @@ import { githubUrl } from '../data/site';
     <p>Built with Astro and Claude Code. No analytics, no cookies.</p>
     <ul>
       <li><ExternalLink href={githubUrl}>GitHub</ExternalLink></li>
+      <li><ExternalLink href={linkedinUrl}>LinkedIn</ExternalLink></li>
       <li><a href="/about-this-site/">About this site</a></li>
     </ul>
   </div>

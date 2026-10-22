@@ -218,4 +218,20 @@
     font-size: 0.9em;
     overflow-wrap: anywhere;
   }
+
+  /* In the heading, keep each link and its address together, so a long one
+     moves to the next line whole instead of breaking mid-address. */
+  .cv__head .meta:not(.cv__updated) {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.1em;
+  }
+
+  .cv__head .meta:not(.cv__updated) > span[aria-hidden='true'] {
+    display: none;
+  }
+
+  .cv__head .meta a {
+    white-space: nowrap;
+  }
 }

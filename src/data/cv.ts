@@ -6,6 +6,11 @@
 // location is town and county only. Do not add contact details here without
 // Brad confirming which ones are meant to be public.
 
+// The LinkedIn address is defined here, because this file must stay free of
+// imports (scripts/cv-flags.mjs loads it on its own), and site.ts re-exports it
+// so the footer and the home page use the same one.
+export const linkedinUrl = 'https://www.linkedin.com/in/brad-barbrook-89896829a';
+
 export interface CvLink {
   label: string;
   url: string;
@@ -76,7 +81,10 @@ export const cv: Cv = {
   basics: {
     name: 'Bradley Barbrook',
     location: 'Barnstaple, Devon',
-    links: [{ label: 'GitHub', url: 'https://github.com/BradDoesCode' }],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/BradDoesCode' },
+      { label: 'LinkedIn', url: linkedinUrl },
+    ],
   },
 
   profile: [

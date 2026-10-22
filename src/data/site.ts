@@ -1,6 +1,7 @@
 // Site-wide constants. Personal facts for the CV live in cv.ts, not here.
 export const siteName = 'Bradley Barbrook';
 export const githubUrl = 'https://github.com/BradDoesCode';
+export { linkedinUrl } from './cv';
 export const repoUrl = 'https://github.com/BradDoesCode/braddoescode.github.io';
 
 export const nav = [

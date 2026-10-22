@@ -6,7 +6,7 @@ import WorkList from '../components/WorkList.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import { cv } from '../data/cv';
 import { staticPages } from '../data/pages';
-import { githubUrl } from '../data/site';
+import { githubUrl, linkedinUrl } from '../data/site';
 import { getWork, hasPublishedWork } from '../lib/work';
 
 const showWork = await hasPublishedWork();
@@ -47,6 +47,7 @@ const featured = (await getWork()).slice(0, 3);
     <ul class="link-list">
       <li><a href="/cv/">Read my CV</a></li>
       <li><ExternalLink href={githubUrl}>My GitHub profile</ExternalLink></li>
+      <li><ExternalLink href={linkedinUrl}>My LinkedIn profile</ExternalLink></li>
       <li><a href="/about-this-site/">How this site is built</a></li>
     </ul>
   </section>
