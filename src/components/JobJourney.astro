@@ -1,0 +1,106 @@
+---
+// An illustrative drawing of a print job's journey through typical print
+// milestones, with one step stuck and an alert going to customer service. It is
+// freshly drawn, generic and labelled as illustrative. It is not taken from any
+// real system.
+//
+// Same approach as ActivityChart: the markers are an inline SVG, every label is
+// HTML laid out in rows that line up with them (axe cannot check the contrast of
+// SVG text), and nothing carries a style attribute or needs a script. Colours
+// and sizes come from classes in journey.css, so light and dark follow the
+// tokens. The drawing is a single column that stacks the same way at every width.
+// The labels are hidden from screen readers; the SVG's <desc> says the same
+// things in words.
+//
+// ROW and STUCK are in SVG units, where 16 units is 1rem. They must match
+// --journey-row and --journey-stuck in journey.css (44 = 2.75rem, 112 = 7rem).
+const ROW = 44;
+const STUCK = 112;
+const WIDTH = 24;
+const CX = WIDTH / 2;
+
+const steps = [
+  'Order placed',
+  'Artwork received',
+  'Preflight and proof',
+  'Proof approved',
+  'Printing',
+  'Finishing',
+  'Despatched',
+  'Delivered',
+];
+const stuckIndex = 1;
+
+// Top of each row, and the centre of its marker (level with the label).
+let top = 0;
+const rows = steps.map((label, i) => {
+  const height = i === stuckIndex ? STUCK : ROW;
+  const row = {
+    label,
+    stuck: i === stuckIndex,
+    done: i < stuckIndex,
+    cy: top + ROW / 2,
+  };
+  top += height;
+  return row;
+});
+const height = top;
+const first = rows.at(0)?.cy ?? 0;
+const stuckY = rows[stuckIndex]?.cy ?? 0;
+const last = rows.at(-1)?.cy ?? 0;
+
+const title = 'A print job stuck while waiting for customer artwork';
+const desc =
+  'Illustrative, not taken from any real system. A vertical list of eight typical print milestones: ' +
+  steps.join(', ') +
+  '. The first is done. The second, artwork received, is flagged as stuck because the job is waiting on customer artwork, and an alert goes to customer service. The remaining steps have not been reached.';
+---
+
+<figure class="journey">
+  <p class="journey__tag">Illustrative: not taken from any real system</p>
+  <div class="journey__body">
+    <svg class="journey__svg" viewBox={`0 0 ${WIDTH} ${height}`} role="img" aria-labelledby="journey-title journey-desc">
+      <title id="journey-title">{title}</title>
+      <desc id="journey-desc">{desc}</desc>
+      <line class="journey__line journey__line--done" x1={CX} y1={first} x2={CX} y2={stuckY} />
+      <line class="journey__line journey__line--todo" x1={CX} y1={stuckY} x2={CX} y2={last} />
+      {
+        rows.map((r) =>
+          r.stuck ? (
+            <g class="journey__stuck">
+              <circle class="journey__stuck-disc" cx={CX} cy={r.cy} r="10" />
+              <line class="journey__stuck-bar" x1={CX} y1={r.cy - 5} x2={CX} y2={r.cy + 1} />
+              <circle class="journey__stuck-dot" cx={CX} cy={r.cy + 5} r="1.5" />
+            </g>
+          ) : (
+            <circle class:list={['journey__dot', r.done ? 'journey__dot--done' : 'journey__dot--todo']} cx={CX} cy={r.cy} r="6" />
+          ),
+        )
+      }
+    </svg>
+    <ol class="journey__steps" aria-hidden="true">
+      {
+        rows.map((r) => (
+          <li class:list={['journey__step', { 'journey__step--stuck': r.stuck, 'journey__step--todo': !r.done && !r.stuck }]}>
+            <span class="journey__label">{r.label}</span>
+            {r.stuck && (
+              <>
+                <span class="journey__flag">Stuck: waiting on customer artwork</span>
+                <span class="journey__alert">
+                  <span class="journey__alert-kind">Alert</span>
+                  <svg class="journey__alert-arrow" viewBox="0 0 16 10" focusable="false">
+                    <path d="M0 5 H14 M10 1 L14 5 L10 9" />
+                  </svg>
+                  <span>Customer service</span>
+                </span>
+              </>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <figcaption class="journey__caption">
+    A made-up print job moving through typical print milestones. When one step stalls, the person who needs to know is told, rather than the customer having to chase.
+  </figcaption>
+</figure>

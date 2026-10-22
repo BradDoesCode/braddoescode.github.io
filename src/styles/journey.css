@@ -1,0 +1,166 @@
+/*
+  The job journey drawing (components/JobJourney.astro). The markers are an
+  inline SVG; every label is HTML in rows that line up with them, so axe can
+  check its contrast. Nothing carries a style attribute, so the strict CSP
+  holds. Colours are tokens, so light and dark come for free. Shape carries the
+  meaning as well as colour: a small solid dot is done, a larger accent disc
+  with an exclamation mark is stuck, a hollow dot is still to come.
+
+  Sizes are in rem so the SVG and the labels scale together: 16 SVG units are
+  1rem. --journey-row and --journey-stuck must match ROW and STUCK in the
+  component.
+*/
+
+.journey {
+  --journey-row: 2.75rem;
+  --journey-stuck: 7rem;
+  --journey-col: 1.5rem;
+  margin: var(--space-5) 0;
+  max-width: none;
+}
+
+.journey__tag {
+  display: inline-block;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+
+.journey__body {
+  display: grid;
+  grid-template-columns: var(--journey-col) minmax(0, 1fr);
+  column-gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  color: var(--fg);
+}
+
+.journey__svg {
+  display: block;
+  width: var(--journey-col);
+  height: calc(7 * var(--journey-row) + var(--journey-stuck));
+  overflow: visible;
+}
+
+.journey__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.journey__step {
+  height: var(--journey-row);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+  column-gap: var(--space-2);
+  line-height: 1.3;
+}
+
+.journey__step::before {
+  content: none;
+}
+
+.journey__step--stuck {
+  height: var(--journey-stuck);
+}
+
+.journey__step--todo {
+  color: var(--muted);
+}
+
+.journey__label {
+  display: flex;
+  align-items: center;
+  flex: 0 0 100%;
+  height: var(--journey-row);
+  font-size: var(--step-0);
+}
+
+.journey__step--stuck .journey__label {
+  font-weight: 600;
+}
+
+.journey__flag {
+  flex: 0 0 100%;
+  margin-top: calc(-1 * var(--space-2));
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.journey__alert {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px dashed var(--accent);
+  color: var(--fg);
+}
+
+.journey__alert-kind {
+  font-weight: 600;
+}
+
+.journey__alert-arrow {
+  display: block;
+  width: 1rem;
+  height: 0.625rem;
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1.5;
+}
+
+.journey__line {
+  stroke-width: 2;
+}
+
+.journey__line--done {
+  stroke: var(--fg);
+}
+
+.journey__line--todo {
+  stroke: var(--border);
+  stroke-dasharray: 3 4;
+}
+
+.journey__dot--done {
+  fill: var(--fg);
+}
+
+.journey__dot--todo {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.journey__stuck-disc {
+  fill: var(--accent);
+}
+
+.journey__stuck-bar {
+  stroke: var(--bg);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.journey__stuck-dot {
+  fill: var(--bg);
+}
+
+.journey__caption {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  margin: var(--space-3) 0 0;
+  color: var(--muted);
+  max-width: var(--measure);
+}
