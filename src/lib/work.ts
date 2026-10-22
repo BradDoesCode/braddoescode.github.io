@@ -20,3 +20,12 @@ export async function getWork(): Promise<WorkEntry[]> {
 export async function hasPublishedWork(): Promise<boolean> {
   return (await getWork()).length > 0;
 }
+
+/**
+ * One case study by id, if it is published (in dev, drafts count, as in
+ * getWork). A link to a case study should be rendered only when this returns
+ * an entry, so it can never point at a page that was left out of the build.
+ */
+export async function getPublishedWork(id: string): Promise<WorkEntry | undefined> {
+  return (await getWork()).find((entry) => entry.id === id);
+}

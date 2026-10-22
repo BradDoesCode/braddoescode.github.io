@@ -12,18 +12,29 @@
 // Two drawings are written out and CSS shows one: weekly bars from 40rem up,
 // monthly bars (the mean level of each month's weeks) below that, so nothing is squeezed at
 // 320px. The 'compact' variant has fewer labels and a shorter caption, for the
-// home page. The summary under the chart gives the same facts in words, for screen readers only; the visible caption stays.
+// home page. The summary under the chart gives the shape in words, for screen readers only;
+// the SVG description covers the markers and does not repeat it.
 import { activity, layout, monthlyBars, summarise, weeklyBars } from '../lib/activity';
 
 interface Props {
   variant?: 'full' | 'compact';
+  /** Show the figure's own caption. The full story sets its approved caption in its footnote instead. */
+  caption?: boolean;
+  /** Draw the August 2026 marker as well as April's. */
+  limits?: boolean;
 }
 
-const { variant = 'full' } = Astro.props;
+const { variant = 'full', caption: showCaption = true, limits = true } = Astro.props;
 const full = variant === 'full';
 const summary = summarise();
-// Set on two lines so the label's box is exactly as wide as its text.
-const markerLines = ['Started building ', 'with AI agents'];
+// Each label is set on two lines so its box is exactly as wide as its text.
+// April's label sits on the lower tier of the marker rows and August's on the
+// upper one, so the two never meet on a phone.
+const markerLines = {
+  change: ['Started building ', 'with AI agents'],
+  limits: ['Usage limits ', 'no longer a constraint'],
+};
+const phaseLabels = { before: 'Before', after: 'Building with AI agents' };
 
 const views = [
   { key: 'wide', unit: 'week', g: layout(weeklyBars(!full)) },
@@ -34,10 +45,10 @@ const subject = activity.metric === 'pull-requests' ? 'Pull requests opened' : '
 const title = `${summary.metricLabel}, ${summary.period}`;
 const caption = full
   ? `${subject} per week across my GitHub account, including private work. It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and picked up from August, once usage limits were no longer a constraint.`
-  : `${subject.replace(' opened', '')} per week, including private work: how I work, not output. The shift began in April 2026 and picked up from August, once usage limits were no longer a constraint.`;
+  : `${subject} per week, including private work, shown relative to the busiest week. It reflects how I work rather than output.`;
 ---
 
-<figure class:list={['activity', `activity--${variant}`]}>
+<figure class:list={['activity', `activity--${variant}`, { 'activity--single': !limits }]}>
   {
     views.map(({ key, unit, g }) => {
       const id = `activity-${variant}-${key}`;
@@ -45,16 +56,16 @@ const caption = full
         <div class:list={['activity__chart', `activity__chart--${key}`]}>
           <div class="activity__markers" aria-hidden="true">
             {g.cells.map((cell) => (
-              <span class:list={['activity__cell', { 'activity__cell--mark': cell.marker }]}>
-                {cell.marker && (
-                  <>
+              <span class:list={['activity__cell', { 'activity__cell--mark': cell.marker && (limits || cell.marker === 'change') }]}>
+                {cell.marker && (limits || cell.marker === 'change') && (
+                  <span class:list={['activity__marker', `activity__marker--${cell.marker}`]}>
                     <span class="activity__marker-line" />
                     <span class="activity__marker-label">
-                      {markerLines.map((line) => (
+                      {markerLines[cell.marker].map((line) => (
                         <span class="activity__marker-text">{line}</span>
                       ))}
                     </span>
-                  </>
+                  </span>
                 )}
               </span>
             ))}
@@ -68,8 +79,9 @@ const caption = full
           >
             <title id={`${id}-title`}>{title}</title>
             <desc id={`${id}-desc`}>
-              {`A bar chart with one bar per ${unit}. ${summary.sentence} A line marks April 2026, when we started building with AI agents.`}
+              {`A bar chart with one bar per ${unit}, split into before and after we started building with AI agents. A line marks April 2026, when we started building with AI agents.${limits ? ' A second line marks August 2026, once usage limits were no longer a constraint.' : ''}`}
             </desc>
+            {g.bandX !== undefined && <rect class="activity__band" x={g.bandX} y="0" width={g.viewWidth - g.bandX} height="100" />}
             <g class="activity__bars">
               {g.rects.map((r) => (
                 <rect class:list={['activity__bar', { 'activity__bar--after': r.after }]} x={r.x} y={r.y} width={r.w} height={r.h} />
@@ -81,10 +93,17 @@ const caption = full
               <span class:list={['activity__cell', { 'activity__cell--mark': cell.tick }]}>{cell.tick && <span class="activity__tick">{cell.tick}</span>}</span>
             ))}
           </div>
+          <div class="activity__phases" aria-hidden="true">
+            {g.cells.map((cell) => (
+              <span class:list={['activity__cell', 'activity__phase', `activity__phase--${cell.phase}`, { 'activity__cell--mark': cell.phaseLabel }]}>
+                {cell.phaseLabel && <span class="activity__phase-label">{phaseLabels[cell.phase]}</span>}
+              </span>
+            ))}
+          </div>
         </div>
       );
     })
   }
   <p class="activity__summary visually-hidden">{summary.sentence}</p>
-  <figcaption class="activity__caption">{caption}</figcaption>
+  {showCaption && <figcaption class="activity__caption">{caption}</figcaption>}
 </figure>

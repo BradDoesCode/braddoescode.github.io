@@ -30,6 +30,9 @@ export const activity = raw as ActivityData;
 /** The month the team began building with AI agents. */
 export const CHANGE_MONTH = '2026-04';
 
+/** The month usage limits stopped being a constraint. */
+export const LIMITS_MONTH = '2026-08';
+
 const DAY = 86_400_000;
 const parse = (date: string) => Date.parse(`${date}T00:00:00Z`);
 const iso = (ms: number) => new Date(ms).toISOString().slice(0, 10);
@@ -44,6 +47,8 @@ export interface Bar {
   value: number;
   /** True from April 2026. */
   after: boolean;
+  /** True from August 2026. */
+  limits: boolean;
   /** "Jul 2025" and so on, set on the bars that carry a tick label. */
   tick?: string | undefined;
 }
@@ -76,7 +81,7 @@ export function weeklyBars(everyOther = false): Bar[] {
       }
       quarters += 1;
     }
-    return { value: level, after: month >= CHANGE_MONTH, tick };
+    return { value: level, after: month >= CHANGE_MONTH, limits: month >= LIMITS_MONTH, tick };
   });
 }
 
@@ -97,7 +102,12 @@ export function monthlyBars(everyOther = false): Bar[] {
       if (!everyOther || quarters % 2 === 0) tick = tickLabel(month, quarters === 0 || month.endsWith('-01'));
       quarters += 1;
     }
-    return { value: counts.reduce((a, b) => a + b, 0) / counts.length, after: month >= CHANGE_MONTH, tick };
+    return {
+      value: counts.reduce((a, b) => a + b, 0) / counts.length,
+      after: month >= CHANGE_MONTH,
+      limits: month >= LIMITS_MONTH,
+      tick,
+    };
   });
 }
 
@@ -145,13 +155,19 @@ export interface Rect {
 export interface Cell {
   /** A quarter's tick label, set on the bar it sits under. */
   tick: string | undefined;
-  /** True on the first bar from April 2026, where the marker line goes. */
-  marker: boolean;
+  /** Which marker line sits on this bar: the first from April 2026 (`change`) or from August 2026 (`limits`). */
+  marker: 'change' | 'limits' | undefined;
+  /** The phase this bar belongs to. */
+  phase: 'before' | 'after';
+  /** True on the bar that carries its phase's label: the first of the earlier phase, the last of the later one. */
+  phaseLabel: boolean;
 }
 
 export interface Geometry {
   viewWidth: number;
   rects: Rect[];
+  /** Where the quiet background band behind the later phase starts, in drawing units; undefined if there is no later phase. */
+  bandX: number | undefined;
   /** One per bar, so HTML rows can share the plot's columns. */
   cells: Cell[];
 }
@@ -163,6 +179,7 @@ export function layout(bars: Bar[]): Geometry {
   // shown or implied.
   const top = Math.max(...bars.map((b) => b.value), 1);
   const firstAfter = bars.findIndex((b) => b.after);
+  const firstLimits = bars.findIndex((b) => b.limits);
   const rects: Rect[] = [];
   bars.forEach((bar, i) => {
     const h = (bar.value / top) * 100;
@@ -174,6 +191,12 @@ export function layout(bars: Bar[]): Geometry {
   return {
     viewWidth: bars.length * SLOT,
     rects,
-    cells: bars.map((bar, i) => ({ tick: bar.tick, marker: firstAfter > 0 && i === firstAfter })),
+    bandX: firstAfter > 0 ? firstAfter * SLOT : undefined,
+    cells: bars.map((bar, i) => ({
+      tick: bar.tick,
+      marker: firstAfter > 0 && i === firstAfter ? 'change' : firstLimits > 0 && i === firstLimits ? 'limits' : undefined,
+      phase: bar.after ? 'after' : 'before',
+      phaseLabel: bar.after ? i === bars.length - 1 : i === 0,
+    })),
   };
 }
