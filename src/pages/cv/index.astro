@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import { cv } from '../../data/cv';
+import { formatDate, isoDate } from '../../lib/format';
+import '../../styles/cv.css';
+
+const flagged = cv.experience.filter((role) => role.needsUpdate);
+---
+
+<BaseLayout
+  title="CV"
+  description="Curriculum vitae of Bradley Barbrook, software developer: profile, skills, experience and education."
+  displayName="roman"
+>
+  <div class="cv">
+    <header class="page-head cv__head">
+      <p class="eyebrow">Curriculum vitae</p>
+      <h1>{cv.basics.name}</h1>
+      <p class="meta">
+        {cv.basics.location}
+        {
+          cv.basics.links.map((link) => (
+            <>
+              <span aria-hidden="true">·</span>
+              <ExternalLink href={link.url}>{link.label}</ExternalLink>
+            </>
+          ))
+        }
+      </p>
+      <p class="meta cv__updated">
+        Last updated <time datetime={isoDate(cv.lastUpdated)}>{formatDate(cv.lastUpdated)}</time>. To save a PDF, use your
+        browser's print dialog.
+      </p>
+    </header>
+
+    {
+      import.meta.env.DEV && flagged.length > 0 && (
+        <aside class="placeholder-note dev-note" aria-label="Notes for Brad, shown in dev only">
+          <strong>Dev only.</strong>
+          {flagged.map((role) => (
+            <span>
+              {role.organisation}: {role.needsUpdate}
+            </span>
+          ))}
+        </aside>
+      )
+    }
+
+    <section aria-labelledby="profile-heading">
+      <h2 id="profile-heading" class="section-title">Professional profile</h2>
+      {cv.profile.map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    <section aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="section-title">Technical skills</h2>
+      <dl class="skills">
+        {
+          cv.skills.map((skill) => (
+            <div class="skills__row">
+              <dt>{skill.group}</dt>
+              <dd>{skill.items.join(', ')}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="experience-heading">
+      <h2 id="experience-heading" class="section-title">Experience</h2>
+      {
+        cv.experience.map((role) => (
+          <article class="role">
+            <h3>{role.title}</h3>
+            <p class="meta">
+              {role.organisation}, {role.location}
+              <span aria-hidden="true">·</span>
+              {role.start} – {role.end}
+            </p>
+            {role.summary.map((paragraph) => <p>{paragraph}</p>)}
+            {role.note && <p class="role__note">{role.note}</p>}
+          </article>
+        ))
+      }
+    </section>
+
+    <section aria-labelledby="earlier-heading">
+      <h2 id="earlier-heading" class="section-title">Earlier experience</h2>
+      {
+        cv.earlierExperience.map((role) => (
+          <article class="role">
+            <h3>{role.title}</h3>
+            <p class="meta">
+              {role.start} – {role.end}
+            </p>
+            <p>{role.summary}</p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section aria-labelledby="education-heading">
+      <h2 id="education-heading" class="section-title">Education</h2>
+      {
+        cv.education.map((item) => (
+          <article class="role">
+            <h3>{item.institution}</h3>
+            <p class="meta">
+              {item.qualification}
+              <span aria-hidden="true">·</span>
+              {item.start} – {item.end}
+            </p>
+          </article>
+        ))
+      }
+    </section>
+
+    <section aria-labelledby="interests-heading">
+      <h2 id="interests-heading" class="section-title">Interests</h2>
+      <ul>
+        {cv.interests.map((interest) => <li>{interest}</li>)}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

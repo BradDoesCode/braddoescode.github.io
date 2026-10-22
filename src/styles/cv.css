@@ -1,0 +1,221 @@
+/*
+  CV page: a few screen rules, then the print stylesheet. The CV is printed
+  from this same page (the browser's print dialog gives the PDF), so there is
+  one set of markup and one data source, and the two cannot drift apart.
+*/
+
+/* The name, in the display face (Cormorant Garamond 600, which runs small, so
+   it is scaled up). The word-for-word h1 text is unchanged. */
+.cv h1 {
+  font-family: var(--font-display);
+  font-size: calc(var(--step-4) * var(--display-scale));
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.skills {
+  margin: 0;
+  max-width: var(--measure);
+}
+
+.skills__row {
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--hairline);
+}
+
+.skills__row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.skills dt {
+  color: var(--muted);
+}
+
+.skills dd {
+  margin: 0;
+}
+
+.role {
+  padding-block: var(--space-4);
+}
+
+.role + .role {
+  border-top: 1px solid var(--hairline);
+}
+
+.role:first-of-type {
+  padding-top: 0;
+}
+
+.role h3 {
+  margin-top: 0;
+}
+
+.role .meta {
+  margin-bottom: var(--space-2);
+}
+
+.role p:last-child {
+  margin-bottom: 0;
+}
+
+.role__note {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+@media (min-width: 40rem) {
+  .skills__row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+}
+
+/* ---------- Print: A4, black on white, no chrome ---------- */
+
+@page {
+  size: A4;
+  margin: 14mm 16mm;
+}
+
+@media print {
+  /* `html:root` outranks the dark-theme tokens whatever the print scheme is. */
+  html:root {
+    color-scheme: light;
+    --bg: #fff;
+    --surface: #fff;
+    --fg: #000;
+    --muted: #333;
+    --accent: #000;
+    --hairline: #999;
+    --rule: #000;
+    --border: #555;
+  }
+
+  body {
+    display: block;
+    min-height: 0;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  .skip-link,
+  .site-header,
+  .site-footer,
+  .dev-note,
+  .cv__updated {
+    display: none !important;
+  }
+
+  main {
+    padding: 0;
+  }
+
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+
+  .cv p,
+  .cv ul,
+  .cv dl {
+    max-width: none;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .cv .page-head,
+  main .cv section:not(.hero) {
+    display: block;
+  }
+
+  /* Set the face explicitly so the printed name never depends on the screen
+     rule: Cormorant Garamond 600 (about 27pt, since it runs small). */
+  .cv h1 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 27pt;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  .cv .eyebrow {
+    font-size: 8pt;
+    margin-bottom: 4pt;
+  }
+
+  .cv .eyebrow::before {
+    display: none;
+  }
+
+  .cv .meta,
+  .role__note {
+    font-size: 9.5pt;
+  }
+
+  .cv .page-head {
+    margin-bottom: 6pt;
+  }
+
+  .cv .page-head h1 + * {
+    margin-top: 3pt;
+  }
+
+  /* The `main` prefix matches the specificity of the screen section rules. */
+  main .cv section:not(.hero) {
+    margin-top: 11pt;
+    padding-top: 4pt;
+    border-top: 0.5pt solid #000;
+  }
+
+  main .cv section:not(.hero):first-child {
+    margin-top: 6pt;
+  }
+
+  main .cv section:not(.hero) > h2 {
+    font-size: 8pt;
+    margin: 0 0 6pt;
+    break-after: avoid;
+  }
+
+  .cv h3 {
+    font-size: 11pt;
+    margin: 0 0 1pt;
+    break-after: avoid;
+  }
+
+  .role {
+    break-inside: avoid;
+    padding-block: 0;
+    margin-bottom: 10pt;
+  }
+
+  .role + .role {
+    border-top: 0;
+  }
+
+  .skills__row {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    break-inside: avoid;
+    padding-block: 0;
+    margin-bottom: 2pt;
+    border-top: 0;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  /* Make link addresses readable on paper. */
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+  }
+}

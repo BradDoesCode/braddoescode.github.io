@@ -1,0 +1,26 @@
+---
+// The intro block at the top of a page. Pass a `media` slot to put an image
+// beside the text (the photo variants); leave it out for the text-only design.
+interface Props {
+  title: string;
+  eyebrow?: string;
+}
+
+const { title, eyebrow } = Astro.props;
+const hasMedia = Astro.slots.has('media');
+
+// Set a multi-word title as a stacked display name: the last word on its own
+// line, in italic. The words stay in order, so the heading reads the same.
+const words = title.split(' ');
+const last = words.length > 1 ? words.pop() : undefined;
+const first = words.join(' ');
+---
+
+<section class:list={['hero', { 'hero--with-media': hasMedia }]} aria-labelledby="hero-title">
+  <div class="hero__text">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 id="hero-title">{last ? <><span>{first}</span> <em>{last}</em></> : title}</h1>
+    <slot />
+  </div>
+  {hasMedia && <div class="hero__media"><slot name="media" /></div>}
+</section>

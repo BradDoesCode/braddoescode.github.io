@@ -1,0 +1,25 @@
+---
+import WorkItem from './WorkItem.astro';
+import type { WorkEntry } from '../lib/work';
+
+interface Props {
+  entries: WorkEntry[];
+  level?: 2 | 3;
+}
+
+const { entries, level = 3 } = Astro.props;
+---
+
+{
+  entries.length > 0 ? (
+    <ul class="work-list">
+      {entries.map((entry) => (
+        <WorkItem entry={entry} level={level} />
+      ))}
+    </ul>
+  ) : (
+    <div class="empty-state">
+      <p>No case studies are published yet.</p>
+    </div>
+  )
+}

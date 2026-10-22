@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import headingFont from '../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
+import nameRoman from '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2?url';
+import nameItalic from '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-italic.woff2?url';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { contentSecurityPolicy, siteName } from '../data/site';
+
+interface Props {
+  /** Page-specific title. Becomes "<title> | Bradley Barbrook". */
+  title: string;
+  /** Unique meta description for this page. */
+  description: string;
+  /** Home uses the site name as its whole title. */
+  isHome?: boolean;
+  /** Keep a page out of search results (used by the 404 page). */
+  noindex?: boolean;
+  /**
+   * The name is set large above the fold: preload its display font. 'roman' for
+   * the CV, 'both' for the home hero, which also sets the surname in italic.
+   */
+  displayName?: 'roman' | 'both';
+}
+
+const { title, description, isHome = false, noindex = false, displayName } = Astro.props;
+
+const fullTitle = isHome ? `${siteName}, software developer` : `${title} | ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    {import.meta.env.PROD && <meta http-equiv="content-security-policy" content={contentSecurityPolicy} />}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f0e5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141310" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href={headingFont} as="font" type="font/woff2" crossorigin />
+    {
+      displayName && (
+        <>
+          <link rel="preload" href={nameRoman} as="font" type="font/woff2" crossorigin />
+          {displayName === 'both' && <link rel="preload" href={nameItalic} as="font" type="font/woff2" crossorigin />}
+        </>
+      )
+    }
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <SiteHeader />
+
+    <main id="main">
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>

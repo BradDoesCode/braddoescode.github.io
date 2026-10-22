@@ -1,0 +1,90 @@
+---
+// Weekly GitHub activity, drawn at build time from src/data/activity.json
+// (refreshed by `npm run stats`, never at build). No script and no style
+// attributes: colours and sizes come from classes in chart.css, so light and
+// dark follow the tokens.
+//
+// The bars are an SVG. Every label is HTML, laid out in CSS grid rows whose
+// cells line up with the bars, because axe cannot check the contrast of SVG
+// text. The chart shows shape only: relative values, with no axis, counts or
+// averages anywhere in the markup or the text.
+//
+// Two drawings are written out and CSS shows one: weekly bars from 40rem up,
+// monthly bars (the mean level of each month's weeks) below that, so nothing is squeezed at
+// 320px. The 'compact' variant has fewer labels and a shorter caption, for the
+// home page. The summary under the chart gives the same facts in words, for screen readers only; the visible caption stays.
+import { activity, layout, monthlyBars, summarise, weeklyBars } from '../lib/activity';
+
+interface Props {
+  variant?: 'full' | 'compact';
+}
+
+const { variant = 'full' } = Astro.props;
+const full = variant === 'full';
+const summary = summarise();
+// Set on two lines so the label's box is exactly as wide as its text.
+const markerLines = ['Started building ', 'with AI agents'];
+
+const views = [
+  { key: 'wide', unit: 'week', g: layout(weeklyBars(!full)) },
+  { key: 'narrow', unit: 'month', g: layout(monthlyBars(!full)) },
+];
+
+const subject = activity.metric === 'pull-requests' ? 'Pull requests opened' : 'Contributions';
+const title = `${summary.metricLabel}, ${summary.period}`;
+const caption = full
+  ? `${subject} per week across my GitHub account, including private work. It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and picked up from August.`
+  : `${subject.replace(' opened', '')} per week, including private work: how I work, not output. The shift began in April 2026 and picked up from August.`;
+---
+
+<figure class:list={['activity', `activity--${variant}`]}>
+  {
+    views.map(({ key, unit, g }) => {
+      const id = `activity-${variant}-${key}`;
+      return (
+        <div class:list={['activity__chart', `activity__chart--${key}`]}>
+          <div class="activity__markers" aria-hidden="true">
+            {g.cells.map((cell) => (
+              <span class:list={['activity__cell', { 'activity__cell--mark': cell.marker }]}>
+                {cell.marker && (
+                  <>
+                    <span class="activity__marker-line" />
+                    <span class="activity__marker-label">
+                      {markerLines.map((line) => (
+                        <span class="activity__marker-text">{line}</span>
+                      ))}
+                    </span>
+                  </>
+                )}
+              </span>
+            ))}
+          </div>
+          <svg
+            class="activity__svg"
+            viewBox={`0 0 ${g.viewWidth} 100`}
+            preserveAspectRatio="none"
+            role="img"
+            aria-labelledby={`${id}-title ${id}-desc`}
+          >
+            <title id={`${id}-title`}>{title}</title>
+            <desc id={`${id}-desc`}>
+              {`A bar chart with one bar per ${unit}. ${summary.sentence} A line marks April 2026, when we started building with AI agents.`}
+            </desc>
+            <g class="activity__bars">
+              {g.rects.map((r) => (
+                <rect class:list={['activity__bar', { 'activity__bar--after': r.after }]} x={r.x} y={r.y} width={r.w} height={r.h} />
+              ))}
+            </g>
+          </svg>
+          <div class="activity__ticks" aria-hidden="true">
+            {g.cells.map((cell) => (
+              <span class:list={['activity__cell', { 'activity__cell--mark': cell.tick }]}>{cell.tick && <span class="activity__tick">{cell.tick}</span>}</span>
+            ))}
+          </div>
+        </div>
+      );
+    })
+  }
+  <p class="activity__summary visually-hidden">{summary.sentence}</p>
+  <figcaption class="activity__caption">{caption}</figcaption>
+</figure>

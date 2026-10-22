@@ -1,0 +1,92 @@
+/*
+  Theme tokens: the only place colours, fonts, type scale, spacing and the
+  reading measure are defined. To try a different visual direction, change this
+  file. Every other stylesheet and component reads these custom properties.
+
+  Direction: editorial. Ink on warm paper, one oxblood accent, a variable serif
+  (Newsreader, self-hosted: see fonts.css) for body and headings, Cormorant
+  Garamond 600 for the name alone, and a system sans for small tracked labels.
+
+  Light is the default; dark redefines the colour tokens under
+  prefers-color-scheme. Text pairs are at least 4.5:1 on --bg and --surface in
+  both themes (muted 6.7:1 and accent 6.8:1 on --bg in light, 7.1:1 and 7.8:1
+  in dark), and again checked by pa11y-ci in light and dark by `npm run check`.
+
+  Not driven by these tokens: the theme-color meta tags in BaseLayout and the
+  colours inside public/favicon.svg repeat --bg and --accent by hand.
+*/
+
+:root {
+  color-scheme: light dark;
+
+  /* Light theme: ink on warm paper. */
+  --bg: #f5f0e5;
+  --surface: #ece5d4;
+  --fg: #1a1814;
+  --muted: #5a5346;
+  --accent: #9a2b1e;
+  --hairline: #d3cab6; /* decorative rules only */
+  --rule: #1a1814; /* the firmer rule above a section */
+  --border: #8a8070; /* UI boundaries, at least 3:1 on --bg */
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Newsreader Variable', Charter, 'Iowan Old Style', 'Sitka Text', Cambria, Georgia, serif;
+  /* The name only: Cormorant Garamond 600 (fonts.css). It has a small x-height,
+     so it is set larger than Newsreader would be: see --display-scale. */
+  --font-display: 'Cormorant Garamond', var(--font-serif);
+  --display-scale: 1.18;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Type scale: a 1.25 ratio from an 18px body, with a display step on top. */
+  --step--2: 0.75rem;
+  --step--1: 0.875rem;
+  --step-0: 1.125rem;
+  --step-1: 1.375rem;
+  --step-2: 1.75rem;
+  --step-3: 2.125rem;
+  --step-4: clamp(2.5rem, 1.7rem + 3.6vw, 4rem);
+  --step-5: clamp(4.5rem, 1.4rem + 11.5vw, 8.25rem);
+  --leading: 1.6;
+  --track-label: 0.14em;
+
+  --measure: 36rem;
+  --page: 64rem;
+  --gutter: 1.25rem;
+  --rail: 0rem; /* label column on wide screens */
+  --rail-gap: 0rem;
+  --indent: 0rem; /* rail plus gap: where the reading column starts */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141310;
+    --surface: #1d1b17;
+    --fg: #ebe5d7;
+    --muted: #a79f8e;
+    --accent: #ec9077;
+    --hairline: #2d2a24;
+    --rule: #6a645a;
+    --border: #7a7365;
+  }
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+@media (min-width: 52rem) {
+  :root {
+    --rail: 10rem;
+    --rail-gap: 2.5rem;
+    --indent: 12.5rem;
+  }
+}

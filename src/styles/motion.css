@@ -1,0 +1,166 @@
+/*
+  Scroll-in motion. CSS only, and entirely optional: everything here sits inside
+  both a feature query and a reduced-motion query, and inside `screen`, so
+  these cases get the plain static page with every word and rule in place:
+    - browsers without scroll-driven animations (animation-timeline)
+    - anyone who has asked for reduced motion
+    - print (the CV prints from the same page)
+
+  Rules of the house:
+    - Text only ever moves (transform). It never fades, so a snapshot taken
+      mid-animation cannot produce a contrast failure.
+    - Distances are short (24px) and the easing is gentle.
+    - Each reveal plays out over roughly the lower half of the screen (vh
+      ranges, so it scales with the window), and a section's label, rule and
+      content run on the same timeline so they arrive as a set.
+    - The timeline goes in longhands on purpose. The minifier folds a full
+      set of animation-* longhands into the `animation` shorthand, and Chrome
+      drops a shorthand that contains a timeline. Leaving some longhands unset
+      (delay, duration, direction and so on) keeps it from merging. The check
+      script fails the build if a built stylesheet ever does this.
+    - The only fade is the section rule, which is a border and not text.
+    - No animated pseudo-elements: axe (used by `npm run check`) cannot work
+      out the contrast of text near one while it is animating, and reports
+      false failures. The same goes for a gradient background on a section.
+*/
+
+@supports (animation-timeline: view()) {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    /* ----- Keyframes ----- */
+
+    @keyframes rise {
+      from {
+        transform: translateY(1.5rem);
+      }
+    }
+
+    @keyframes slide-in {
+      from {
+        transform: translateX(-1.5rem);
+      }
+    }
+
+    /* The section rule fades up from the paper colour. It is a border, so the
+       layout never moves, and it is not text. */
+    @keyframes rule-in {
+      from {
+        border-top-color: var(--bg);
+      }
+    }
+
+    /* The activity bars grow up from the baseline. Bars are shapes, not text,
+       so a snapshot mid-growth cannot cause a contrast failure. */
+    @keyframes grow {
+      from {
+        transform: scaleY(0.06);
+      }
+    }
+
+    @keyframes drift {
+      to {
+        transform: translateY(-3.5rem);
+      }
+    }
+
+    @keyframes name-in {
+      from {
+        transform: translateY(0.14em);
+      }
+    }
+
+    /* ----- Section labels and rules ----- */
+
+    /* Each section is its own timeline, so its label and its rule move
+       together as the section comes up the screen. */
+    main section:not(.hero) {
+      view-timeline: --section block;
+      animation-name: rule-in;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+      animation-timeline: --section;
+      animation-range: cover 0px cover 60vh;
+    }
+
+    main section:not(.hero) > h2 {
+      animation-name: slide-in;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+      animation-timeline: --section;
+      animation-range: cover 0px cover 50vh;
+    }
+
+    /* ----- Things that rise into place ----- */
+
+    .work-item,
+    .link-list li,
+    .role,
+    .prose h2,
+    main section:not(.hero) > p,
+    main section:not(.hero) > dl,
+    main section:not(.hero) > ul:not(.work-list, .link-list) {
+      animation-name: rise;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0px cover 55vh;
+    }
+
+    /* A light stagger for neighbours that arrive together: each later row
+       starts a little further up the screen. */
+    .work-item:nth-child(2),
+    .link-list li:nth-child(2) {
+      animation-range: cover 6vh cover 61vh;
+    }
+
+    .work-item:nth-child(3),
+    .link-list li:nth-child(3) {
+      animation-range: cover 12vh cover 67vh;
+    }
+
+    .work-item:nth-child(n + 4),
+    .link-list li:nth-child(n + 4) {
+      animation-range: cover 18vh cover 73vh;
+    }
+
+    /* ----- The activity chart ----- */
+
+    /* The figure is the timeline and the bars follow it, in longhands as
+       ever. The group scales from its own bottom edge, which is the baseline. */
+    .activity {
+      view-timeline: --activity block;
+    }
+
+    .activity__bars {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation-name: grow;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+      animation-timeline: --activity;
+      animation-range: cover 0px cover 50vh;
+    }
+
+    /* ----- Home: the name ----- */
+
+    /* A quick settle on load: transform only, so the name is readable from
+       the first frame. */
+    .hero h1 span,
+    .hero h1 em {
+      animation: name-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    .hero h1 em {
+      animation-delay: 0.06s;
+    }
+
+    /* And a slight lift as the hero scrolls away, so the name leaves a touch
+       faster than the page. */
+    .hero h1 {
+      animation-name: drift;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}

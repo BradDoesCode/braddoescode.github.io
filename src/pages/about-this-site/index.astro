@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ActivityChart from '../../components/ActivityChart.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import { repoUrl } from '../../data/site';
+---
+
+<BaseLayout
+  title="About this site"
+  description="How this site is built, and the part Claude Code and I each play in building it."
+>
+  <div class="page-head">
+    <h1>About this site</h1>
+  </div>
+
+  <section aria-labelledby="built-heading">
+    <h2 id="built-heading">How it is built</h2>
+    {/* Source: CLAUDE.md, Stack and Deploy model. */}
+    <p>
+      This is a static site built with Astro. I build it on my own machine and publish the built files to GitHub Pages.
+    </p>
+    {/* Source: CLAUDE.md non-negotiables, and site-standards.md. */}
+    <p>
+      The checks also run on my machine. The site has no analytics and no cookie banner, and it loads no third-party scripts.
+    </p>
+  </section>
+
+  <section aria-labelledby="ai-heading">
+    <h2 id="ai-heading">How AI is involved</h2>
+    {/* Source: CLAUDE.md, Purpose: the site is built with Claude Code, with Brad directing, reviewing and deciding what ships. */}
+    <p>
+      I build this site with Claude Code, Anthropic's coding assistant. I direct the work, review the changes and decide what is
+      published.
+    </p>
+    {/* Source: confirmed in the build session with Brad. */}
+    <p>Claude Code wrote the code for this site. I chose what to build, judged the designs and reviewed what came back.</p>
+    {/* Source: CLAUDE.md, Working with Brad: Brad is the only source of truth for Brad's career. */}
+    <p>The facts about my career come from me. Claude Code is told not to invent details to fill a gap.</p>
+  </section>
+
+  <section id="activity" aria-labelledby="activity-heading">
+    <h2 id="activity-heading">Activity</h2>
+    <ActivityChart />
+  </section>
+
+  <section aria-labelledby="public-heading">
+    <h2 id="public-heading">The setup is public</h2>
+    {/* Source: the repository: CLAUDE.md and the .claude folder (rules and skills). */}
+    <p>
+      The instructions Claude Code follows for this site are in the public{' '}
+      <ExternalLink href={repoUrl}>repository on GitHub</ExternalLink>. They are a <code>CLAUDE.md</code> file, plus written rules
+      and skills in the <code>.claude</code> folder.
+    </p>
+  </section>
+</BaseLayout>

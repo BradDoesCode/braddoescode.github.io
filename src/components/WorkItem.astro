@@ -1,0 +1,37 @@
+---
+// One case study in a listing: a line in the table of contents. Swap this component, and the
+// `.work-list` styles, to try a different listing design.
+import { formatYear, isoDate } from '../lib/format';
+import type { WorkEntry } from '../lib/work';
+
+interface Props {
+  entry: WorkEntry;
+  /** Heading level of the title, so the page outline has no gaps. */
+  level?: 2 | 3;
+}
+
+const { entry, level = 3 } = Astro.props;
+const { title, summary, date, role, tech, draft } = entry.data;
+const Heading = `h${level}` as const;
+---
+
+<li class="work-item">
+  <div class="work-item__head">
+    <Heading><a href={`/work/${entry.id}/`}>{title}</a></Heading>
+    <time class="work-item__year" datetime={isoDate(date)}>{formatYear(date)}</time>
+  </div>
+  <p class="work-item__summary">{summary}</p>
+  <p class="meta">
+    {draft && <><strong>Draft</strong><span aria-hidden="true">·</span></>}
+    {role}
+  </p>
+  {
+    tech.length > 0 && (
+      <ul class="tag-list" aria-label="Technologies">
+        {tech.map((t) => (
+          <li>{t}</li>
+        ))}
+      </ul>
+    )
+  }
+</li>

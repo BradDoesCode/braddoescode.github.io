@@ -1,0 +1,44 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, isoDate } from '../../lib/format';
+import { getWork } from '../../lib/work';
+
+export const getStaticPaths = (async () => {
+  const entries = await getWork();
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { title, summary, date, role, tech, draft } = entry.data;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={title} description={summary}>
+  <article>
+    <header class="page-head">
+      <p class="eyebrow"><a href="/work/">All work</a></p>
+      <h1>{title}</h1>
+      <p class="lede">{summary}</p>
+      <p class="meta">
+        {draft && <><strong>Draft, not published</strong><span aria-hidden="true">·</span></>}
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        <span aria-hidden="true">·</span>
+        {role}
+      </p>
+      {
+        tech.length > 0 && (
+          <ul class="tag-list" aria-label="Technologies">
+            {tech.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

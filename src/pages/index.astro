@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ActivityChart from '../components/ActivityChart.astro';
+import Hero from '../components/Hero.astro';
+import WorkList from '../components/WorkList.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { cv } from '../data/cv';
+import { githubUrl } from '../data/site';
+import { getWork, hasPublishedWork } from '../lib/work';
+
+const showWork = await hasPublishedWork();
+const featured = (await getWork()).slice(0, 3);
+---
+
+<BaseLayout
+  title="Home"
+  description="Portfolio of Bradley Barbrook, a software developer in Barnstaple, Devon."
+  isHome
+  displayName="both"
+>
+  <Hero title={cv.basics.name} eyebrow={`Software developer, ${cv.basics.location}`}>
+    {/* Source: the CV profile, first paragraph. */}
+    <p class="lede">
+      I build software with AI coding agents, inside a structured engineering process where people make the design
+      decisions and review what ships. The aim is speed without compromise on quality.
+    </p>
+  </Hero>
+
+  {
+    showWork && (
+      <section aria-labelledby="featured-heading">
+        <h2 id="featured-heading" class="section-title">Featured work</h2>
+        <WorkList entries={featured} level={3} />
+        <p><a href="/work/">See all work</a></p>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="activity-heading">
+    <h2 id="activity-heading">Activity</h2>
+    <ActivityChart variant="compact" />
+    <p><a href="/about-this-site/#activity">See the full chart</a></p>
+  </section>
+
+  <section aria-labelledby="elsewhere-heading">
+    <h2 id="elsewhere-heading" class="section-title">Elsewhere</h2>
+    <ul class="link-list">
+      <li><a href="/cv/">Read my CV</a></li>
+      <li><ExternalLink href={githubUrl}>My GitHub profile</ExternalLink></li>
+      <li><a href="/about-this-site/">How this site is built</a></li>
+    </ul>
+  </section>
+</BaseLayout>

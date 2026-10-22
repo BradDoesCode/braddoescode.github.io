@@ -1,0 +1,14 @@
+---
+import ExternalLink from './ExternalLink.astro';
+import { githubUrl } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Built with Astro and Claude Code. No analytics, no cookies.</p>
+    <ul>
+      <li><ExternalLink href={githubUrl}>GitHub</ExternalLink></li>
+      <li><a href="/about-this-site/">About this site</a></li>
+    </ul>
+  </div>
+</footer>

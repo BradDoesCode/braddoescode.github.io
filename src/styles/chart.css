@@ -1,0 +1,140 @@
+/*
+  The activity chart (components/ActivityChart.astro). The bars are an SVG that
+  stretches to fill its box; every label is HTML in a row of grid cells (one
+  cell per bar) so it lines up with the bars and axe can check its contrast.
+  Nothing carries a style attribute, so the strict CSP holds. Colours are
+  tokens, so light and dark come for free: weeks before April 2026 are in the
+  quiet --border tone and later weeks in --accent, each at least 3:1 on --bg.
+*/
+
+.activity {
+  --marker-h: 2.75rem; /* the row above the plot that holds the marker label */
+  --plot-h: 8rem;
+  --tick-h: 1.75rem;
+  margin: 0 0 var(--space-4);
+  max-width: none;
+}
+
+.activity--compact {
+  --plot-h: 5.5rem;
+}
+
+@media (min-width: 40rem) {
+  .activity {
+    --plot-h: 10rem;
+  }
+
+  .activity--compact {
+    --plot-h: 6rem;
+  }
+}
+
+/* Row 1 holds the marker label, row 2 the bars, row 3 the tick labels. There is
+   no y axis: the chart shows shape only. */
+.activity__chart {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: var(--marker-h) var(--plot-h) var(--tick-h);
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  line-height: 1;
+  color: var(--muted);
+}
+
+/* Phones get the monthly drawing, wider screens the weekly one. Declared after
+   .activity__chart so these display values win. */
+.activity__chart--wide {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .activity__chart--wide {
+    display: grid;
+  }
+
+  .activity__chart--narrow {
+    display: none;
+  }
+}
+
+.activity__markers,
+.activity__ticks {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.activity__markers {
+  grid-row: 1;
+}
+
+.activity__ticks {
+  grid-row: 3;
+}
+
+.activity__svg {
+  grid-row: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid var(--border);
+  overflow: visible;
+}
+
+.activity__cell {
+  display: block;
+}
+
+/* Only a cell that holds a label or the marker needs to anchor it. */
+.activity__cell--mark {
+  position: relative;
+}
+
+.activity__tick {
+  position: absolute;
+  top: var(--space-2);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* The marker is a hairline from the top of its row to the baseline, with its
+   label to the left of it. */
+.activity__marker-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: calc(var(--marker-h) + var(--plot-h));
+  border-left: 1px solid var(--fg);
+}
+
+.activity__marker-label {
+  position: absolute;
+  top: 0;
+  right: calc(100% + var(--space-2));
+  text-align: right;
+  white-space: nowrap;
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+.activity__marker-text {
+  display: block;
+}
+
+.activity__bar {
+  fill: var(--border);
+}
+
+.activity__bar--after {
+  fill: var(--accent);
+}
+
+.activity__caption {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  margin: var(--space-3) 0 0;
+  color: var(--muted);
+  max-width: var(--measure);
+}

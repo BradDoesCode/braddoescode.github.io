@@ -1,0 +1,13 @@
+---
+// The one way to link off-site. It always sets rel="noopener noreferrer", and
+// the check script fails the build if an external link ever lacks it.
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = Omit<HTMLAttributes<'a'>, 'rel' | 'target'> & {
+  href: string;
+};
+
+const { href, ...attrs } = Astro.props;
+---
+
+<a {...attrs} href={href} rel="noopener noreferrer"><slot /></a>

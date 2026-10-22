@@ -1,0 +1,57 @@
+/*
+  Newsreader, a variable serif drawn for reading on screen, self-hosted from the
+  @fontsource-variable/newsreader package and bundled into the build (no font
+  CDN). Latin subset only, two files:
+    roman   weight 200-800 and an optical-size axis (the display cut at large
+            sizes, the text cut at body size, picked by font-optical-sizing)
+    italic  weight 200-800
+  Characters outside Latin fall back to the next serif in --font-serif.
+
+  Cormorant Garamond, the display face for the name only (see --font-display in
+  tokens.css), from @fontsource/cormorant-garamond. Static, weight 600, Latin
+  subset, roman and italic (about 23 kB each). Nothing else on the site uses it.
+*/
+
+@font-face {
+  font-family: 'Newsreader Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Newsreader Variable';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2')
+    format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 600;
+  src: url('../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-italic.woff2')
+    format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
