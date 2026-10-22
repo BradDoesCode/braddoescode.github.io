@@ -33,8 +33,8 @@ const views = [
 const subject = activity.metric === 'pull-requests' ? 'Pull requests opened' : 'Contributions';
 const title = `${summary.metricLabel}, ${summary.period}`;
 const caption = full
-  ? `${subject} per week across my GitHub account, including private work. It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and picked up from August.`
-  : `${subject.replace(' opened', '')} per week, including private work: how I work, not output. The shift began in April 2026 and picked up from August.`;
+  ? `${subject} per week across my GitHub account, including private work. It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and picked up from August, once usage limits were no longer a constraint.`
+  : `${subject.replace(' opened', '')} per week, including private work: how I work, not output. The shift began in April 2026 and picked up from August, once usage limits were no longer a constraint.`;
 ---
 
 <figure class:list={['activity', `activity--${variant}`]}>

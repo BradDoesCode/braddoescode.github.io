@@ -111,7 +111,7 @@ export interface Summary {
 /**
  * The shape of the data, in words. These sentences state what the chart looked
  * like when the data was last refreshed (low and steady, a gradual rise from
- * April 2026, a sharp rise from August 2026), so read them again whenever
+ * April 2026, a sharp rise from August 2026, once usage limits were no longer a constraint), so read them again whenever
  * `npm run stats` brings in a different picture.
  */
 export function summarise(): Summary {
@@ -123,7 +123,7 @@ export function summarise(): Summary {
   const sentence =
     `${what}, from ${period}, shown relative to the busiest week. ` +
     'Activity was low and steady from June 2025. It rose gradually from April 2026, when we started building with AI agents, ' +
-    'and rose sharply from August 2026.';
+    'and rose sharply from August 2026, once usage limits were no longer a constraint.';
   return { metricLabel: what, period, sentence };
 }
 
