@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDate, isoDate } from '../../lib/format';
+import { formatYear, isoDate } from '../../lib/format';
 import { getWork } from '../../lib/work';
 
 export const getStaticPaths = (async () => {
@@ -11,7 +11,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { entry } = Astro.props;
-const { title, summary, date, role, tech, draft } = entry.data;
+const { title, summary, date, years, role, tech, draft } = entry.data;
 const { Content } = await render(entry);
 ---
 
@@ -23,7 +23,7 @@ const { Content } = await render(entry);
       <p class="lede">{summary}</p>
       <p class="meta">
         {draft && <><strong>Draft, not published</strong><span aria-hidden="true">·</span></>}
-        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        <time datetime={isoDate(date)}>{years ?? formatYear(date)}</time>
         <span aria-hidden="true">·</span>
         {role}
       </p>
