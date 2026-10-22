@@ -114,7 +114,7 @@ const chartNote = stat
           It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and
           picked up from August, once usage limits were no longer a constraint.{' '}
           {/* Source: confirmed by Brad in chat (22 October 2026): rounded multipliers against the average before April 2026. */}
-          {statRows.length > 0 &&
+          {(stat !== undefined || statRows.length > 0) &&
             'Multipliers compare average pull requests opened per week in each period with the average before April 2026, rounded to the nearest whole number. '}
           {/* Source: confirmed by Brad in chat */}
           Most of my work since April has been on newer projects, which grow faster than maintenance on a mature codebase.
