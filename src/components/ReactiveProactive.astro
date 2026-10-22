@@ -1,0 +1,35 @@
+---
+// A before-and-after pair of short flows, freshly drawn and generic: how a
+// stalled job comes to light under a reactive set-up and under a proactive one.
+// Labelled as illustrative. It is not a screen, and nothing in it is taken from
+// any real system.
+//
+// Real HTML lists, so the text is read as it is and axe can check its contrast.
+// The connectors between steps are drawn in CSS (illustrations.css) and carry no
+// text. "Before" is dashed and quiet, "After" is solid and in the accent, so the
+// difference does not depend on colour alone. Side by side from 40rem, stacked
+// below that.
+const before = ['A job stalls', 'Nobody knows', 'The customer chases', 'Customer service goes digging'];
+const after = ['A job stalls', 'The system alerts customer service', 'They act before the customer asks'];
+---
+
+<figure class="flows">
+  <p class="illus-tag">Illustrative</p>
+  <div class="flows__grid">
+    <div class="flow flow--before" role="group" aria-labelledby="flow-before">
+      <p class="flow__title" id="flow-before">Before: reactive</p>
+      <ol class="flow__steps">
+        {before.map((step) => <li class="flow__step">{step}</li>)}
+      </ol>
+    </div>
+    <div class="flow flow--after" role="group" aria-labelledby="flow-after">
+      <p class="flow__title" id="flow-after">After: proactive</p>
+      <ol class="flow__steps">
+        {after.map((step) => <li class="flow__step">{step}</li>)}
+      </ol>
+    </div>
+  </div>
+  <figcaption class="illus-caption">
+    The same stalled job, handled two ways. In the first, the customer finds out before we do. In the second, we do.
+  </figcaption>
+</figure>

@@ -1,0 +1,241 @@
+/*
+  Illustrations in case studies: ReactiveProactive, ProblemToFeature and
+  PullQuote (components/). They share the visual language of the job journey
+  drawing: tokens only, no style attributes, light and dark from the tokens.
+  The first two are real HTML (lists), so axe can check their contrast; the
+  connectors are drawn in CSS and carry no text. Mobile first: everything
+  stacks, and goes side by side from 40rem.
+*/
+
+.illus-tag {
+  display: inline-block;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+
+.illus-caption {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  margin: var(--space-3) 0 0;
+  color: var(--muted);
+  max-width: var(--measure);
+}
+
+.flows,
+.p2f {
+  margin: var(--space-5) 0;
+  max-width: none;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.35;
+}
+
+/* ---------- Before and after ---------- */
+
+.flows__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+@media (min-width: 40rem) {
+  .flows__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+.flow__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--step--2);
+  font-weight: 650;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.flow__steps {
+  --gap: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.flow__step {
+  position: relative;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  font-size: var(--step-0);
+  line-height: 1.3;
+}
+
+.flow__step + .flow__step {
+  margin-top: var(--gap);
+}
+
+/* The connector: a short line down from the step above, with an arrowhead. */
+.flow__step + .flow__step::before {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  bottom: 100%;
+  height: var(--gap);
+  border-left: 1px solid var(--border);
+}
+
+.flow__step + .flow__step::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--space-3) - 0.3125rem + 0.5px);
+  bottom: calc(100% + 0.0625rem);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-0.125rem) rotate(45deg) scale(0.85);
+  transform-origin: center;
+}
+
+/* Before: quiet. Dashed, in the muted tone. */
+.flow--before .flow__title,
+.flow--before .flow__step {
+  color: var(--muted);
+}
+
+.flow--before .flow__step {
+  border-style: dashed;
+}
+
+/* After: the accent. Solid, with the last step in bold. */
+.flow--after .flow__title {
+  color: var(--accent);
+}
+
+.flow--after .flow__step {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.flow--after .flow__step + .flow__step::before {
+  border-left-color: var(--accent);
+}
+
+.flow--after .flow__step + .flow__step::after {
+  border-right-color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.flow--after .flow__step:last-child {
+  font-weight: 600;
+}
+
+/* ---------- From a problem to a feature ---------- */
+
+.p2f__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 40rem) {
+  .p2f__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.p2f__step {
+  margin: 0;
+  padding: var(--space-3);
+  border-top: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.p2f__step + .p2f__step {
+  margin-top: 0;
+}
+
+.p2f__step--fix {
+  border-top-color: var(--accent);
+}
+
+.p2f__head {
+  margin: 0 0 var(--space-2);
+  font-size: var(--step--2);
+  font-weight: 650;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.p2f__step--fix .p2f__head {
+  color: var(--accent);
+}
+
+.p2f__line,
+.p2f .p2f__quote,
+.p2f .p2f__quote p {
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.p2f .p2f__quote {
+  font-style: italic;
+}
+
+/* ---------- Pull quote ---------- */
+
+.pullquote {
+  margin: var(--space-6) 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+  position: relative;
+}
+
+/* The accent mark: a short bar sitting on the rule. */
+.pullquote::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 3rem;
+  border-top: 3px solid var(--accent);
+}
+
+.pullquote__text {
+  margin: 0;
+  max-width: 22em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: calc(var(--step-1) * var(--display-scale));
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+@media (min-width: 40rem) {
+  .pullquote__text {
+    font-size: calc(var(--step-2) * var(--display-scale));
+  }
+}

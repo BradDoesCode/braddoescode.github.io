@@ -1,0 +1,9 @@
+---
+// A pull quote: a line from the text, set large in the display font. It repeats
+// text that is already in the page, so it is hidden from screen readers rather
+// than announced twice. It has nothing to focus, so hiding it is safe.
+---
+
+<div class="pullquote" aria-hidden="true">
+  <p class="pullquote__text"><slot /></p>
+</div>
