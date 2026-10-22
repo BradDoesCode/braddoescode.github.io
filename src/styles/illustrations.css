@@ -465,3 +465,49 @@
   border-left: 2px solid var(--accent);
   color: var(--fg);
 }
+
+/* ---------- Pictures (components/CaseFigure.astro) ---------- */
+
+.case-figure {
+  margin: var(--space-5) 0;
+  max-width: none;
+}
+
+.case-figure__picture {
+  display: block;
+}
+
+.case-figure__img {
+  display: block;
+  height: auto;
+}
+
+/* A wide strip: its own scrollable region, shown at a fixed height so the
+   artwork stays legible, and scrolled sideways rather than shrunk. The region
+   is a real stop for the keyboard, and the page never scrolls sideways. */
+.case-figure__scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--hairline);
+}
+
+.case-figure--strip .case-figure__img {
+  max-width: none;
+  width: auto;
+  height: 24rem;
+}
+
+/* The map phone: a tall picture, kept small. */
+.case-figure--tall .case-figure__img {
+  width: 100%;
+  max-width: 14rem;
+  height: auto;
+  border: 1px solid var(--hairline);
+}
+
+@media (min-width: 40rem) {
+  .case-figure--strip .case-figure__img {
+    height: 28rem;
+  }
+}
