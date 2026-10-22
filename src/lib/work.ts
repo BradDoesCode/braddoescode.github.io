@@ -3,12 +3,17 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type WorkEntry = CollectionEntry<'work'>;
 
 /**
- * Case studies for listings and routes, newest first. Drafts appear in dev so
+ * Case studies for listings and routes: by `order` (lowest first; entries
+ * without one come last), then newest first. Drafts appear in dev so
  * the templates can be worked on, and never in a production build.
  */
 export async function getWork(): Promise<WorkEntry[]> {
   const entries = await getCollection('work', ({ data }) => !import.meta.env.PROD || !data.draft);
-  return entries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return entries.sort(
+    (a, b) =>
+      (a.data.order ?? Infinity) - (b.data.order ?? Infinity) ||
+      b.data.date.valueOf() - a.data.date.valueOf(),
+  );
 }
 
 /**

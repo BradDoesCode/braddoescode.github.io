@@ -11,14 +11,14 @@ interface Props {
 }
 
 const { entry, level = 3 } = Astro.props;
-const { title, summary, date, role, tech, draft } = entry.data;
+const { title, summary, date, years, role, tech, draft } = entry.data;
 const Heading = `h${level}` as const;
 ---
 
 <li class="work-item">
   <div class="work-item__head">
     <Heading><a href={`/work/${entry.id}/`}>{title}</a></Heading>
-    <time class="work-item__year" datetime={isoDate(date)}>{formatYear(date)}</time>
+    <time class="work-item__year" datetime={isoDate(date)}>{years ?? formatYear(date)}</time>
   </div>
   <p class="work-item__summary">{summary}</p>
   <p class="meta">
