@@ -22,9 +22,11 @@ interface Props {
   caption?: boolean;
   /** Draw the August 2026 marker as well as April's. */
   limits?: boolean;
+  /** An extra sentence for the end of the compact caption. */
+  note?: string | undefined;
 }
 
-const { variant = 'full', caption: showCaption = true, limits = true } = Astro.props;
+const { variant = 'full', caption: showCaption = true, limits = true, note } = Astro.props;
 const full = variant === 'full';
 const summary = summarise();
 // Each label is set on two lines so its box is exactly as wide as its text.
@@ -45,7 +47,7 @@ const subject = activity.metric === 'pull-requests' ? 'Pull requests opened' : '
 const title = `${summary.metricLabel}, ${summary.period}`;
 const caption = full
   ? `${subject} per week across my GitHub account, including private work. It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and picked up from August, once usage limits were no longer a constraint.`
-  : `${subject} per week, including private work, shown relative to the busiest week. It reflects how I work rather than output.`;
+  : `${subject} per week, including private work, shown relative to the busiest week. It reflects how I work rather than output.${note ? ` ${note}` : ''}`;
 ---
 
 <figure class:list={['activity', `activity--${variant}`, { 'activity--single': !limits }]}>

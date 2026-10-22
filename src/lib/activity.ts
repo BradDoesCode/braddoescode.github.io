@@ -18,14 +18,38 @@ export interface Week {
   level: number;
 }
 
+export interface Multipliers {
+  /** April to July 2026 against before April 2026. */
+  aprilToJuly?: number;
+  /** From August 2026 against before April 2026. */
+  fromAugust?: number;
+  /** From April 2026 overall against before April 2026. */
+  fromApril?: number;
+}
+
 interface ActivityData {
   generatedAt: string;
   metric: Metric;
   from: string;
+  /** Rounded whole numbers: each period's average pull requests per week against the average before April 2026. Never counts. */
+  multipliers?: Multipliers;
   weeks: Week[];
 }
 
 export const activity = raw as ActivityData;
+
+/**
+ * The multipliers worth showing: a period that rounds to 1 or less is left out
+ * rather than shown as a weak figure. Read from the data at build time, so a
+ * refresh (`npm run stats`) updates every place they appear.
+ */
+export function shownMultipliers(): Multipliers {
+  const shown: Multipliers = {};
+  for (const [name, value] of Object.entries(activity.multipliers ?? {})) {
+    if (Number.isInteger(value) && value > 1) shown[name as keyof Multipliers] = value;
+  }
+  return shown;
+}
 
 /** The month the team began building with AI agents. */
 export const CHANGE_MONTH = '2026-04';

@@ -1,13 +1,18 @@
 ---
-// The Activity section's content: a headline, a lede, the annotated chart and,
-// in the full version, what changed and an honest note on how the chart is
-// made. The compact version (home page) is the headline, one line, the chart
-// and two links. The page supplies the section and its "Activity" label.
+// The Activity section's content: a title, a big multiplier, the annotated
+// chart and, in the full version, a lede, stat and "what changed" rows and a
+// note on how the chart is made. The compact version (home page) is the title,
+// the big multiplier, the chart and two links. The page supplies the section
+// and its "Activity" label.
 //
-// Shape only: nothing here states a count, an average, a ratio or a figure of
-// any kind. The case-study link and the point that rests on it are drawn only
-// when that case study is published, so neither can point at a missing page.
+// The only figures are rounded multipliers (average pull requests per week in a
+// period against the average before April 2026), read from
+// src/data/activity.json at build time so a refresh updates them. A multiplier
+// that rounds to 1 or less is not shown. Never a count, an average or a total
+// (confidentiality.md). The case-study link and the row that rests on it are
+// drawn only when that case study is published.
 import ActivityChart from './ActivityChart.astro';
+import { shownMultipliers } from '../lib/activity';
 import { getPublishedWork } from '../lib/work';
 
 interface Props {
@@ -18,26 +23,58 @@ const { variant = 'full' } = Astro.props;
 const full = variant === 'full';
 const study = await getPublishedWork('job-visibility');
 const studyHref = study ? `/work/${study.id}/` : undefined;
+
+const multipliers = shownMultipliers();
+const stat = multipliers.fromAugust;
+const statRows = [
+  { key: 'aprilToJuly', label: 'April–July 2026', value: multipliers.aprilToJuly },
+  { key: 'fromAugust', label: 'From August 2026', value: multipliers.fromAugust },
+].filter((row) => row.value !== undefined);
+const basis = 'compared with before April 2026';
+const chartNote = stat
+  ? 'The multiplier compares average pull requests opened per week with the average before April 2026, rounded to the nearest whole number.'
+  : undefined;
 ---
 
 <div class:list={['activity-story', `activity-story--${variant}`]}>
-  <h3 class="activity-story__headline">How the way I work changed</h3>
-  {/* Source: the lede wording follows Brad's approved caption (April 2026, then once usage limits were no longer a constraint). */}
+  {/* Source: confirmed by Brad in chat (the title's "same job, same hours"). */}
+  <h3 class="activity-story__headline">Same job, same hours, a different pace</h3>
+
   {
-    full ? (
-      <p class="activity-story__lede">
-        Once we started building with AI agents in April 2026, my weeks looked different. They changed again from August, once
-        usage limits were no longer a constraint.
-      </p>
-    ) : (
-      <p class="activity-story__lede">
-        My weeks changed shape when we started building with AI agents in April 2026, and again once usage limits were no longer
-        a constraint.
+    stat !== undefined && (
+      <p class="activity-story__stat">
+        <span class="activity-story__figure">{stat}×</span>
+        <span class="activity-story__stat-label">more pull requests a week since August, {basis}</span>
       </p>
     )
   }
 
-  <ActivityChart variant={variant} caption={!full} limits />
+  {
+    full && (
+      <p class="activity-story__lede">
+        Once we started building with AI agents in April 2026, my pace picked up. It picked up again from August, once usage limits
+        were no longer a constraint.
+      </p>
+    )
+  }
+
+  {
+    full && statRows.length > 0 && (
+      <dl class="activity-story__points activity-story__points--stats">
+        {statRows.map((row) => (
+          <div class="activity-story__point">
+            <dt>{row.label}</dt>
+            <dd>
+              <span class="activity-story__figure activity-story__figure--row">{row.value}×</span> pull requests a week
+              <span class="activity-story__basis">{basis}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  <ActivityChart variant={variant} caption={!full} limits note={chartNote} />
 
   {
     full && (
@@ -62,11 +99,6 @@ const studyHref = study ? `/work/${study.id}/` : undefined;
               </dd>
             </div>
           )}
-          <div class="activity-story__point">
-            <dt>Hours</dt>
-            {/* Source: confirmed by Brad in chat */}
-            <dd>Same job, same hours.</dd>
-          </div>
         </dl>
 
         {study && (
@@ -81,6 +113,9 @@ const studyHref = study ? `/work/${study.id}/` : undefined;
           Pull requests opened per week across my GitHub account, including private work, shown relative to the busiest week.
           It reflects how I work rather than output. The shift began when we started building with AI agents in April 2026, and
           picked up from August, once usage limits were no longer a constraint.{' '}
+          {/* Source: confirmed by Brad in chat (22 October 2026): rounded multipliers against the average before April 2026. */}
+          {statRows.length > 0 &&
+            'Multipliers compare average pull requests opened per week in each period with the average before April 2026, rounded to the nearest whole number. '}
           {/* Source: confirmed by Brad in chat */}
           Most of my work since April has been on newer projects, which grow faster than maintenance on a mature codebase.
         </p>
