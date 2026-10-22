@@ -1,0 +1,64 @@
+---
+title: "From chasing jobs to knowing where they are"
+summary: "We are building a new internal platform so the business hears about a stuck job before the customer has to chase it."
+date: 2026-10-22
+role: "Technical lead and sole developer for my area"
+tech: ["Claude Code", "Full-stack web development"]
+draft: true
+---
+
+import JobJourney from '../../components/JobJourney.astro';
+
+## The problem
+
+Under our older systems, the business usually did not know a job had a problem until a customer chased it. A job might be stuck in production. It might be waiting on artwork from the customer. Either way, there was no real way to find out unless someone went digging.
+
+That is a reactive way to run a print business. The customer notices first, and the business then has to catch up.
+
+The drawing below shows the idea with a made-up job. It is a generic print workflow, not taken from any real system. One step has stalled, and the person who needs to know is told.
+
+<JobJourney />
+
+The aim was to move from that reactive model to a proactive one. The system should tell people where a job is, and highlight any issue to the person who needs to know about it.
+
+## My part
+
+Since April 2026 I have been part of the team building Pollards' new internal platform. It replaces the company's older systems, and it is still in development.
+
+The work is split by area of the business. Other developers each own their own area, and we collaborate where the areas overlap. Mine runs from prepress to the customer receiving their order.
+
+I was the only developer on my area, and its technical lead. Within it, I built:
+
+- job milestone tracking
+- alerts
+- tickets
+- dashboards
+- the customer portal
+
+Milestone tracking and alerts are the most direct answer to the problem above. The first records where a job is, and the second tells the right person when something is wrong. {/* UNVERIFIED: ask Brad */}
+
+Where my area overlaps with others, I work with the developers who own them.
+
+## How we approached it
+
+I started by listening. I talked to people in production, prepress, customer service and account management about what was wrong with the old systems. I wanted their input on what the new one should do.
+
+About a dozen people from across the business drop in and out as needed: account managers, customer service, prepress and production staff, prepress and production managers and directors, and senior leadership. They shape what we build, and I am grateful to them for giving their time.
+
+We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships. For me, the point is speed without compromise on quality: better planning, better security and quicker building.
+
+## What was hard
+
+The hardest part was not the building. It was defining the issues with the old systems and turning them into real solutions.
+
+Someone describes a problem from their day-to-day work. My job is to turn that into a feature that actually fixes it, which is a different thing from a feature that sounds like it should. Getting from the first to the second took the most care.
+
+## Where it's at
+
+It is not fully in use yet.
+
+Some screens are live and in daily use. The customer service dashboard is one: it gives better visibility of jobs going through the business. The customer portal and the production pipelines are built and in testing.
+
+Because people use the live screens, we hear quickly what works and what does not, and we change them quickly in response. A screen that is not quite right does not have to stay that way for long.
+
+It is too early for me to say how much the platform has changed things, and I would rather say that than guess. What I can say is that the aim has not changed: the business should hear about a problem with a job from its own systems, not from a customer who had to chase.
