@@ -490,13 +490,21 @@
    pushed the picture about 200px in from the left. Reset all of it here, with a
    selector specific enough to win. */
 main .case-figure section.case-figure__scroll {
-  display: block;
   margin: 0;
   padding: 0;
   max-width: 100%;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   border: 1px solid var(--hairline);
+  /* One row. The gap between groups of panels shows the page background, so a
+     break in the strip reads as intended. */
+  display: flex;
+  gap: 1rem;
+  background: var(--bg);
+}
+
+.case-figure__scroll .case-figure__picture {
+  flex: none;
 }
 
 .case-figure--strip .case-figure__img {

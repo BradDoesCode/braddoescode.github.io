@@ -9,7 +9,8 @@ draft: false
 
 import CaseFigure from '../../components/CaseFigure.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
-import strip from '../../assets/find-your-event-strip.jpg';
+import panelsA from '../../assets/find-your-event-panels-a.jpg';
+import panelsB from '../../assets/find-your-event-panels-b.jpg';
 
 ## What it was
 
@@ -28,18 +29,28 @@ Organisers create their event in a web app, with the details, maps, guides and t
 Between them, those put an event's details, its map and its schedule in an attendee's pocket, and let the organiser keep them up to date.
 
 <CaseFigure
-  image={strip}
-  alt="An app store image strip showing the Find Your Event app: the event home screen, scanning a QR code, an event page, the interactive map and the activities schedule."
-  widths={[1700, 3322]}
-  sizes="1700px"
+  panels={[
+    {
+      image: panelsA,
+      alt: 'Two Play Store panels for the Find Your Event app: the event home screen, listing two events, and the QR code scanner, captioned as a way to find and join events by scanning an event QR code.',
+      widths: [415, 830],
+      sizes: '(min-width: 40rem) 413px, 354px',
+    },
+    {
+      image: panelsB,
+      alt: 'Three more Play Store panels: the activities schedule for a festival, the festival\'s list of stalls, and a closing "Download now" panel.',
+      widths: [623, 1246],
+      sizes: '(min-width: 40rem) 620px, 531px',
+    },
+  ]}
   scroll
   eager
   regionLabel="Find Your Event app screens, scrolls sideways"
 >
-  Images from the app's Play Store listing. Scroll sideways to see all of it.
+  Images from the app's Play Store listing, in two groups. Scroll sideways to see all of them.
 </CaseFigure>
 
-The screens in those images use the details of a real festival, The Slipshod Gathering, which agreed to us setting up a demo to show what the app could do. {/* Source: confirmed by Brad in chat */}
+The activities and stalls screens in those images use the details of a real festival, The Slipshod Gathering, which agreed to us setting up a demo to show what the app could do. The home screen lists it alongside a second event. {/* Source: confirmed by Brad in chat */}
 
 ## My part
 

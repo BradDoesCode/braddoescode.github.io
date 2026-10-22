@@ -11,13 +11,19 @@
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-interface Props {
+interface Panel {
   image: ImageMetadata;
   alt: string;
   /** Widths to generate, in pixels. */
   widths: number[];
   /** The 'sizes' attribute: how wide the image is shown. */
   sizes: string;
+}
+
+interface Props {
+  /** One or more images, shown in order. In a scroll region they sit side by
+   *  side with a small gap, so separate groups read as separate. */
+  panels: Panel[];
   /** Put a wide strip in a horizontally scrollable region. */
   scroll?: boolean;
   /** The accessible name of the scrollable region. */
@@ -26,37 +32,41 @@ interface Props {
   eager?: boolean;
 }
 
-const { image, alt, widths, sizes, scroll = false, regionLabel, eager = false } = Astro.props;
+const { panels, scroll = false, regionLabel, eager = false } = Astro.props;
 ---
 
 <figure class="case-figure case-figure--strip">
   {
     scroll ? (
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">
+        {panels.map((p) => (
+          <Picture
+            class="case-figure__img"
+            src={p.image}
+            alt={p.alt}
+            widths={p.widths}
+            sizes={p.sizes}
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            loading={eager ? 'eager' : 'lazy'}
+            pictureAttributes={{ class: 'case-figure__picture' }}
+          />
+        ))}
+      </section>
+    ) : (
+      panels.map((p) => (
         <Picture
           class="case-figure__img"
-          src={image}
-          alt={alt}
-          widths={widths}
-          sizes={sizes}
+          src={p.image}
+          alt={p.alt}
+          widths={p.widths}
+          sizes={p.sizes}
           formats={['avif', 'webp']}
           fallbackFormat="jpg"
           loading={eager ? 'eager' : 'lazy'}
           pictureAttributes={{ class: 'case-figure__picture' }}
         />
-      </section>
-    ) : (
-      <Picture
-        class="case-figure__img"
-        src={image}
-        alt={alt}
-        widths={widths}
-        sizes={sizes}
-        formats={['avif', 'webp']}
-        fallbackFormat="jpg"
-        loading={eager ? 'eager' : 'lazy'}
-        pictureAttributes={{ class: 'case-figure__picture' }}
-      />
+      ))
     )
   }
   <figcaption class="illus-caption"><slot /></figcaption>
