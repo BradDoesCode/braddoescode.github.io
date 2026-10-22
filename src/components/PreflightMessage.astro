@@ -1,0 +1,31 @@
+---
+// A before-and-after pair for one preflight message: a terse technical line,
+// and the same finding said to the customer in plain language. The words are
+// invented for this page. Neither line is real system output, and this is not a
+// screen. Labelled as an illustrative example.
+//
+// Real HTML, so axe can check the contrast. "Before" is a dashed box in the
+// monospace face, "after" a solid accent box in the body face, so the
+// difference does not depend on colour alone. Side by side from 40rem, stacked
+// below that.
+---
+
+<figure class="pm">
+  <p class="illus-tag">Illustrative example: not real system output</p>
+  <div class="pm__grid">
+    <div class="pm__panel pm__panel--before" role="group" aria-labelledby="pm-before">
+      <p class="pm__head" id="pm-before">Before: technical</p>
+      <p class="pm__line pm__line--tech">Bleed: 0 mm. Required: 3 mm.</p>
+    </div>
+    <div class="pm__panel pm__panel--after" role="group" aria-labelledby="pm-after">
+      <p class="pm__head" id="pm-after">After: friendly</p>
+      <p class="pm__kind">Fixed for you</p>
+      <p class="pm__line">
+        Your design runs right to the edge, so we’ve added a little extra around it (bleed) so nothing gets trimmed off.
+      </p>
+    </div>
+  </div>
+  <figcaption class="illus-caption">
+    The same finding, said two ways. The customer reads the second one.
+  </figcaption>
+</figure>

@@ -1,0 +1,46 @@
+---
+// An illustrative drawing of artwork moving through a typical print workflow,
+// from customer upload to ready for print, with two checkpoints and a branch
+// after the automatic checks. Freshly drawn and generic, labelled as
+// illustrative. It is not a screen, and nothing in it is taken from any real
+// system.
+//
+// Real HTML lists, so the text is read as it is and axe can check its contrast.
+// The connectors between steps are drawn in CSS (illustrations.css) and carry no
+// text. Steps are solid boxes, checkpoints are small dashed pills in the
+// accent, and the branch sits inside the checks box: "fixed for you" is solid
+// and "needs your attention" is dashed and in the accent, so the difference
+// does not depend on colour alone. A short note under the list says every step
+// is logged. The two outcomes sit side by side from 30rem
+// and stack below that.
+---
+
+<figure class="aj">
+  <p class="illus-tag">Illustrative: not taken from any real system</p>
+  <ol class="aj__steps">
+    <li class="aj__step">Upload</li>
+    <li class="aj__step aj__step--branch">
+      <p class="aj__name">Automatic checks</p>
+      <p class="aj__then">Then one of two outcomes</p>
+      <ul class="aj__outcomes">
+        <li class="aj__outcome aj__outcome--fixed">
+          <p class="aj__outcome-name">Fixed for you</p>
+          <p class="aj__outcome-line">We fix it, and tell you what we did.</p>
+        </li>
+        <li class="aj__outcome aj__outcome--attention">
+          <p class="aj__outcome-name">Needs your attention</p>
+          <p class="aj__outcome-line">We tell you what to fix.</p>
+        </li>
+      </ul>
+    </li>
+    <li class="aj__checkpoint">Checkpoint: the artwork is ready for a proof</li>
+    <li class="aj__step">Proof</li>
+    <li class="aj__step">Customer approval</li>
+    <li class="aj__checkpoint">Checkpoint: the proof is approved</li>
+    <li class="aj__step">Ready for print</li>
+  </ol>
+  <p class="aj__log">Every step is logged, with the reason for anything that goes wrong.</p>
+  <figcaption class="illus-caption">
+    A made-up piece of artwork moving through typical print stages. Along the way it has to pass checkpoints, and the checks tell the customer either what we've fixed or what they need to fix.
+  </figcaption>
+</figure>

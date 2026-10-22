@@ -239,3 +239,229 @@
     font-size: calc(var(--step-2) * var(--display-scale));
   }
 }
+
+/* ---------- The artwork journey ---------- */
+
+.aj,
+.pm {
+  margin: var(--space-5) 0;
+  max-width: none;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.35;
+}
+
+.aj__steps {
+  --gap: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 28rem;
+}
+
+.aj__step,
+.aj__checkpoint {
+  position: relative;
+  margin: 0;
+}
+
+.aj__step {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  font-size: var(--step-0);
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+.aj__step + .aj__step,
+.aj__step + .aj__checkpoint,
+.aj__checkpoint + .aj__step {
+  margin-top: var(--gap);
+}
+
+/* Connectors, as in the before-and-after flows: a short line down from the item
+   above, with an arrowhead. */
+.aj__step + .aj__step::before,
+.aj__step + .aj__checkpoint::before,
+.aj__checkpoint + .aj__step::before {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  bottom: 100%;
+  height: var(--gap);
+  border-left: 1px solid var(--border);
+}
+
+.aj__step + .aj__step::after,
+.aj__step + .aj__checkpoint::after,
+.aj__checkpoint + .aj__step::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--space-3) - 0.3125rem + 0.5px);
+  bottom: calc(100% + 0.0625rem);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-0.125rem) rotate(45deg) scale(0.85);
+  transform-origin: center;
+}
+
+/* A checkpoint is a small dashed pill in the accent, set apart from the steps. */
+.aj__checkpoint {
+  justify-self: start;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1) var(--space-3);
+  border: 1px dashed var(--accent);
+  border-radius: 1rem;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.aj__name,
+.aj__then,
+.aj__outcome-name,
+.aj__outcome-line {
+  margin: 0;
+  max-width: none;
+}
+
+.aj__name {
+  font-size: var(--step-0);
+  line-height: 1.3;
+}
+
+.aj__then {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--muted);
+}
+
+.aj__outcomes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+@media (min-width: 30rem) {
+  .aj__outcomes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.aj__outcome {
+  margin: 0;
+  padding: var(--space-2);
+  background: var(--surface);
+}
+
+.aj__outcome + .aj__outcome {
+  margin-top: 0;
+}
+
+.aj__outcome-name {
+  font-weight: 650;
+}
+
+.aj__outcome-line {
+  color: var(--fg);
+}
+
+.aj__outcome--fixed {
+  border: 1px solid var(--border);
+}
+
+.aj__outcome--attention {
+  border: 1px dashed var(--accent);
+}
+
+.aj__outcome--attention .aj__outcome-name {
+  color: var(--accent);
+}
+
+/* ---------- A preflight message, before and after ---------- */
+
+.pm__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 40rem) {
+  .pm__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+.pm__panel {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+}
+
+.pm__head {
+  margin: 0 0 var(--space-2);
+  font-size: var(--step--2);
+  font-weight: 650;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.pm__kind {
+  display: inline-block;
+  margin: 0 0 var(--space-2);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--accent);
+  border-radius: 1rem;
+  font-size: var(--step--2);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.pm__line {
+  margin: 0;
+  max-width: none;
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.4;
+}
+
+/* Before: quiet and technical. Dashed, muted, in the monospace face. */
+.pm__panel--before {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.pm__line--tech {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* After: friendly. Solid, in the accent, on a surface fill. */
+.pm__panel--after {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.pm__panel--after .pm__head {
+  color: var(--accent);
+}
+
+/* A note under the list: every step is logged. A quiet rule on the left, in the
+   accent, so it reads as a note on the whole journey, not as another step. */
+.aj__log {
+  margin: var(--space-3) 0 0;
+  max-width: 28rem;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--accent);
+  color: var(--fg);
+}
