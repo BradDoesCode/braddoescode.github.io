@@ -89,7 +89,7 @@ export const cv: Cv = {
 
   profile: [
     'I build software with AI coding agents, inside a structured engineering process where people make the design decisions and review what ships. The aim is speed without compromise on quality.',
-    "I'm part of the team building Pollards' new internal platform, and I work across the stack, from customer-facing apps to internal tools. Before that I worked on the PHP backend of Brandhub, with earlier experience in full-stack and Flutter mobile development.",
+    "I'm part of the team building Pollards' new internal platform, and I work across the stack, from customer-facing apps to internal tools. Before that I worked on the PHP backend of an established e-commerce print platform, with earlier experience in full-stack and Flutter mobile development.",
   ],
 
   skills: [
@@ -115,9 +115,9 @@ export const cv: Cv = {
       start: 'June 2025',
       end: 'Present',
       summary: [
-        "Since April 2026 I've been part of the team building Pollards' new internal platform, which is replacing the company's older systems. It's still in development. We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships.",
+        "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships.",
         "The work is split by area of the business. My area runs from prepress to the customer receiving their order, giving staff and customers a clearer view of where every job is. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor.",
-        "Before that, from June 2025, I maintained and improved the PHP backend of Brandhub, the company's established e-commerce platform, working in Yii2 and Vue.js. Brandhub is now a legacy system, kept running while the new platform replaces it.",
+        "Before that, from June 2025, I maintained and improved the PHP backend of an established e-commerce print platform, working in Yii2 and Vue.js.",
       ],
     },
     {
@@ -161,5 +161,5 @@ export const cv: Cv = {
 
   // The date of the last real update to this file. The update-cv skill sets
   // it each time the content changes.
-  lastUpdated: '2026-10-22',
+  lastUpdated: '2026-10-23',
 };

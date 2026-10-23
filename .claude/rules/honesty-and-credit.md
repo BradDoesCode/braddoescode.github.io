@@ -35,7 +35,7 @@ Every claim on this site must be true and supportable by Brad if a hiring manage
 | "World-class, fully automated pipeline." | "A pipeline where most steps run without a person, and a person approves the result." |
 | "Zero bugs reached production." | "Review caught several problems before they shipped." (only if Brad can support "several") |
 | "Seamless AI integration." | "Getting agents to work reliably took a lot of iteration. The hardest part was keeping their context accurate." |
-| "Rebuilt the backend single-handedly." | "I worked on the PHP backend of Brandhub, mainly on [area Brad confirms]." |
+| "Rebuilt the backend single-handedly." | "I worked on the PHP backend of an established e-commerce platform, mainly on [area Brad confirms]." |
 
 ## Rules for agents
 

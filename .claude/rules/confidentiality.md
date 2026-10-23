@@ -7,6 +7,7 @@ This repo and the site are public. Brad works for William Pollard & Co, and thei
 - Code, snippets, prompts, or rule and skill text taken from any William Pollard repo, even lightly edited.
 - Names of private repos, internal systems, tools, services, databases or environments. Describe the internal platform generically, for example "an internal business platform". Say no more than that about what it does.
 - Names of customers, suppliers or colleagues.
+- The status or future of any company system: whether it is legacy, being retired or being replaced. Describe past work on a system without saying what will happen to it.
 - How the team's AI engineering process works: how agents are instructed, which review steps exist, how work is specified, or how fixes and issues are automated. Say only that agents work inside a structured process with human decisions and review.
 - Internal architecture specifics, infrastructure names, data models, schemas, endpoints, or screenshots of internal tools.
 - Internal metrics: volumes, revenue, savings, PR counts, commit counts, review counts, agent run counts, from private repos.
@@ -24,7 +25,7 @@ Page content, headings, alt text, image filenames and image metadata (EXIF, XMP,
 | Brad's role and responsibilities | Names of colleagues, even in thanks |
 | The general approach and ideas ("agents work inside a structured process; people decide and review") | The text of any internal spec, prompt, rule or skill |
 | Technologies at a general level ("PHP", "TypeScript", "LLM agents") | Internal service names, hostnames, repo names, table or field names |
-| Brandhub as a public product, and Brad's PHP backend work on it in general terms | Brandhub internals, customer brand portals, client data |
+| Brad's earlier PHP backend work on an established e-commerce print platform, in general terms | The platform's name, internals, client portals, client data or its future |
 | Freshly written, anonymised, illustrative examples labelled as such | Real code or output, even trimmed or "mostly generic" |
 | Qualitative outcomes Brad is happy to say publicly | Internal numbers, even rounded or "roughly" |
 
