@@ -9,16 +9,29 @@
   Rules of the house:
     - Text only ever moves (transform). It never fades, so a snapshot taken
       mid-animation cannot produce a contrast failure.
-    - Distances are short (24px) and the easing is gentle.
-    - Each reveal plays out over roughly the lower half of the screen (vh
-      ranges, so it scales with the window), and a section's label, rule and
-      content run on the same timeline so they arrive as a set.
+    - Text lines move only a little relative to each other (1.5rem, no more
+      than the gap between blocks), so a lifted line never sits on its
+      neighbour while the neighbours are part way through their own reveal.
+      The big movement is made by lifting a whole section as one block
+      (3rem, rule and all), which keeps its lines where they were relative to
+      each other. Sideways text movement and a longer rise both failed axe's
+      contrast check (it reported text as partly overlapped). The last block
+      on a page is left still, because axe cannot settle its contrast while it
+      is displaced. Fades and the largest travel belong to shapes and
+      pictures, which have no text contrast to fail: the chart, the
+      case-study pictures, the journey drawing, the section rule.
+    - Reveals are brisk rather than slow: text settles within about a quarter
+      of a screen of scroll (vh ranges, so it scales with the window), with a
+      firm ease-out, so the movement reads as a movement and not as drift.
+      A section's label, rule and content run on the same timeline so they
+      arrive as a set.
     - The timeline goes in longhands on purpose. The minifier folds a full
       set of animation-* longhands into the `animation` shorthand, and Chrome
       drops a shorthand that contains a timeline. Leaving some longhands unset
       (delay, duration, direction and so on) keeps it from merging. The check
       script fails the build if a built stylesheet ever does this.
-    - The only fade is the section rule, which is a border and not text.
+    - The fades are the section rule (a border), the pictures and the chart
+      (shapes). None of them is text.
     - No animated pseudo-elements: axe (used by `npm run check`) cannot work
       out the contrast of text near one while it is animating, and reports
       false failures. The same goes for a gradient background on a section.
@@ -36,57 +49,116 @@
 
     @keyframes slide-in {
       from {
-        transform: translateX(-1.5rem);
+        transform: translateX(-3.5rem);
       }
     }
 
-    /* The section rule fades up from the paper colour. It is a border, so the
-       layout never moves, and it is not text. */
+    /* The section rule arrives in the accent colour and cools to its resting
+       tone, and a short accent shadow above it shrinks away. It is a border and a
+       shadow, so the layout never moves, and it is not text. */
     @keyframes rule-in {
       from {
-        border-top-color: var(--bg);
+        border-top-color: var(--accent);
+        box-shadow: 0 -3px 0 var(--accent);
       }
     }
 
-    /* The activity bars grow up from the baseline. Bars are shapes, not text,
-       so a snapshot mid-growth cannot cause a contrast failure. */
+    /* A whole section comes up into place, rule and all. Moving the block as one
+       keeps every line in it where it was relative to the others. */
+    @keyframes section-rise {
+      from {
+        transform: translateY(3rem);
+      }
+    }
+
+    /* Pictures and the chart are shapes, not text, so they may fade, scale and
+       travel as far as they like. */
+    @keyframes picture-in {
+      from {
+        opacity: 0;
+        transform: translateY(4rem) scale(0.92);
+      }
+    }
+
+    /* The activity bars grow up from the baseline while a wipe sweeps across
+       them from the left. */
     @keyframes grow {
       from {
-        transform: scaleY(0.06);
+        transform: scaleY(0.03);
       }
     }
 
-    @keyframes drift {
+    @keyframes sweep {
+      from {
+        clip-path: inset(0 100% 0 0);
+      }
+    }
+
+    @keyframes draw-down {
+      from {
+        transform: scaleY(0);
+      }
+    }
+
+    @keyframes unclip-down {
+      from {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    @keyframes drift-name {
       to {
-        transform: translateY(-3.5rem);
+        transform: translateY(-9rem) scale(0.94);
+      }
+    }
+
+    @keyframes drift-eyebrow {
+      to {
+        transform: translateY(-12rem);
+      }
+    }
+
+    @keyframes drift-lede {
+      to {
+        transform: translateY(-3rem);
       }
     }
 
     @keyframes name-in {
       from {
-        transform: translateY(0.14em);
+        transform: translateY(0.4em);
       }
     }
 
     /* ----- Section labels and rules ----- */
 
     /* Each section is its own timeline, so its label and its rule move
-       together as the section comes up the screen. */
-    main section:not(.hero) {
+       together as the section comes up the screen. The strip of pictures in
+       a case study is a <section> too, but it has its own treatment below. */
+    main section:not(.hero, .case-figure__scroll) {
       view-timeline: --section block;
-      animation-name: rule-in;
-      animation-timing-function: ease-out;
-      animation-fill-mode: both;
-      animation-timeline: --section;
-      animation-range: cover 0px cover 60vh;
+      animation-name: rule-in, section-rise;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1), cubic-bezier(0.2, 0.7, 0.2, 1);
+      animation-fill-mode: both, both;
+      animation-timeline: --section, --section;
+      animation-range: cover 0px cover 40vh, cover 0px cover 30vh;
     }
 
-    main section:not(.hero) > h2 {
-      animation-name: slide-in;
-      animation-timing-function: ease-out;
+    /* The last section of a page stays put and only its rule animates. */
+    main section:not(.hero, .case-figure__scroll):last-child {
+      animation-name: rule-in;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
       animation-fill-mode: both;
       animation-timeline: --section;
-      animation-range: cover 0px cover 50vh;
+      animation-range: cover 0px cover 40vh;
+    }
+
+    main section:not(.hero, .case-figure__scroll) > h2 {
+      animation-name: slide-in;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+      animation-fill-mode: both;
+      animation-timeline: --section;
+      animation-range: cover 0px cover 26vh;
     }
 
     /* ----- Things that rise into place ----- */
@@ -99,42 +171,72 @@
     .link-list li,
     .role,
     .prose h2,
+    .prose > p:not(:last-child),
+    .prose > ul:not(:last-child),
+    .prose > ol:not(:last-child),
     .activity-story > :not(.activity, .activity-story__points, .activity-story__note),
     .activity-story__point,
-    main section:not(.hero) > p,
-    main section:not(.hero) > dl,
-    main section:not(.hero) > ul:not(.work-list, .link-list) {
+    main section:not(.hero, .case-figure__scroll) > p,
+    main section:not(.hero, .case-figure__scroll) > dl,
+    main section:not(.hero, .case-figure__scroll) > ul:not(.work-list, .link-list) {
       animation-name: rise;
-      animation-timing-function: ease-out;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
       animation-fill-mode: both;
       animation-timeline: view();
-      animation-range: cover 0px cover 55vh;
+      animation-range: cover 0px cover 26vh;
     }
 
-    /* A light stagger for neighbours that arrive together: each later row
+    /* A clear stagger for neighbours that arrive together: each later row
        starts a little further up the screen. */
     .work-item:nth-child(2),
     .link-list li:nth-child(2),
     .activity-story__point:nth-child(2) {
-      animation-range: cover 6vh cover 61vh;
+      animation-range: cover 8vh cover 34vh;
     }
 
     .work-item:nth-child(3),
     .link-list li:nth-child(3),
     .activity-story__point:nth-child(3) {
-      animation-range: cover 12vh cover 67vh;
+      animation-range: cover 16vh cover 42vh;
     }
 
     .work-item:nth-child(n + 4),
     .link-list li:nth-child(n + 4),
     .activity-story__point:nth-child(n + 4) {
-      animation-range: cover 18vh cover 73vh;
+      animation-range: cover 24vh cover 50vh;
+    }
+
+    /* ----- Pictures ----- */
+
+    /* The strip of screenshots in a case study is one scroll region, so it is
+       the thing that animates (a picture inside a scroll region would look to
+       that region for its timeline, which never moves). It holds only
+       pictures, so it can fade as well as rise and grow. */
+    main .case-figure section.case-figure__scroll {
+      transform-origin: 50% 100%;
+      animation-name: picture-in;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0px cover 45vh;
+    }
+
+    /* The journey drawing is a line and dots with no text in it (the labels
+       are beside it), so it is drawn from the top down as it arrives. */
+    .journey__svg {
+      animation-name: unclip-down;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0px cover 60vh;
     }
 
     /* ----- The activity chart ----- */
 
     /* The figure is the timeline and the bars follow it, in longhands as
-       ever. The group scales from its own bottom edge, which is the baseline. */
+       ever. The group scales from its own bottom edge, which is the baseline.
+       Two animations share the timeline: the bars grow and a wipe sweeps
+       across, so the chart is drawn from left to right. */
     .activity {
       view-timeline: --activity block;
     }
@@ -142,30 +244,59 @@
     .activity__bars {
       transform-box: fill-box;
       transform-origin: 50% 100%;
-      animation-name: grow;
+      animation-name: grow, sweep;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1), linear;
+      animation-fill-mode: both, both;
+      animation-timeline: --activity, --activity;
+      animation-range: cover 0px cover 45vh, cover 0px cover 60vh;
+    }
+
+    /* The April and August markers are hairlines. They are drawn down after
+       the bars, so the eye is taken to the change. */
+    .activity__marker-line {
+      transform-origin: 50% 0;
+      animation-name: draw-down;
       animation-timing-function: ease-out;
       animation-fill-mode: both;
       animation-timeline: --activity;
-      animation-range: cover 0px cover 50vh;
+      animation-range: cover 25vh cover 65vh;
     }
 
     /* ----- Home: the name ----- */
 
-    /* A quick settle on load: transform only, so the name is readable from
-       the first frame. */
+    /* A settle on load: transform only, so the name is readable from the
+       first frame. The two lines arrive one after the other. */
     .hero h1 span,
     .hero h1 em {
-      animation: name-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation: name-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     }
 
     .hero h1 em {
-      animation-delay: 0.06s;
+      animation-delay: 0.12s;
     }
 
-    /* And a slight lift as the hero scrolls away, so the name leaves a touch
-       faster than the page. */
+    /* As the hero scrolls away the three layers leave at different speeds, so
+       the name seems to stand proud of the page: the kicker goes first, then the
+       name, then the paragraph. Each moves only in transform. */
     .hero h1 {
-      animation-name: drift;
+      transform-origin: 0 50%;
+      animation-name: drift-name;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+
+    .hero__text > .eyebrow {
+      animation-name: drift-eyebrow;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+
+    .hero__text > .lede {
+      animation-name: drift-lede;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: view();
