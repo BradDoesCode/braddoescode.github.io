@@ -1,0 +1,80 @@
+---
+// A before-and-after of a page load, freshly drawn and generic: a page that
+// loads all the shared data every time, against one that loads only what it
+// needs. Labelled as illustrative. It shows shape only: no timings, no numbers,
+// and nothing taken from any real system.
+//
+// Real HTML lists, so the text is read as it is and axe can check its contrast.
+// The blocks and wait bars are drawn in CSS (illustrations.css), are hidden from
+// screen readers, and carry no text. "Before" is dashed and quiet, "After" is
+// solid and in the accent, and the wait is also written out in words, so the
+// difference does not depend on colour or size alone. Side by side from 40rem,
+// stacked below that.
+const before = [
+  { step: 'Page requested' },
+  { step: 'Load all shared data', note: 'On every page load' },
+  { step: 'Page usable' },
+];
+const after = [
+  { step: 'Page requested' },
+  { step: 'Load only what this page needs', note: 'A lighter, faster fetch' },
+  { step: 'Page usable' },
+];
+---
+
+<figure class="flows pl">
+  <p class="illus-tag">Illustrative: not taken from any real system</p>
+  <div class="flows__grid">
+    <div class="flow flow--before" role="group" aria-labelledby="pl-before">
+      <p class="flow__title" id="pl-before">Before: load everything</p>
+      <ol class="flow__steps">
+        {
+          before.map((s) => (
+            <li class="flow__step">
+              {s.step}
+              {s.note && (
+                <>
+                  <span class="pl__note">{s.note}</span>
+                  <span class="pl__blocks pl__blocks--heavy" aria-hidden="true">
+                    <span class="pl__block" />
+                    <span class="pl__block" />
+                    <span class="pl__block" />
+                    <span class="pl__block" />
+                  </span>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+      <p class="pl__wait">The wait: longer</p>
+      <span class="pl__bar pl__bar--long" aria-hidden="true"></span>
+    </div>
+    <div class="flow flow--after" role="group" aria-labelledby="pl-after">
+      <p class="flow__title" id="pl-after">After: load what's needed</p>
+      <ol class="flow__steps">
+        {
+          after.map((s) => (
+            <li class="flow__step">
+              {s.step}
+              {s.note && (
+                <>
+                  <span class="pl__note">{s.note}</span>
+                  <span class="pl__blocks pl__blocks--light" aria-hidden="true">
+                    <span class="pl__block" />
+                  </span>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+      <p class="pl__wait">The wait: shorter</p>
+      <span class="pl__bar pl__bar--short" aria-hidden="true"></span>
+    </div>
+  </div>
+  <figcaption class="illus-caption">
+    The same page, loaded two ways. The second asks for less, so the person waits for less. The bars show the
+    shape of the difference, not a measurement.
+  </figcaption>
+</figure>

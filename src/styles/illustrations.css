@@ -518,3 +518,82 @@ main .case-figure section.case-figure__scroll {
     height: 28rem;
   }
 }
+
+/* ---------- A page load, before and after (components/PageLoad.astro) ----------
+   Reuses the .flows / .flow styles above. The blocks and wait bars are drawn in
+   CSS, carry no text and are hidden from screen readers. */
+
+.pl__note {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--step--1);
+  font-weight: 400;
+}
+
+.pl__blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.pl__block {
+  display: block;
+  height: 0.75rem;
+  background: var(--border);
+}
+
+/* A stack of several fetches, each wide. */
+.pl__blocks--heavy .pl__block {
+  flex: 1 1 100%;
+}
+
+/* One small fetch. */
+.pl__blocks--light .pl__block {
+  width: 35%;
+  background: var(--accent);
+}
+
+/* Equal-height columns, with the wait row pinned to the bottom, so the two bars
+   line up and the difference in length is easy to compare. */
+.pl .flow {
+  display: flex;
+  flex-direction: column;
+}
+
+.pl .flow__steps {
+  flex: 1 1 auto;
+}
+
+.pl__wait {
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: var(--step--2);
+  font-weight: 650;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.flow--before .pl__wait {
+  color: var(--muted);
+}
+
+.flow--after .pl__wait {
+  color: var(--accent);
+}
+
+.pl__bar {
+  display: block;
+  height: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+
+.pl__bar--long {
+  width: 100%;
+}
+
+.pl__bar--short {
+  width: 40%;
+  border-color: var(--accent);
+  background: var(--accent);
+}

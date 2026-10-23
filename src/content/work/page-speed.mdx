@@ -1,0 +1,59 @@
+---
+title: "The data every page was waiting for"
+summary: "I made an established e-commerce print platform faster and nicer to use, while learning two new frameworks."
+date: 2026-10-23
+years: "2025"
+order: 4
+role: "PHP developer, backend and front-end improvements"
+tech: ["PHP", "Yii2", "Vue.js", "Angular"]
+draft: true
+---
+
+import PageLoad from '../../components/PageLoad.astro';
+
+## The starting point
+
+Pollards has an established e-commerce print platform. It's business-critical: our own people use it, and so do large clients, including national organisations, to order print.
+
+It was old, a little slow and had its quirks. But overall it was good for customers.
+
+For the people looking after it, the picture was different. After more than a decade of development by many people, general maintenance was a pain.
+
+I worked on it from June 2025 until I moved to working on Pollards' new internal platform in April 2026.
+
+This was hands-on work, before I started building with AI agents.
+
+## My part
+
+I worked on the PHP backend, in Yii2 and Vue.js. My focus was usability and performance: refining workflows and interfaces, and making things faster and more reliable. The method was small, steady improvements in an established codebase, with as little disruption to users as I could manage.
+
+There were two strands to it:
+
+- Faster pages, mainly by cutting down and speeding up the shared data the app loaded on every page.
+- Nicer page designs, so the app looked and felt better to use.
+
+## The shared data
+
+The app used Angular as well as Vue. Whichever page you opened, it loaded a set of shared data first. By shared data I mean the information that many pages have in common, rather than anything specific to the page you opened.
+
+The trouble was that the site depended on much of that data. I couldn't just switch it off. So I did two things. I cut out some of what was loaded, and I improved how quickly the rest was fetched.
+
+Because it happened on every page load, the gain showed up across the whole site, not on a single screen.
+
+The drawing below shows the idea with a made-up page. It's generic, and not taken from any real system.
+
+<PageLoad />
+
+## How I worked
+
+I found my way around mainly with developer tooling. Some files ran to thousands of lines, which made the codebase tricky to navigate.
+
+Every change needed strict checking. A small edit in one place can cause a bug somewhere else, and this is a system clients use to place orders.
+
+## What was hard
+
+I was learning Vue and Angular while maintaining the app, to a strict deadline. The app used both, side by side, and each has its own way of doing things. I learned each one by working in it, on the app itself.
+
+## What happened
+
+The app was a better experience to use. Most of that came from performance, with the design improvements on top.
