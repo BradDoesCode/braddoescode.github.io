@@ -1,6 +1,6 @@
 ---
 title: "The dragon that had to be cut in two"
-summary: "I built Runedex, a completion tracker for the game RuneScape: Dragonwilds, on my own in Flutter, and the hardest part was a dragon on the home screen."
+summary: "A completion tracker for RuneScape: Dragonwilds that I built on my own in Flutter, as a side project and a way to practise."
 date: 2026-10-23
 years: "2025"
 order: 4
@@ -19,7 +19,7 @@ import lore from '../../assets/runedex-lore.jpg';
 
 ## What it was
 
-This one is a side project from 2025. I built it before I used AI tools, so it sits alongside [Find Your Event](/work/find-your-event/) as a marker for how differently I work now.
+This one is a side project from 2025. I built it before I used AI coding tools, so it sits alongside [Find Your Event](/work/find-your-event/) as a marker for how differently I work now.
 
 Runedex is a completion tracker for the game RuneScape: Dragonwilds, which I was playing at the time. It tracks quests, side quests and collectibles, which the game calls lore scraps, and shows a live completion percentage. Progress is stored on your device, and the app collects no personal data.
 
@@ -73,9 +73,9 @@ The code is in <ExternalLink href="https://github.com/BradDoesCode/Rundex">the p
 
 ## What was hard
 
-The dragon on the home screen took the most thought. Its arm reaches over the top of the Main Quests card, and one flat image can't do that when the card has to stay tappable. {/* UNVERIFIED: ask Brad. Who made the dragon artwork? Nothing here says, and the text avoids claiming it. */}
+The dragon on the home screen took the most thought. The artwork itself was AI-generated, but its arm reaches over the top of the Main Quests card, and one flat image can't do that when the card has to stay tappable. {/* Source: confirmed by Brad in chat */}
 
-So I split the picture into two pieces: the dragon, and its arm. In a layered stack, the dragon sits behind the card and the arm sits in front of it, with the card in between.
+So I split the picture into two pieces myself: the dragon, and its arm. In a layered stack, the dragon sits behind the card and the arm sits in front of it, with the card in between.
 
 <LayeredCard />
 
@@ -89,4 +89,4 @@ The other hard part wasn't code. Runedex is for people playing one particular ga
 
 ## Where it got to
 
-It was ready for closed testing on Google Play, with GitHub issue forms for testers to sign up and send feedback. I didn't get any testers.
+Runedex got as far as being ready for closed testing on Google Play, with GitHub issue forms for testers to sign up and send feedback. Without testers, it hasn't gone further than that, but the code is still on GitHub for anyone who wants a look.
