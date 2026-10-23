@@ -59,8 +59,11 @@ These exist now, as scripts in `package.json`. Report what they actually output,
 | `npm run build` | Static build into `dist/`, including `.nojekyll` (from `public/`), then `scripts/cv-pdf.mjs` writes the CV PDF to `dist/cv/Bradley-Barbrook-CV.pdf` |
 | `npm run preview` | Serve the built output |
 | `npm run deploy` | Build, then publish `dist/` to `gh-pages`. **Brad runs this, never an agent.** |
+| `npm run cv:private` | A private copy of the CV with Brad's phone and email on it, for direct applications. Brad runs this locally; output goes to `~/Documents`, never published. Agents do not run it for real. See below. |
 | `npm run stats` | Refreshes the activity chart data using your `gh` login; run before deploy. Read-only GitHub queries, and the only command that needs a network. |
 | `npm run check` | The single local gate, `scripts/check.mjs`. Runs offline. See below. |
+
+`npm run cv:private` (`scripts/cv-private.mjs`) renders the built `/cv/` page the same way as the public PDF, but adds the contact details in the headless browser only, at print time. They come from `~/.config/braddoescode/cv-private.json` (`{ "phone": "...", "email": "..." }`), which lives outside the repo and which agents never create, fill or read. The output is `~/Documents/Bradley Barbrook CV.pdf`. Both paths can be overridden with `CV_PRIVATE_CONFIG` and `CV_PRIVATE_OUT`, which tests use with fake values. The script refuses to write its output, or read its config, anywhere inside the repo, will not overwrite a file it did not make, and is never part of `build`, `check` or `deploy`. `.gitignore` also ignores `cv-private*` and `*.private.*`. The public site, the public PDF and `dist/` never hold a phone number or email.
 
 `npm run check` runs these stages in order and exits non-zero if any fails:
 

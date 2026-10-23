@@ -37,3 +37,10 @@ Thumbs.db
 
 # Agent worktrees
 .claude/worktrees/
+
+# Private CV copy (scripts/cv-private.mjs writes outside the repo; these are a
+# second line of defence if one is ever dropped in)
+cv-private*
+!scripts/cv-private.mjs
+*.private.*
+Bradley Barbrook CV*.pdf
