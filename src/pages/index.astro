@@ -9,6 +9,19 @@ import { staticPages } from '../data/pages';
 import { githubUrl, linkedinUrl } from '../data/site';
 import { getWork, hasPublishedWork } from '../lib/work';
 
+// Years and wording follow src/data/cv.ts, apart from the FiveM line.
+const timeline = [
+  { years: '2012\u20132022', text: 'Retail and team-leading roles' },
+  { years: '2022', text: 'Ran a FiveM roleplay server and learned to code' },
+  // Source: confirmed by Brad in chat
+  {
+    years: '2022\u20132025',
+    text: "Digitwell Solutions: joined as an apprentice, learned full-stack development (mainly Laravel) and Flutter, and led Flutter's adoption",
+  },
+  { years: '2025', text: 'Pollards Print: PHP backend work on an established e-commerce print platform' },
+  { years: '2026', text: "Building with AI agents on Pollards' new internal platform" },
+];
+
 const showWork = await hasPublishedWork();
 const featured = (await getWork()).slice(0, 3);
 ---
@@ -26,6 +39,29 @@ const featured = (await getWork()).slice(0, 3);
       decisions and review what ships. The aim is speed without compromise on quality.
     </p>
   </Hero>
+
+  <section aria-labelledby="how-heading">
+    <h2 id="how-heading" class="section-title">How I got here</h2>
+    {/* Source: confirmed by Brad in chat (23 October 2026) */}
+    <p>
+      I didn't start out in software. After ten years in retail and team-leading roles, I got into code in 2022 by
+      running a British-themed FiveM roleplay server for GTA V. I wrote its scripts in Lua and ran the community,
+      which grew to more than 1,000 members, with the server full at 64 players every night. It's what made me want
+      to code for a living, and it gave me a head start when I did.
+    </p>
+    {/* Source: dates match src/data/cv.ts; the FiveM line is confirmed by Brad in chat (23 October 2026) */}
+    <ol class="timeline" aria-label="Career timeline">
+      {
+        timeline.map((item) => (
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true" />
+            <span class="timeline__year">{item.years}</span>
+            <span class="timeline__text">{item.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
 
   {
     showWork && (

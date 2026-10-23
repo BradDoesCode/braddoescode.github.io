@@ -176,6 +176,7 @@
     .prose > p:not(:last-child),
     .prose > ul:not(:last-child),
     .prose > ol:not(:last-child),
+    .timeline,
     .activity-story > :not(.activity, .activity-story__points, .activity-story__note),
     .activity-story__point,
     main section:not(.hero, .case-figure__scroll) > p,
