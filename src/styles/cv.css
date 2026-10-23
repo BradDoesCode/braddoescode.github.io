@@ -1,7 +1,8 @@
 /*
   CV page: a few screen rules, then the print stylesheet. The CV is printed
-  from this same page (the browser's print dialog gives the PDF), so there is
-  one set of markup and one data source, and the two cannot drift apart.
+  from this same page, and the downloadable PDF is made from it at build time
+  (scripts/cv-pdf.mjs, headless Chrome using this print stylesheet), so there
+  is one set of markup and one data source, and the two cannot drift apart.
 */
 
 /* The name, in the display face (Cormorant Garamond 600, which runs small, so
@@ -12,6 +13,19 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 0.95;
+}
+
+/* The PDF is made from this same page at build time (scripts/cv-pdf.mjs). */
+.cv__download {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+}
+
+.cv__download a {
+  display: inline-block;
+  padding-block: var(--space-2);
+  font-weight: 600;
 }
 
 .skills {
@@ -107,6 +121,7 @@
   .site-header,
   .site-footer,
   .dev-note,
+  .cv__download,
   .cv__updated {
     display: none !important;
   }

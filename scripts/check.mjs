@@ -2,12 +2,15 @@
 //
 // Stages, in order:
 //   1. astro check        types, Astro diagnostics
-//   2. astro build        static build into dist/
+//   2. astro build        static build into dist/, then the CV PDF
+//                         (scripts/cv-pdf.mjs), as `npm run build` does
 //   3. output assertions  .nojekyll, CSP meta on every page, no inline
 //                         script/style, no third-party runtime resources,
 //                         a link-preview card (og:image) on every page that
 //                         exists in dist/ as a 1200x630 PNG under 300 KB,
 //                         no draft markers (UNVERIFIED, Source: comments),
+//                         the CV PDF exists, is a PDF, is small, and holds no
+//                         email, UK phone number or local path,
 //                         and the activity data holds only dates, relative levels and rounded multipliers
 //   4. html-validate      HTML validity of every built page
 //   5. linkinator         internal links and fragments, against a local server
@@ -19,7 +22,7 @@
 //
 // Exits non-zero if any stage fails. External links are listed but not
 // followed, because the check must not need a network.
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, statSync } from 'node:fs';
 import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -257,6 +260,60 @@ async function ogProblems(html, name) {
   return problems;
 }
 
+// The downloadable CV PDF (scripts/cv-pdf.mjs) is made from the built /cv/
+// page, which carries no phone number, address or email. This checks the
+// file: it exists, is a PDF, is small, and holds no email address, UK phone
+// number or local path. The text inside a PDF is compressed and stored as
+// glyphs, so the patterns are tested against the parts that are readable (the
+// metadata, links and annotations, with the compressed streams cut out), the
+// visible text of the page it was printed from, and, when poppler's
+// `pdftotext` is installed, the PDF's own text.
+const CV_PDF = 'cv/Bradley-Barbrook-CV.pdf';
+const CV_PDF_MAX_BYTES = 500 * 1024;
+const EMAIL_PATTERN = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
+const UK_PHONE_PATTERN = /(?:\+\s?44|\b0044|(?<![\d.])0)[\s().-]*\d(?:[\s().-]*\d){8,10}(?!\d)/;
+const LOCAL_PATH_PATTERN = /\/Users\/|\/home\/[a-z]|\/private\/|\/var\/folders\/|[A-Z]:\\Users\\/;
+
+async function cvPdfProblems() {
+  const file = join(dist, CV_PDF);
+  const name = `dist/${CV_PDF}`;
+  if (!existsSync(file)) return [`${name} is missing (it is made by scripts/cv-pdf.mjs after the build)`];
+  const problems = [];
+  const bytes = await readFile(file);
+  if (!bytes.subarray(0, 4).equals(Buffer.from('%PDF'))) problems.push(`${name}: does not start with %PDF`);
+  if (bytes.length > CV_PDF_MAX_BYTES) {
+    problems.push(`${name}: is ${Math.round(bytes.length / 1024)} KB, over the ${CV_PDF_MAX_BYTES / 1024} KB cap`);
+  }
+  const raw = bytes.toString('latin1');
+  if (LOCAL_PATH_PATTERN.test(raw)) problems.push(`${name}: contains a local file path`);
+
+  const readable = raw.replace(/stream\r?\n[\s\S]*?\r?\nendstream/g, '');
+  const html = await readFile(join(dist, 'cv', 'index.html'), 'utf8');
+  const pageText = html
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ');
+  // The strings in the file's own objects (title, author, link addresses),
+  // for the phone test. Numbers elsewhere in it (offsets, page sizes) would
+  // look like phone numbers.
+  const strings = [...readable.matchAll(/\(((?:[^()\\]|\\.)*)\)/g)].map((m) => m[1]);
+  for (const [, hex] of readable.matchAll(/<([0-9A-Fa-f]{4,})>/g)) {
+    const buffer = Buffer.from(hex.length % 2 ? hex + '0' : hex, 'hex');
+    strings.push(buffer.subarray(0, 2).equals(Buffer.from([0xfe, 0xff])) ? Buffer.from(buffer.subarray(2)).swap16().toString('utf16le') : buffer.toString('latin1'));
+  }
+  const sources = {
+    'its metadata and links': { email: readable, phone: strings.join('\n') },
+    'the /cv/ page it is made from': { email: pageText, phone: pageText },
+  };
+  const extracted = spawnSync('pdftotext', ['-layout', file, '-'], { encoding: 'utf8' });
+  if (extracted.status === 0) sources['its text (pdftotext)'] = { email: extracted.stdout, phone: extracted.stdout };
+  for (const [where, text] of Object.entries(sources)) {
+    if (EMAIL_PATTERN.test(text.email)) problems.push(`${name}: an email address appears in ${where}`);
+    if (UK_PHONE_PATTERN.test(text.phone)) problems.push(`${name}: a UK phone number appears in ${where}`);
+  }
+  return problems;
+}
+
 async function assertOutput() {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -345,10 +402,11 @@ async function assertOutput() {
     }
   }
 
+  problems.push(...(await cvPdfProblems()));
   problems.push(...(await activityProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; activity data holds only dates, relative levels and rounded multipliers`);
+  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers`);
   return problems.length === 0;
 }
 
@@ -424,6 +482,9 @@ async function main() {
   let go = await stage('astro check', async () => (await run(bin('astro'), ['check'])) === 0, { fatal: true });
   if (go) {
     go = await stage('astro build', async () => (await run(bin('astro'), ['build'])) === 0, { fatal: true });
+  }
+  if (go) {
+    go = await stage('CV PDF (from the built /cv/ page)', async () => (await run('node', ['scripts/cv-pdf.mjs'])) === 0, { fatal: true });
   }
   if (go) {
     await stage('output assertions (.nojekyll, CSP, no inline code or third parties)', assertOutput);

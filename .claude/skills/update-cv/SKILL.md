@@ -33,8 +33,8 @@ Ask for anything missing. Do not invent dates, titles or numbers.
 ## 3. Keep site and print in sync
 
 - Confirm `/cv/` renders the new content, both on screen and in print preview. Run `npm run build` and look at both.
-- Check the print stylesheet still fits sensibly on one or two A4 pages with no orphaned headings.
-- If a PDF download link is offered, remind Brad it is made from the browser's print dialog and Brad must regenerate it. Do not commit a stale PDF.
+- Check the print stylesheet still fits sensibly on one or two A4 pages with no orphaned headings (the PDF uses the same stylesheet).
+- The downloadable PDF (`/cv/Bradley-Barbrook-CV.pdf`) is made from the built `/cv/` page by `scripts/cv-pdf.mjs` on every `npm run build`, so it follows the CV data automatically and there is nothing to regenerate or remember. Never commit a PDF; `dist/` is ignored. After the edit, open the built PDF (`dist/cv/Bradley-Barbrook-CV.pdf`) and check it is still two A4 pages with a sensible break. `npm run check` fails if it is missing, too big, or holds an email address, phone number or local path.
 
 ## 4. Flag gaps and stale entries
 

@@ -29,9 +29,11 @@ const flagged = cv.experience.filter((role) => role.needsUpdate);
           ))
         }
       </p>
+      <p class="cv__download">
+        <a href="/cv/Bradley-Barbrook-CV.pdf" download>Download CV (PDF)</a>
+      </p>
       <p class="meta cv__updated">
-        Last updated <time datetime={isoDate(cv.lastUpdated)}>{formatDate(cv.lastUpdated)}</time>. To save a PDF, use your
-        browser's print dialog.
+        Last updated <time datetime={isoDate(cv.lastUpdated)}>{formatDate(cv.lastUpdated)}</time>.
       </p>
     </header>
 
