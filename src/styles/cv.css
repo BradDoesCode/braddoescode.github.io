@@ -203,10 +203,19 @@
     break-after: avoid;
   }
 
+  /* Roles may split across the page break so page 1 fills up. The heading
+     stays with its first lines (h3 break-after above), and orphans/widows
+     stop single lines being stranded at either side of the break. */
   .role {
-    break-inside: avoid;
+    break-inside: auto;
     padding-block: 0;
     margin-bottom: 10pt;
+  }
+
+  .role p,
+  .role li {
+    orphans: 3;
+    widows: 3;
   }
 
   .role + .role {
