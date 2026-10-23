@@ -34,3 +34,18 @@ export async function hasPublishedWork(): Promise<boolean> {
 export async function getPublishedWork(id: string): Promise<WorkEntry | undefined> {
   return (await getWork()).find((entry) => entry.id === id);
 }
+
+/**
+ * The case studies either side of one, in the same order as /work/ (it reads
+ * getWork, so drafts are left out in production and the order cannot drift).
+ * "Previous" is the one listed above it and "next" the one listed below it.
+ * There is no wrap-around: the first has no previous and the last has no next.
+ */
+export async function getNeighbours(
+  id: string,
+): Promise<{ previous?: WorkEntry | undefined; next?: WorkEntry | undefined }> {
+  const entries = await getWork();
+  const index = entries.findIndex((entry) => entry.id === id);
+  if (index === -1) return {};
+  return { previous: entries[index - 1], next: entries[index + 1] };
+}

@@ -1,0 +1,46 @@
+---
+// The "More work" navigation at the foot of a case study: the case studies
+// either side of this one, in the order /work/ lists them, and a way back to the
+// list. There is no wrap-around, so the first has no previous and the last no next.
+import { formatYear } from '../lib/format';
+import type { WorkEntry } from '../lib/work';
+
+interface Props {
+  previous?: WorkEntry | undefined;
+  next?: WorkEntry | undefined;
+}
+
+const { previous, next } = Astro.props;
+---
+
+<nav class="case-nav" aria-label="More case studies">
+  <ul class="case-nav__list">
+    {
+      previous && (
+        <li class="case-nav__item case-nav__item--prev">
+          <a href={`/work/${previous.id}/`} rel="prev">
+            <span class="case-nav__label">Previous</span>
+            <span class="case-nav__name">{previous.data.title}</span>
+            <span class="case-nav__year">
+              {previous.data.years ?? formatYear(previous.data.date)}
+            </span>
+          </a>
+        </li>
+      )
+    }
+    {
+      next && (
+        <li class="case-nav__item case-nav__item--next">
+          <a href={`/work/${next.id}/`} rel="next">
+            <span class="case-nav__label">Next</span>
+            <span class="case-nav__name">{next.data.title}</span>
+            <span class="case-nav__year">
+              {next.data.years ?? formatYear(next.data.date)}
+            </span>
+          </a>
+        </li>
+      )
+    }
+  </ul>
+  <p class="case-nav__all"><a href="/work/">All work</a></p>
+</nav>

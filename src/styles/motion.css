@@ -208,6 +208,18 @@
       animation-range: cover 24vh cover 50vh;
     }
 
+    /* The "More work" navigation is the last thing on a case study. Only its
+       top rule arrives, in the accent colour, cooling to its resting tone, and
+       no text moves (large motion at the end of a page has failed the
+       contrast check before). */
+    .case-nav {
+      animation-name: rule-in;
+      animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: cover 0px cover 40vh;
+    }
+
     /* ----- Pictures ----- */
 
     /* The strip of screenshots in a case study is one scroll region, so it is

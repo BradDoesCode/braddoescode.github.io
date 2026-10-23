@@ -731,6 +731,86 @@ main section .work-item:first-child {
   line-height: 1.4;
 }
 
+/* "More work": the previous and next case study at the foot of a case study.
+   Each link is one block, so the whole of it is the target. */
+.case-nav {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hairline);
+}
+
+.case-nav__list {
+  display: grid;
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.case-nav__item {
+  margin: 0;
+}
+
+.case-nav__item a {
+  display: block;
+  min-height: 2.75rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.case-nav__label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.case-nav__name {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--step-1);
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.case-nav__year {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.case-nav__item a:hover .case-nav__name,
+.case-nav__item a:focus-visible .case-nav__name {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.case-nav__all {
+  margin: var(--space-4) 0 0;
+  max-width: none;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+}
+
+.case-nav__all a {
+  display: inline-block;
+  padding-block: var(--space-2);
+  color: var(--muted);
+}
+
+.case-nav__all a:hover {
+  color: var(--accent);
+}
+
 /* ---------- Wider screens ---------- */
 
 @media (min-width: 40rem) {
@@ -812,8 +892,19 @@ main section .work-item:first-child {
   main .wrap > .placeholder-note,
   main .wrap > .work-list,
   main .wrap > .empty-state,
-  main .wrap > article > .prose {
+  main .wrap > article > .prose,
+  main .wrap > .case-nav {
     margin-left: var(--indent);
+  }
+
+  .case-nav__list {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-5);
+  }
+
+  .case-nav__item--next {
+    grid-column: 2;
+    text-align: right;
   }
 
   main .wrap > .placeholder-note {
@@ -836,5 +927,12 @@ main section .work-item:first-child {
 
   .work-item:hover .work-item__head::after {
     border-color: var(--accent);
+  }
+}
+
+/* Navigation has no place on paper. */
+@media print {
+  .case-nav {
+    display: none !important;
   }
 }

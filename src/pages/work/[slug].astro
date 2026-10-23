@@ -3,7 +3,8 @@ import { render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatYear, isoDate } from '../../lib/format';
-import { getWork } from '../../lib/work';
+import CaseNav from '../../components/CaseNav.astro';
+import { getNeighbours, getWork } from '../../lib/work';
 
 export const getStaticPaths = (async () => {
   const entries = await getWork();
@@ -13,6 +14,7 @@ export const getStaticPaths = (async () => {
 const { entry } = Astro.props;
 const { title, summary, date, years, role, tech, draft } = entry.data;
 const { Content } = await render(entry);
+const { previous, next } = await getNeighbours(entry.id);
 ---
 
 <BaseLayout title={title} description={summary} ogType="article">
@@ -41,4 +43,5 @@ const { Content } = await render(entry);
       <Content />
     </div>
   </article>
+  <CaseNav previous={previous} next={next} />
 </BaseLayout>
