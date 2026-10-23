@@ -72,11 +72,13 @@
     }
 
     /* Pictures and the chart are shapes, not text, so they may fade, scale and
-       travel as far as they like. */
+       travel. Nothing here starts hidden or tiny: each starts part drawn, and
+       is done by the time it is a third of the way up the screen, so a picture
+       or chart near the fold is never missing. */
     @keyframes picture-in {
       from {
-        opacity: 0;
-        transform: translateY(4rem) scale(0.92);
+        opacity: 0.3;
+        transform: scale(0.94);
       }
     }
 
@@ -84,25 +86,25 @@
        them from the left. */
     @keyframes grow {
       from {
-        transform: scaleY(0.03);
+        transform: scaleY(0.25);
       }
     }
 
     @keyframes sweep {
       from {
-        clip-path: inset(0 100% 0 0);
+        clip-path: inset(0 70% 0 0);
       }
     }
 
     @keyframes draw-down {
       from {
-        transform: scaleY(0);
+        transform: scaleY(0.2);
       }
     }
 
     @keyframes unclip-down {
       from {
-        clip-path: inset(0 0 100% 0);
+        clip-path: inset(0 0 70% 0);
       }
     }
 
@@ -211,14 +213,15 @@
     /* The strip of screenshots in a case study is one scroll region, so it is
        the thing that animates (a picture inside a scroll region would look to
        that region for its timeline, which never moves). It holds only
-       pictures, so it can fade as well as rise and grow. */
+       pictures, so it can fade and grow. It scales from its top edge and does not
+       travel, so it never lands on the caption beneath it. */
     main .case-figure section.case-figure__scroll {
-      transform-origin: 50% 100%;
+      transform-origin: 50% 0;
       animation-name: picture-in;
       animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
       animation-fill-mode: both;
       animation-timeline: view();
-      animation-range: cover 0px cover 45vh;
+      animation-range: cover 0px cover 22vh;
     }
 
     /* The journey drawing is a line and dots with no text in it (the labels
@@ -228,7 +231,7 @@
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: view();
-      animation-range: cover 0px cover 60vh;
+      animation-range: cover 0px cover 25vh;
     }
 
     /* ----- The activity chart ----- */
@@ -248,18 +251,18 @@
       animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1), linear;
       animation-fill-mode: both, both;
       animation-timeline: --activity, --activity;
-      animation-range: cover 0px cover 45vh, cover 0px cover 60vh;
+      animation-range: cover 0px cover 12vh, cover 0px cover 14vh;
     }
 
-    /* The April and August markers are hairlines. They are drawn down after
-       the bars, so the eye is taken to the change. */
+    /* The April and August markers are hairlines. They draw down a little
+       after the bars begin, so the eye is taken to the change. */
     .activity__marker-line {
       transform-origin: 50% 0;
       animation-name: draw-down;
       animation-timing-function: ease-out;
       animation-fill-mode: both;
       animation-timeline: --activity;
-      animation-range: cover 25vh cover 65vh;
+      animation-range: cover 0px cover 16vh;
     }
 
     /* ----- Home: the name ----- */
