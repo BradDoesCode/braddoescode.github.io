@@ -1,0 +1,69 @@
+---
+// An exploded diagram of one layering idea, freshly drawn and generic: a large
+// picture that has to pass behind a card and in front of it at once is cut into
+// two pieces, with the card between them. Labelled as illustrative. It is made
+// of plain shapes, not the app's artwork, and shows no code.
+//
+// The shapes are drawn in CSS (illustrations.css) and hidden from screen
+// readers. Everything that carries meaning is real HTML text, so axe can check
+// it: an ordered list of four panels, then a note about taps. In each of the
+// first three panels one layer is solid and the others are dashed outlines, so
+// the difference does not depend on colour alone. Two panels across below 40rem,
+// four from there.
+const panels = [
+  {
+    id: 'dragon',
+    head: 'Behind',
+    name: 'The big picture',
+    line: 'Most of the creature, behind everything.',
+  },
+  {
+    id: 'card',
+    head: 'In the middle',
+    name: 'The menu card',
+    line: 'The thing you tap, drawn over the picture.',
+  },
+  {
+    id: 'arm',
+    head: 'In front',
+    name: 'The arm',
+    line: 'The piece that reaches over the card.',
+  },
+  {
+    id: 'all',
+    head: 'Together',
+    name: 'What you see',
+    line: 'The three layers read as one picture.',
+  },
+];
+---
+
+<figure class="ls">
+  <p class="illus-tag">Illustrative: simple shapes, not the app’s artwork</p>
+  <ol class="ls__panels">
+    {
+      panels.map((p) => (
+        <li class={`ls__panel ls__panel--${p.id}`}>
+          <div class="ls__stage" aria-hidden="true">
+            <span class="ls__shape ls__shape--dragon" />
+            <span class="ls__shape ls__shape--card" />
+            <span class="ls__shape ls__shape--arm" />
+            {p.id === 'all' && <span class="ls__tap" />}
+            {p.id === 'all' && <span class="ls__tap-line" />}
+          </div>
+          <p class="ls__head">{p.head}</p>
+          <p class="ls__name">{p.name}</p>
+          <p class="ls__line">{p.line}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="ls__note">
+    <strong>Taps go through the arm to the card.</strong> The arm is only for looking at, so a tap on it reaches the card
+    underneath.
+  </p>
+  <figcaption class="illus-caption">
+    One picture cut into two pieces, with the card between them. Both pieces are sized and placed in the same way, so
+    they stay lined up on any screen size.
+  </figcaption>
+</figure>
