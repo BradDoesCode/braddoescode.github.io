@@ -127,7 +127,7 @@ export const cv: Cv = {
       start: '2022',
       end: '2025',
       summary: [
-        'I gained rounded experience building and maintaining applications and websites across multiple frameworks and environments. I designed and developed applications for iOS and Android, desktop applications, and full-stack projects, while collaborating closely with the founder and taking on a broad range of responsibilities to meet project goals.',
+        'I gained rounded experience building and maintaining applications and websites across multiple frameworks and environments. I designed and developed applications for iOS and Android, desktop applications, and full-stack projects, while collaborating closely with the founder and taking on a broad range of responsibilities to meet project goals. I learned full-stack development there, mainly in Laravel.',
         'Flutter development became a key focus, learning the framework and Dart language from scratch. After researching and advocating for modern alternatives, I led the adoption of Flutter to replace a long-standing legacy platform, resulting in improved development speed and application performance. I worked extensively with state management, including Riverpod, to deliver a fully completed large-scale application.',
       ],
       note: 'Role originally undertaken as part of an apprenticeship programme (not completed). Responsibilities and output were equivalent to a junior-to-mid level software developer.',
