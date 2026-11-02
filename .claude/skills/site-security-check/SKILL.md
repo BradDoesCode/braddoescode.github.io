@@ -27,7 +27,7 @@ This skill does not fix things. It reports. Do not push, deploy or open PRs.
 4. **Content Security Policy.**
    - A CSP meta tag exists on every page and matches the standard. No `'unsafe-inline'` or `'unsafe-eval'` in `script-src`. Any inline script is hashed.
    - Origins in the CSP match what the pages actually load, no wildcard origins.
-5. **External links.** Every link to another origin has `rel="noopener noreferrer"`. Check the built HTML, for example `rg '<a [^>]*href="https?://' dist | rg -v 'noopener'`.
+5. **External links.** Every link to another origin has `rel="noopener noreferrer"` and `target="_blank"`. Check the built HTML, for example `rg '<a [^>]*href="https?://' dist | rg -v 'noopener'`.
 6. **Dependencies.**
    - `npm audit` (once `package.json` exists). Report severity, whether the vulnerable package is in the build chain or the output, and whether a fix is available.
    - Lockfile committed. No unpinned `latest` versions. No install scripts from unfamiliar packages. List any new dependency and why it is needed.

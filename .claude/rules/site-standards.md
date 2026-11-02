@@ -38,7 +38,7 @@ Technical and quality standards for the built site. Stack choices live in `CLAUD
 
 - Provide a **Content-Security-Policy via `<meta http-equiv>`**, since Pages gives no header control. Start strict: `default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'`. Loosen only with a stated reason. Astro inlines small stylesheets by default, so set `build.inlineStylesheets: 'never'` to keep `style-src 'self'` valid. (`frame-ancestors` is ignored in a meta tag; do not rely on it.)
 - Add `<meta name="referrer" content="strict-origin-when-cross-origin">`.
-- Every external link carries `rel="noopener noreferrer"`. Use one shared link component so this cannot be forgotten.
+- External links open in a new tab, say so for screen readers, and go through `ExternalLink`. That one component sets `target="_blank"`, `rel="noopener noreferrer"` and visually hidden text "(opens in a new tab)", and CSS draws a small decorative arrow after the link. Links written in Markdown or MDX content reach it through `MarkdownLink`, which `src/pages/work/[slug].astro` passes to `<Content />`. Never write a raw `<a href="https://...">`; `npm run check` fails if one gets through. Internal links stay in the same tab.
 - No inline event handlers. Avoid inline scripts; if one is needed, hash it in the CSP rather than using `'unsafe-inline'`.
 
 ## Output
