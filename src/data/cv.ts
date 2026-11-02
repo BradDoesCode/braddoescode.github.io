@@ -36,8 +36,13 @@ export interface CvRole {
   start: string;
   /** Display string, or "Present". */
   end: string;
-  /** One entry per paragraph. */
-  summary: string[];
+  /** An optional one-line introduction, shown above the bullets. */
+  intro?: string;
+  /**
+   * What was done, one idea per bullet (2 to 5). Past tense for past roles,
+   * present tense for the current one.
+   */
+  bullets: string[];
   /** An extra line shown under the role, as written on the CV. */
   note?: string;
   /**
@@ -124,7 +129,7 @@ export const cv: Cv = {
       location: 'Exeter',
       start: 'June 2025',
       end: 'Present',
-      summary: [
+      bullets: [
         "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code).",
         "The work is split by area of the business. My area runs from prepress to the customer receiving their order. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor. One is a customer service dashboard: some of the team use it to see problems with jobs before the customer calls.",
         "Before that, from June 2025, I worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js. I cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.",
@@ -136,7 +141,7 @@ export const cv: Cv = {
       location: 'Devon',
       start: '2022',
       end: '2025',
-      summary: [
+      bullets: [
         'I built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder. I learned full-stack development there, mainly in Laravel.',
         'I learned Flutter and Dart from scratch. I researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it, which made development faster and the apps perform better. I used Riverpod for state management and delivered a large-scale application.',
       ],

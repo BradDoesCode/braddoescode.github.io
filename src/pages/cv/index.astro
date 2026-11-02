@@ -80,7 +80,10 @@ const flagged = cv.experience.filter((role) => role.needsUpdate);
               <span aria-hidden="true">·</span>
               {role.start} – {role.end}
             </p>
-            {role.summary.map((paragraph) => <p>{paragraph}</p>)}
+            {role.intro && <p class="role__intro">{role.intro}</p>}
+            <ul class="role__bullets">
+              {role.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
             {role.note && <p class="role__note">{role.note}</p>}
           </article>
         ))

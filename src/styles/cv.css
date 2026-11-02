@@ -75,6 +75,19 @@
   margin-bottom: 0;
 }
 
+.role__intro {
+  margin-bottom: var(--space-2);
+}
+
+.role__bullets {
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+.role__bullets li + li {
+  margin-top: var(--space-1);
+}
+
 .role__note {
   color: var(--muted);
   font-size: var(--step--1);
@@ -220,6 +233,24 @@
 
   .role + .role {
     border-top: 0;
+  }
+
+  .role__intro {
+    margin-bottom: 2pt;
+  }
+
+  .role__bullets {
+    margin: 0;
+    padding-left: 12pt;
+  }
+
+  .role__bullets li + li {
+    margin-top: 1.5pt;
+  }
+
+  /* A bullet may not be the last or first line of a role on its own. */
+  .role__bullets li {
+    break-inside: avoid;
   }
 
   /* Projects are short, so keep each one whole rather than splitting it. */
