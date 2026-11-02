@@ -13,12 +13,13 @@
   fill) and the gradient's position is transitioned. The gradient is 210% of
   the link's box on both axes, at a true 45 degrees, so the hard edge between
   the two colours starts clear of the bottom-left corner and ends clear of the
-  top-right one, whatever the shape of the link. The 220% is the geometry: the
+  top-right one, whatever the shape of the link. The 210% is the geometry: the
   edge has to travel the box's width plus its height.
 
   Rules of the house:
     - At rest a link is ordinary coloured text. The gradient and the
-      transparent fill exist only on :hover and :focus-visible, so axe (used by
+      transparent fill exist only while a link is hovered or focused and while
+      the sweep runs back afterwards (see "Leaving"), so axe (used by
       `npm run check`) reads the resting colour as it always has, and a page
       that is never hovered is untouched. Only background-size and
       background-position are set at rest, and with no image they paint nothing.
@@ -105,6 +106,36 @@
       text-decoration-line: underline;
       text-decoration-color: transparent;
       transition: color 0.2s ease;
+    }
+
+    /* ----- Leaving: the sweep runs back from wherever it had got to ----- */
+
+    /* Where the browser can switch a discrete property after a delay
+       (transition-behavior: allow-discrete), the gradient, the clip and the
+       transparent fill stay on while the position runs back to the start, then
+       drop away, so the link is plain coloured text again once it is still.
+         - The position transitions both ways with one duration and easing, so
+           an interrupted sweep reverses from its current value and a new hover
+           carries on forwards from it.
+         - The fill goes back first, then the image and clip a moment later.
+           By then the gradient shows only the resting colour, so the order is
+           invisible, and text is never left transparent with nothing behind it.
+         - The colour is not transitioned here: the transparent fill hides it
+           until the fill is restored, by which time it is the resting colour.
+       Entering (below) lists only the position, so everything else is instant.
+       Elsewhere the sweep goes forwards and the colour fades back, as above. */
+    @supports (transition-behavior: allow-discrete) {
+      a:not(.link-list a, .case-nav__item a, .skip-link, .site-name),
+      .work-list .work-item :is(h2, h3) a,
+      .link-list__text,
+      .case-nav__name {
+        transition:
+          background-position var(--sweep-time) var(--sweep-ease),
+          -webkit-text-fill-color 0s var(--sweep-time),
+          background-image 0s calc(var(--sweep-time) + 60ms) allow-discrete,
+          background-clip 0s calc(var(--sweep-time) + 60ms) allow-discrete,
+          -webkit-background-clip 0s calc(var(--sweep-time) + 60ms) allow-discrete;
+      }
     }
 
     /* ----- On hover and keyboard focus ----- */
