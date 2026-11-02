@@ -45,12 +45,12 @@ export const manifestIcons: Record<string, IconOptions & { purpose: 'any' | 'mas
 
 export function iconSvg({ size, letter }: IconOptions): string {
   const scale = (size * letter) / MARK_HEIGHT;
-  const { bg, accent } = readPalettes().light;
+  const { bg, fg } = readPalettes().light;
   const x = size / 2 - MARK_CENTRE.x * scale;
   const y = size / 2 - MARK_CENTRE.y * scale;
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`,
-    `<rect width="${size}" height="${size}" fill="${accent}"/>`,
+    `<rect width="${size}" height="${size}" fill="${fg}"/>`,
     `<path transform="translate(${x} ${y}) scale(${scale})" fill="${bg}" d="${MARK_PATH}"/>`,
     '</svg>',
   ].join('');
