@@ -139,7 +139,7 @@ export const cv: Cv = {
       ],
     },
     {
-      title: 'Software Developer, E‑commerce Platform',
+      title: 'Software Developer, E-commerce Platform',
       organisation: 'Pollards Print',
       location: 'Exeter',
       start: 'June 2025',
