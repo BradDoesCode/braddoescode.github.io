@@ -3,7 +3,7 @@
 // chart and, in the full version, a lede, stat and "what changed" rows and a
 // note on how the chart is made. The compact version (home page) is the title,
 // the big multiplier, the chart and two links. The page supplies the section
-// and its "Activity" label.
+// and its "Activity" label (the full version is on /work/, the compact one on the home page).
 //
 // The only figures are rounded multipliers (average pull requests per week in a
 // period against the average before April 2026), read from
@@ -126,7 +126,7 @@ const chartNote = stat
   {
     !full && (
       <p class="activity-story__links">
-        <a href="/about-this-site/#activity">See the full chart and what changed</a>
+        <a href="/work/#activity">See the full chart and what changed</a>
         {studyHref && <a href={studyHref}>See it in practice</a>}
       </p>
     )

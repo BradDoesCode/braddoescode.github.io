@@ -18,7 +18,7 @@ export const staticPages = {
   },
   work: {
     title: 'Work',
-    description: 'Case studies by Bradley Barbrook, listed newest first.',
+    description: 'Case studies by Bradley Barbrook, listed newest first, and a chart of how my weekly pace changed.',
   },
   '404': {
     title: 'Page not found',

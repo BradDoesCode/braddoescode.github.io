@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ActivityStory from '../../components/ActivityStory.astro';
 import WorkList from '../../components/WorkList.astro';
 import { staticPages } from '../../data/pages';
 import { getWork } from '../../lib/work';
@@ -7,9 +8,14 @@ import { getWork } from '../../lib/work';
 const entries = await getWork();
 ---
 
-<BaseLayout title={staticPages.work.title} description={staticPages.work.description}>
+<BaseLayout title={staticPages.work.title} description={staticPages.work.description} displayName="roman">
   <div class="page-head">
     <h1>Work</h1>
   </div>
   <WorkList entries={entries} level={2} />
+
+  <section id="activity" aria-labelledby="activity-heading">
+    <h2 id="activity-heading">Activity</h2>
+    <ActivityStory />
+  </section>
 </BaseLayout>

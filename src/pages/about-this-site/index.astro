@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ActivityStory from '../../components/ActivityStory.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
 import { staticPages } from '../../data/pages';
 import { repoUrl } from '../../data/site';
@@ -23,7 +22,6 @@ const palettePage =
 <BaseLayout
   title={staticPages['about-this-site'].title}
   description={staticPages['about-this-site'].description}
-  displayName="roman"
 >
   <div class="page-head">
     <h1>About this site</h1>
@@ -52,11 +50,6 @@ const palettePage =
     <p>Claude Code wrote the code for this site. I chose what to build, judged the designs and reviewed what came back.</p>
     {/* Source: CLAUDE.md, Working with Brad: Brad is the only source of truth for Brad's career. */}
     <p>The facts about my career come from me. Claude Code is told not to invent details to fill a gap.</p>
-  </section>
-
-  <section id="activity" aria-labelledby="activity-heading">
-    <h2 id="activity-heading">Activity</h2>
-    <ActivityStory />
   </section>
 
   <section id="colour" aria-labelledby="colour-heading">
