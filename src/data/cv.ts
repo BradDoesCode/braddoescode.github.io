@@ -165,7 +165,8 @@ export const cv: Cv = {
         'Built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder.',
         'Learned full-stack development there, mainly in Laravel.',
         'Learned Flutter and Dart from scratch, researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it. Development got faster and the apps performed better.',
-        'Used Riverpod for state management and delivered a large-scale application.',
+        'Used Riverpod for state management in Flutter.',
+        'Helped build Map Your Event, a large-scale Laravel application and the backend for the Find Your Event app.',
       ],
       note: "I started the role as an apprentice; the apprenticeship wasn't completed. The work was at junior-to-mid level.",
     },
@@ -183,11 +184,34 @@ export const cv: Cv = {
 
   projects: [
     {
+      name: 'Portfolio site',
+      year: '2026',
+      summary:
+        'Built with Claude Code, with me choosing what to build and reviewing what came back. Every page scores 100 in all four Lighthouse categories, on mobile and desktop, and passes automated WCAG 2.2 AA accessibility checks in light and dark mode. The repo is public, including the rules and checks the agents work under.',
+      links: [{ label: 'Code on GitHub', url: 'https://github.com/BradDoesCode/braddoescode.github.io' }],
+    },
+    {
       name: 'Runedex',
       year: '2025',
       summary:
-        'A Flutter app for Android and iOS that I built on my own in about five months, from April to August 2025.',
-      links: [{ label: 'Case study', url: '/work/runedex/' }],
+        'A completion tracker for RuneScape: Dragonwilds, built on my own in Flutter for Android and iOS, from April to August 2025. It tracks quests and collectibles with a live completion percentage, and stores progress on the device with Riverpod and Hive. It got as far as being ready for closed testing on Google Play.',
+      links: [
+        { label: 'Case study', url: '/work/runedex/' },
+        { label: 'Code on GitHub', url: 'https://github.com/BradDoesCode/Rundex' },
+      ],
+    },
+    {
+      name: 'Find Your Event',
+      year: '2024–2025',
+      summary:
+        "The attendee app for Map Your Event, an in-house start-up project at Digitwell Solutions. I built the Flutter mobile app, with event listings, an interactive site map, a personalised schedule, push notifications and QR code scanning, and helped build the Laravel backend. It never got the funding to reach the market, but it's still on the Play Store.",
+      links: [
+        { label: 'Case study', url: '/work/find-your-event/' },
+        {
+          label: 'Play Store',
+          url: 'https://play.google.com/store/apps/details?id=uk.co.myeenterprises.findyourevent&hl=en_GB',
+        },
+      ],
     },
     {
       name: 'FiveM roleplay server',
