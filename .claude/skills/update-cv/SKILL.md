@@ -9,6 +9,8 @@ The CV has one data source, `src/data/cv.ts` (see `CLAUDE.md`). The `/cv/` page 
 
 Read `.claude/rules/confidentiality.md`, `.claude/rules/honesty-and-credit.md` and `.claude/rules/writing-style.md` first. CV entries are public claims.
 
+The home page's "Now" section is not part of the CV, but it is the same kind of public claim: its text and `updated` month live in `src/data/now.ts`. Refresh it every month or two, from what Brad tells you, and change `updated` when you do.
+
 ## 1. Gather
 
 Take what Brad gives you in chat. Do not pull career details from work repos, internal documents or guesses. For each new or changed entry, make sure you have:

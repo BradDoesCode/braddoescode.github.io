@@ -750,6 +750,60 @@ main section .work-item:first-child {
   }
 }
 
+/* "Now": a dated line, then a short labelled list. Same hairline rows as the
+   Activity section's "what changed" list: a small tracked label, then plain text. */
+.now__updated {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.now-list {
+  margin: 0 0 var(--space-4);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.now-list__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--hairline);
+}
+
+.now-list dt {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.now-list dd {
+  margin: 0;
+  max-width: var(--measure);
+  overflow-wrap: anywhere;
+}
+
+.now__closing {
+  margin: 0;
+}
+
+.now__closing a {
+  display: inline-block;
+  padding-block: var(--space-1);
+}
+
+@media (min-width: 40rem) {
+  .now-list__row {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
 /* Hidden from sight, still read by screen readers. Not display:none. */
 .visually-hidden {
   position: absolute;

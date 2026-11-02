@@ -7,6 +7,7 @@ import ExternalLink from '../components/ExternalLink.astro';
 import { cv } from '../data/cv';
 import { staticPages } from '../data/pages';
 import { githubUrl, linkedinUrl } from '../data/site';
+import { formatMonth, now } from '../data/now';
 import { getWork, hasPublishedWork } from '../lib/work';
 
 // Years and wording follow src/data/cv.ts, apart from the FiveM line.
@@ -76,6 +77,26 @@ const featured = (await getWork()).slice(0, 3);
         ))
       }
     </ol>
+  </section>
+
+  <section aria-labelledby="now-heading">
+    <h2 id="now-heading" class="section-title">Now</h2>
+    {/* Source: confirmed by Brad in chat (2 November 2026). The text and date are in src/data/now.ts. */}
+    <p class="now__updated">Updated {formatMonth(now.updated)}</p>
+    <dl class="now-list">
+      {
+        now.items.map((item) => (
+          <div class="now-list__row">
+            <dt>{item.label}</dt>
+            <dd>{item.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    {/* Source: closing line confirmed by Brad in chat (2 November 2026). */}
+    <p class="now__closing">
+      <ExternalLink href={linkedinUrl}>{now.closing.link}</ExternalLink>{now.closing.rest}
+    </p>
   </section>
 
   <section aria-labelledby="elsewhere-heading">
