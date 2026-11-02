@@ -1,0 +1,27 @@
+---
+// The notes listing at /notes/. A rest route so that getStaticPaths can return
+// nothing: with no published note, the page is not built at all.
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoteItem from '../../components/NoteItem.astro';
+import { staticPages } from '../../data/pages';
+import { getNotes } from '../../lib/notes';
+
+export const getStaticPaths = (async () => {
+  const entries = await getNotes();
+  return entries.length > 0 ? [{ params: { index: undefined }, props: { entries } }] : [];
+}) satisfies GetStaticPaths;
+
+const { entries } = Astro.props;
+---
+
+<BaseLayout title={staticPages.notes.title} description={staticPages.notes.description} displayName="roman">
+  <div class="page-head">
+    <h1>Notes</h1>
+    <p class="lede">{staticPages.notes.description}</p>
+    <p class="meta"><a href="/notes/rss.xml">RSS feed</a></p>
+  </div>
+  <ul class="work-list">
+    {entries.map((entry) => <NoteItem entry={entry} />)}
+  </ul>
+</BaseLayout>

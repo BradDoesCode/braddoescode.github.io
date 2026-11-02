@@ -1,12 +1,16 @@
 ---
 import { nav, siteName } from '../data/site';
+import { hasPublishedNotes } from '../lib/notes';
 import { hasPublishedWork } from '../lib/work';
 
 const here = Astro.url.pathname;
 
-// The Work link comes back by itself once a case study is published.
+// The Work and Notes links come back by themselves once a case study or a note is published.
 const showWork = await hasPublishedWork();
-const items = nav.filter((item) => showWork || item.href !== '/work/');
+const showNotes = await hasPublishedNotes();
+const items = nav.filter(
+  (item) => (showWork || item.href !== '/work/') && (showNotes || item.href !== '/notes/'),
+);
 
 function isCurrent(href: string) {
   return href === '/' ? here === '/' : here.startsWith(href);
