@@ -127,7 +127,7 @@ export const cv: Cv = {
       summary: [
         "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code).",
         "The work is split by area of the business. My area runs from prepress to the customer receiving their order. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor. One is a customer service dashboard: some of the team use it to see problems with jobs before the customer calls.",
-        "Before that, from June 2025, I worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js. I made its pages load faster by cutting out some of the data each page loaded and speeding up how the rest was fetched.",
+        "Before that, from June 2025, I worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js. I cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.",
       ],
     },
     {
