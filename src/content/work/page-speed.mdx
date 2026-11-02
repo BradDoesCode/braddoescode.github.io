@@ -25,20 +25,17 @@ This was hands-on work, before I started building with AI agents.
 
 ## My part
 
-I worked on the PHP backend, in Yii2 and Vue.js. My focus was usability and performance: refining workflows and interfaces, and making things faster and more reliable. The method was small, steady improvements in an established codebase, with as little disruption to users as I could manage.
+I worked on the PHP backend, in Yii2 and Vue.js. My focus was usability and performance. I refined workflows and interfaces and made things faster and more reliable, through small, steady improvements in an established codebase, with as little disruption to users as I could manage.
 
-There were two strands to it:
-
-- Faster pages, mainly by cutting down and speeding up the shared data the app loaded on every page.
-- Nicer page designs, so the app looked and felt better to use.
+Pages got faster, mainly by cutting down and speeding up the shared data the app loaded on every page. I also gave pages nicer designs, so the app looked and felt better to use.
 
 ## The shared data
 
 The app used Angular as well as Vue. Whichever page you opened, it loaded a set of shared data first. By shared data I mean the information that many pages have in common, rather than anything specific to the page you opened.
 
-The trouble was that the site depended on much of that data. I couldn't just switch it off. So I did two things. I cut out some of what was loaded, and I improved how quickly the rest was fetched.
+The site depended on much of that data, so I couldn't just switch it off. I cut out some of what was loaded and improved how quickly the rest was fetched.
 
-Because it happened on every page load, the gain showed up across the whole site, not on a single screen.
+Because it happened on every page load, the gain showed up across the whole site.
 
 The drawing below shows the idea with a made-up page. It's generic, and not taken from any real system.
 
