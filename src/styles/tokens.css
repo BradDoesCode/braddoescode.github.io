@@ -3,14 +3,18 @@
   reading measure are defined. To try a different visual direction, change this
   file. Every other stylesheet and component reads these custom properties.
 
-  Direction: editorial. Ink on warm paper, one oxblood accent, a variable serif
+  Direction: editorial. Navy ink on a cool off-white, one dark ochre accent (dark mode
+  goes full navy, with a lighter ochre), a variable serif
   (Newsreader, self-hosted: see fonts.css) for body and headings, Cormorant
   Garamond 600 for the name and the Activity headline, and a system sans for small tracked labels.
 
   Light is the default; dark redefines the colour tokens under
-  prefers-color-scheme. Text pairs are at least 4.5:1 on --bg and --surface in
-  both themes (muted 6.7:1 and accent 6.8:1 on --bg in light, 7.1:1 and 7.8:1
-  in dark), and again checked by pa11y-ci in light and dark by `npm run check`.
+  prefers-color-scheme. This file is the one source of colour. Text pairs are
+  at least 4.5:1 and UI pairs (accent and quiet chart bars) at least 3:1, in
+  both themes. src/lib/contrast.ts reads the hex values below, the "Colour and
+  readability" section of /about-this-site/ shows the ratios, and the build
+  fails if a pair falls short. pa11y-ci checks the rendered pages too.
+  The link-preview cards (src/lib/og.ts) read the light values from here.
 
   Not driven by these tokens: the theme-color meta tags in BaseLayout and the
   colours inside public/favicon.svg repeat --bg and --accent by hand.
@@ -19,15 +23,15 @@
 :root {
   color-scheme: light dark;
 
-  /* Light theme: ink on warm paper. */
-  --bg: #f5f0e5;
-  --surface: #ece5d4;
-  --fg: #1a1814;
-  --muted: #5a5346;
-  --accent: #9a2b1e;
-  --hairline: #d3cab6; /* decorative rules only */
-  --rule: #1a1814; /* the firmer rule above a section */
-  --border: #8a8070; /* UI boundaries, at least 3:1 on --bg */
+  /* Light theme: navy ink on a cool off-white, dark ochre accent. */
+  --bg: #f4f3ee;
+  --surface: #e7e6df;
+  --fg: #12203d;
+  --muted: #4a5470;
+  --accent: #8a5700;
+  --hairline: #d2d1c8; /* decorative rules only */
+  --rule: #12203d; /* the firmer rule above a section */
+  --border: #7d8499; /* UI boundaries and the quiet chart bars, at least 3:1 on --bg */
 
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Newsreader Variable', Charter, 'Iowan Old Style', 'Sitka Text', Cambria, Georgia, serif;
@@ -66,14 +70,14 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #141310;
-    --surface: #1d1b17;
-    --fg: #ebe5d7;
-    --muted: #a79f8e;
-    --accent: #ec9077;
-    --hairline: #2d2a24;
-    --rule: #6a645a;
-    --border: #7a7365;
+    --bg: #0e1526;
+    --surface: #162036;
+    --fg: #e7eaf1;
+    --muted: #9fa9c0;
+    --accent: #e3ac3f;
+    --hairline: #212c45;
+    --rule: #5b6786;
+    --border: #6a7592;
   }
 }
 

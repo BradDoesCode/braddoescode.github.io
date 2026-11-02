@@ -6,21 +6,24 @@
 // description (a case study's one-line summary). No logos, no images.
 //
 // The look follows the site's "Editorial" design in its light theme (a card
-// has one look). The colours repeat the tokens in src/styles/tokens.css, which
-// cannot be imported here because a card is drawn outside the CSS pipeline.
+// has one look). The colours are the light tokens in src/styles/tokens.css,
+// read through src/lib/contrast.ts because a card is drawn outside the CSS
+// pipeline.
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import satori from 'satori';
 import { siteName } from '../data/site';
+import { readPalettes } from './contrast';
 import { OG_HEIGHT, OG_WIDTH } from './ogSize';
 
+const light = readPalettes().light;
 const COLOUR = {
-  paper: '#f5f0e5', // --bg
-  ink: '#1a1814', // --fg
-  muted: '#5a5346', // --muted
-  accent: '#9a2b1e', // --accent
-  hairline: '#d3cab6', // --hairline
+  paper: light.bg,
+  ink: light.fg,
+  muted: light.muted,
+  accent: light.accent,
+  hairline: light.hairline,
 };
 
 const MARGIN_X = 88;
