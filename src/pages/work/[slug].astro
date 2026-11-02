@@ -4,6 +4,7 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatYear, isoDate } from '../../lib/format';
 import CaseNav from '../../components/CaseNav.astro';
+import MarkdownLink from '../../components/MarkdownLink.astro';
 import { getNeighbours, getWork } from '../../lib/work';
 
 export const getStaticPaths = (async () => {
@@ -40,7 +41,7 @@ const { previous, next } = await getNeighbours(entry.id);
       }
     </header>
     <div class="prose">
-      <Content />
+      <Content components={{ a: MarkdownLink }} />
     </div>
   </article>
   <CaseNav previous={previous} next={next} />

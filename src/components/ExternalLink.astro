@@ -1,6 +1,9 @@
 ---
-// The one way to link off-site. It always sets rel="noopener noreferrer", and
-// the check script fails the build if an external link ever lacks it.
+// The one way to link off-site. It opens in a new tab, always sets
+// rel="noopener noreferrer", and says so to screen readers. The small visible
+// arrow is drawn by CSS (`a[target='_blank']::after` in global.css), so it is
+// never read aloud. The check script fails the build if an external link ever
+// lacks any of this.
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = Omit<HTMLAttributes<'a'>, 'rel' | 'target'> & {
@@ -10,4 +13,6 @@ type Props = Omit<HTMLAttributes<'a'>, 'rel' | 'target'> & {
 const { href, ...attrs } = Astro.props;
 ---
 
-<a {...attrs} href={href} rel="noopener noreferrer"><slot /></a>
+<a {...attrs} href={href} target="_blank" rel="noopener noreferrer"
+  ><slot /><span class="visually-hidden"> (opens in a new tab)</span></a
+>

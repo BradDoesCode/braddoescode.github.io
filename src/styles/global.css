@@ -121,6 +121,23 @@ a:hover {
   text-decoration-thickness: 2px;
 }
 
+/* A link that opens in a new tab gets a small arrow after its text. It is
+   decoration only (the empty alternative keeps it out of the accessible name;
+   the link itself carries visually hidden "opens in a new tab" text). The
+   no-break space keeps it on the same line as the last word, and inline-block
+   keeps the link underline from running under it. Not shown in print, where
+   cv.css writes the address instead. */
+a[target='_blank']::after {
+  content: '\00a0\2197';
+  content: '\00a0\2197' / '';
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.8em;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--accent);
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -679,9 +696,13 @@ main section .work-item:first-child {
   font-family: var(--font-sans);
 }
 
-.link-list a[rel~='noopener']::after {
+/* Off-site rows end in the same arrow as every other new-tab link (from the
+   rule near the top of this file), sized up to match the row. */
+.link-list a[target='_blank']::after {
   content: '\2197';
   content: '\2197' / '';
+  font-size: 1em;
+  line-height: inherit;
 }
 
 .link-list a:hover {

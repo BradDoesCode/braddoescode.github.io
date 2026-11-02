@@ -8,6 +8,8 @@
 //                         script/style, no third-party runtime resources,
 //                         a link-preview card (og:image) on every page that
 //                         exists in dist/ as a 1200x630 PNG under 300 KB,
+//                         every external link opens in a new tab with rel="noopener noreferrer"
+//                         and hidden "(opens in a new tab)" text,
 //                         no draft markers (UNVERIFIED, Source: comments),
 //                         the CV PDF exists, is a PDF, is small, and holds no
 //                         email, UK phone number or local path,
@@ -408,12 +410,22 @@ async function assertOutput() {
       fail(`${name}: third-party embedded resource`);
     }
 
-    // Every external <a> must be safe to follow.
-    for (const [tag] of html.matchAll(/<a\s[^>]*>/gi)) {
-      if (/\shref=["']?https?:\/\//i.test(tag)) {
+    // Every external <a> must be safe to follow, open in a new tab, and say
+    // so to screen readers (ExternalLink, which MarkdownLink also uses, does
+    // all three).
+    for (const match of html.matchAll(/<a\s[^>]*>([\s\S]*?)<\/a>/gi)) {
+      const [, inner] = match;
+      const tag = match[0].match(/^<a\s[^>]*>/i)[0];
+      if (/\shref=["']?((https?:)?\/\/|mailto:|tel:)/i.test(tag)) {
         const rel = tag.match(/\srel=["']([^"']*)["']/i)?.[1] ?? '';
         if (!/\bnoopener\b/.test(rel) || !/\bnoreferrer\b/.test(rel)) {
           fail(`${name}: external link without rel="noopener noreferrer": ${tag}`);
+        }
+        if (!/\starget=["']?_blank\b/i.test(tag)) {
+          fail(`${name}: external link without target="_blank": ${tag}`);
+        }
+        if (!/<span class="visually-hidden">\s*\(opens in a new tab\)\s*<\/span>/i.test(inner)) {
+          fail(`${name}: external link without the hidden "(opens in a new tab)" text: ${tag}`);
         }
       }
     }

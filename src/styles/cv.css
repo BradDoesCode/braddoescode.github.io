@@ -236,10 +236,20 @@
     text-decoration: none;
   }
 
+  /* A printed page has no tabs, so drop the "opens in a new tab" text. */
+  a .visually-hidden {
+    display: none;
+  }
+
   /* Make link addresses readable on paper. */
+  a[href^='http'][target='_blank']::after,
   a[href^='http']::after {
     content: ' (' attr(href) ')';
+    display: inline;
+    font-family: inherit;
     font-size: 0.9em;
+    line-height: inherit;
+    color: inherit;
     overflow-wrap: anywhere;
   }
 
