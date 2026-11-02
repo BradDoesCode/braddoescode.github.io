@@ -14,6 +14,8 @@
 //                         the CV PDF exists, is a PDF, is small, and holds no
 //                         email, UK phone number or local path,
 //                         and the activity data holds only dates, relative levels and rounded multipliers,
+//                         and src/data/lighthouse.json (written by `npm run lighthouse`) holds only an
+//                         ISO date, a version, the modes and four integer scores from 0 to 100 per built page,
 //                         and the colour contrast tables on /about-this-site/ (worked out from
 //                         src/styles/tokens.css by src/lib/contrast.ts) are present, with every
 //                         text pair at 4.5:1 or more and every UI pair at 3:1 or more, light and dark
@@ -187,6 +189,60 @@ async function activityProblems() {
     if (!isIsoDate(text) && !ACTIVITY_METRICS.includes(text)) {
       problems.push(`${file}: contains a string that is not a date or a metric name`);
       break;
+    }
+  }
+  return problems;
+}
+
+// src/data/lighthouse.json is written by `npm run lighthouse` and shown on
+// /about-this-site/. It may hold a date, the Lighthouse version, the modes it
+// was run in and, for each built page, four whole-number scores from 0 to 100
+// per mode. Nothing else: the scores are the only figures the site shows from it.
+const LIGHTHOUSE_MODES = ['mobile', 'desktop'];
+const LIGHTHOUSE_SCORES = ['performance', 'accessibility', 'bestPractices', 'seo'];
+
+async function lighthouseProblems() {
+  const file = 'src/data/lighthouse.json';
+  const problems = [];
+  let data;
+  try {
+    data = JSON.parse(await readFile(join(root, file), 'utf8'));
+  } catch (error) {
+    return [`${file}: cannot be read as JSON (${error.message}); run npm run lighthouse`];
+  }
+  const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+  if (!isObject(data)) return [`${file}: must be an object`];
+  if (!sameKeys(data, ['measuredAt', 'lighthouseVersion', 'modes', 'pages'])) {
+    problems.push(`${file}: top-level keys must be exactly measuredAt, lighthouseVersion, modes, pages (found ${Object.keys(data).join(', ') || 'none'})`);
+  }
+  if (!isIsoDate(data.measuredAt)) problems.push(`${file}: measuredAt is not an ISO date`);
+  if (typeof data.lighthouseVersion !== 'string' || !/^\d+\.\d+\.\d+$/.test(data.lighthouseVersion)) {
+    problems.push(`${file}: lighthouseVersion must look like 13.6.0`);
+  }
+  const modes = Array.isArray(data.modes) ? data.modes : [];
+  if (modes.length === 0 || !modes.every((mode) => LIGHTHOUSE_MODES.includes(mode)) || new Set(modes).size !== modes.length) {
+    problems.push(`${file}: modes must be a non-empty list drawn from ${LIGHTHOUSE_MODES.join(', ')}, each once`);
+  }
+  if (!isObject(data.pages) || Object.keys(data.pages).length === 0) {
+    problems.push(`${file}: pages must be a non-empty object`);
+    return problems;
+  }
+  for (const [path, perMode] of Object.entries(data.pages)) {
+    const where = `${file}: pages["${path}"]`;
+    if (!/^\/(?:[a-z0-9-]+\/)*$/.test(path)) problems.push(`${where} is not a page path such as /work/`);
+    else if (!existsSync(join(dist, path, 'index.html'))) problems.push(`${where} is not a built page; run npm run lighthouse`);
+    if (!isObject(perMode) || !sameKeys(perMode, modes)) {
+      problems.push(`${where} must have exactly the modes ${modes.join(', ')}`);
+      continue;
+    }
+    for (const [mode, scores] of Object.entries(perMode)) {
+      if (!isObject(scores) || !sameKeys(scores, LIGHTHOUSE_SCORES)) {
+        problems.push(`${where}.${mode} keys must be exactly ${LIGHTHOUSE_SCORES.join(', ')}`);
+        continue;
+      }
+      for (const [name, value] of Object.entries(scores)) {
+        if (!Number.isInteger(value) || value < 0 || value > 100) problems.push(`${where}.${mode}.${name} must be an integer from 0 to 100`);
+      }
     }
   }
   return problems;
@@ -451,10 +507,11 @@ async function assertOutput() {
 
   problems.push(...(await cvPdfProblems()));
   problems.push(...(await activityProblems()));
+  problems.push(...(await lighthouseProblems()));
   problems.push(...(await contrastProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; colour contrast tables show every pair passing`);
+  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; Lighthouse data holds only a date, a version and integer scores; colour contrast tables show every pair passing`);
   return problems.length === 0;
 }
 
