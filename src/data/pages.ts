@@ -14,7 +14,7 @@ export const staticPages = {
   },
   'about-this-site': {
     title: 'About this site',
-    description: 'How this site is built and checked, how Claude Code and I share the work, and the choices behind how it looks.',
+    description: 'How I build and check this site with Claude Code, and the choices behind how it looks.',
   },
   work: {
     title: 'Work',

@@ -12,7 +12,7 @@ export const now = {
     { label: 'Outside work', text: 'Gaming, and time with my family.' },
   ],
   // The link wraps `link`; `rest` follows it. Together they read as one sentence.
-  closing: { link: 'Happy to talk', rest: ' about interesting roles in AI-assisted engineering.' },
+  closing: { link: 'Happy to talk', rest: ' about roles in AI-assisted engineering.' },
 } as const;
 
 const months = [
