@@ -11,7 +11,10 @@
 //                         no draft markers (UNVERIFIED, Source: comments),
 //                         the CV PDF exists, is a PDF, is small, and holds no
 //                         email, UK phone number or local path,
-//                         and the activity data holds only dates, relative levels and rounded multipliers
+//                         and the activity data holds only dates, relative levels and rounded multipliers,
+//                         and the colour contrast tables on /about-this-site/ (worked out from
+//                         src/styles/tokens.css by src/lib/contrast.ts) are present, with every
+//                         text pair at 4.5:1 or more and every UI pair at 3:1 or more, light and dark
 //   4. html-validate      HTML validity of every built page
 //   5. linkinator         internal links and fragments, against a local server
 //   6. pa11y-ci           WCAG 2.2 AA via axe and HTML_CodeSniffer, in light
@@ -314,6 +317,38 @@ async function cvPdfProblems() {
   return problems;
 }
 
+// The "Colour and readability" tables on /about-this-site/ are worked out from
+// src/styles/tokens.css when the page is built, and the build itself throws if
+// a pair falls short (src/lib/contrast.ts). This reads the built page back as a
+// second check: both tables must be there, and every row's ratio must meet the
+// standard it names (4.5:1 for text, 3:1 for interface parts), with no "Fail".
+async function contrastProblems() {
+  const name = 'dist/about-this-site/index.html';
+  const file = join(dist, 'about-this-site', 'index.html');
+  if (!existsSync(file)) return [`${name} is missing`];
+  const html = await readFile(file, 'utf8');
+  const problems = [];
+  const tables = [...html.matchAll(/<table class="contrast-table"[\s\S]*?<\/table>/g)].map((m) => m[0]);
+  if (tables.length !== 2) {
+    return [`${name}: expected 2 contrast tables (light and dark), found ${tables.length}`];
+  }
+  const modes = ['light', 'dark'];
+  tables.forEach((table, index) => {
+    const rows = [...table.matchAll(/<tr>\s*<th scope="row">[\s\S]*?<\/tr>/g)].map((m) => m[0]);
+    if (rows.length < 9) problems.push(`${name}: the ${modes[index]} contrast table has ${rows.length} rows, expected at least 9`);
+    for (const row of rows) {
+      const label = row.match(/<th scope="row">\s*([^<]*)/)?.[1].trim();
+      const cells = [...row.matchAll(/<td[^>]*>([^<]*)<\/td>/g)].map((m) => m[1].trim());
+      const ratio = Number.parseFloat(cells[0]);
+      const need = Number.parseFloat(cells[1]);
+      if (!(need === 4.5 || need === 3)) problems.push(`${name}: ${modes[index]} "${label}" names an unknown standard "${cells[1]}"`);
+      else if (!(ratio >= need)) problems.push(`${name}: ${modes[index]} "${label}" is ${cells[0]}, below ${need}:1`);
+      if (cells[2] !== 'Pass') problems.push(`${name}: ${modes[index]} "${label}" result is "${cells[2]}", not Pass`);
+    }
+  });
+  return problems;
+}
+
 async function assertOutput() {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -404,9 +439,10 @@ async function assertOutput() {
 
   problems.push(...(await cvPdfProblems()));
   problems.push(...(await activityProblems()));
+  problems.push(...(await contrastProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers`);
+  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; colour contrast tables show every pair passing`);
   return problems.length === 0;
 }
 
