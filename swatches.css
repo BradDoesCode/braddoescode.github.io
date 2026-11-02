@@ -1,0 +1,22 @@
+/* Generated from src/styles/tokens.css */
+.swatches--light {
+  --sw-bg: #f4f3ee;
+  --sw-surface: #e7e6df;
+  --sw-fg: #12203d;
+  --sw-muted: #4a5470;
+  --sw-accent: #8a5700;
+  --sw-hairline: #d2d1c8;
+  --sw-rule: #12203d;
+  --sw-border: #7d8499;
+}
+
+.swatches--dark {
+  --sw-bg: #0e1526;
+  --sw-surface: #162036;
+  --sw-fg: #e7eaf1;
+  --sw-muted: #9fa9c0;
+  --sw-accent: #e3ac3f;
+  --sw-hairline: #212c45;
+  --sw-rule: #5b6786;
+  --sw-border: #6a7592;
+}
