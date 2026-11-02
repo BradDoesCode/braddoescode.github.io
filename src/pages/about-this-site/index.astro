@@ -70,8 +70,7 @@ const buildSteps = [
     <h1>About this site</h1>
     {/* Source: Brad's approved intro, lightly edited. */}
     <p class="lede">
-      How this site is put together: how I built it, what every change has to pass before it goes live, and the choices behind
-      how it looks and behaves.
+      How I built this site, and what every change has to pass before it goes live.
     </p>
   </div>
 
@@ -184,7 +183,7 @@ const buildSteps = [
     </p>
     <p>The colours are navy ink with an ochre accent, in light and dark.</p>
     <p>
-      Motion is kept light. Sections slide in as you scroll, in browsers that support it, and links sweep to a new colour when you
+      Sections slide in as you scroll, in browsers that support it, and links sweep to a new colour when you
       hover over them. Both are done in CSS alone, and both switch off when your device asks for reduced motion.
     </p>
 
@@ -194,17 +193,14 @@ const buildSteps = [
       {/* Source: the ratios are worked out from src/styles/tokens.css at build time (src/lib/contrast.ts). */}
       <p>
         The tables below show how much each pair of colours on this site contrasts, in light and dark. The ratios are worked out
-        from the site's own colours whenever the site is built, so the numbers cannot drift from what you see.
+        from the site's own colours whenever the site is built.
       </p>
       {/* Source: WCAG 2.x: 4.5:1 for normal text, 3:1 for large text and user interface components. */}
       <p>
         Contrast compares how light two colours are. It runs from 1:1, no difference at all, to 21:1, which is black on white. The
         Web Content Accessibility Guidelines (WCAG) ask for at least 4.5:1 for normal text, and 3:1 for large text and interface
-        parts such as the chart bars.
-      </p>
-      <p>
-        Contrast matters because it keeps text readable for people with low vision, on dim or cheap screens, and in bright
-        sunlight.
+        parts such as the chart bars. Higher contrast helps people with low vision, and anyone reading on a dim or cheap screen
+        or in bright sunlight.
       </p>
       {/* Source: Brad chose this palette in chat (2 November 2026) */}
       <p>
@@ -277,7 +273,7 @@ const buildSteps = [
   <section aria-labelledby="privacy-heading">
     <h2 id="privacy-heading">Privacy and performance</h2>
     {/* Source: site-standards.md, Static and private by design (no analytics, trackers, cookies; no third-party runtime scripts, fonts, embeds or CDNs). */}
-    <p>This site does not track you. It sets no cookies, has no analytics, and loads nothing from other websites.</p>
+    <p>This site sets no cookies, has no analytics and loads nothing from other websites.</p>
     {/* Source: CLAUDE.md, Stack; checked against dist/, which holds no .js files and no script tags. */}
     <p>It sends no JavaScript to your browser: the pages are plain HTML and CSS.</p>
     {/* Source: ExternalLink.astro and the output check in scripts/check.mjs. */}
