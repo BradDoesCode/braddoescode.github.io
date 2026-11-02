@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The letter's path is also MARK_PATH in src/lib/icon.ts. Change both. -->
   <style>
     rect { fill: #8a5700; }
     path { fill: #f4f3ee; }

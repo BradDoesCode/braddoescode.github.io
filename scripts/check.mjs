@@ -8,6 +8,9 @@
 //                         script/style, no third-party runtime resources,
 //                         a link-preview card (og:image) on every page that
 //                         exists in dist/ as a 1200x630 PNG under 300 KB,
+//                         the home-screen icons (apple-touch-icon.png and the web manifest's icons)
+//                         exist as small PNGs of the right size, the manifest parses and lists only
+//                         icons that exist, and every page links the touch icon and the manifest,
 //                         every external link opens in a new tab with rel="noopener noreferrer"
 //                         and hidden "(opens in a new tab)" text,
 //                         no draft markers (UNVERIFIED, Source: comments),
@@ -321,6 +324,66 @@ async function ogProblems(html, name) {
   return problems;
 }
 
+// Home-screen icons (src/lib/icon.ts, src/pages/apple-touch-icon.png.ts,
+// src/pages/icons/, src/pages/site.webmanifest.ts). The touch icon is the
+// 180x180 PNG iOS uses; the manifest lists the icons other phones use. All are
+// small same-origin files, so the CSP is untouched. Every page must link the
+// touch icon and the manifest, and the manifest must list only files that exist.
+const TOUCH_ICON = { path: 'apple-touch-icon.png', size: 180 };
+const ICON_MAX_BYTES = 30 * 1024;
+
+async function pngProblems(path, size) {
+  const file = join(dist, path);
+  const name = `dist/${path}`;
+  if (!existsSync(file)) return [`${name} is missing`];
+  const bytes = await readFile(file);
+  if (!bytes.subarray(0, 8).equals(PNG_SIGNATURE)) return [`${name}: not a PNG file`];
+  const problems = [];
+  const width = bytes.readUInt32BE(16);
+  const height = bytes.readUInt32BE(20);
+  if (width !== size || height !== size) problems.push(`${name}: is ${width}x${height}, not ${size}x${size}`);
+  if (bytes.length > ICON_MAX_BYTES) {
+    problems.push(`${name}: is ${Math.round(bytes.length / 1024)} KB, over the ${ICON_MAX_BYTES / 1024} KB cap`);
+  }
+  return problems;
+}
+
+async function iconProblems() {
+  const problems = await pngProblems(TOUCH_ICON.path, TOUCH_ICON.size);
+
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(join(dist, 'site.webmanifest'), 'utf8'));
+  } catch (error) {
+    return [...problems, `dist/site.webmanifest is missing or is not valid JSON (${error.message})`];
+  }
+  for (const key of ['name', 'short_name', 'start_url', 'display', 'background_color', 'theme_color']) {
+    if (typeof manifest[key] !== 'string' || !manifest[key]) problems.push(`dist/site.webmanifest: no "${key}"`);
+  }
+  const icons = Array.isArray(manifest.icons) ? manifest.icons : [];
+  if (!icons.length) problems.push('dist/site.webmanifest: lists no icons');
+  for (const icon of icons) {
+    const path = typeof icon?.src === 'string' ? icon.src.replace(/^\//, '') : '';
+    const size = Number.parseInt(String(icon?.sizes ?? ''), 10);
+    if (!path || path.includes('//') || /^[a-z]+:/i.test(path)) {
+      problems.push(`dist/site.webmanifest: icon src is not a path on this site: ${icon?.src}`);
+    } else if (!Number.isInteger(size) || String(icon.sizes) !== `${size}x${size}`) {
+      problems.push(`dist/site.webmanifest: icon ${icon.src} has sizes "${icon.sizes}", expected e.g. "192x192"`);
+    } else {
+      problems.push(...(await pngProblems(path, size)));
+    }
+  }
+
+  // The icon's letter is drawn from MARK_PATH in src/lib/icon.ts. The favicon
+  // cannot import it, so it repeats the path by hand: check they still agree.
+  const markPath = (await readFile(join(root, 'src/lib/icon.ts'), 'utf8')).match(/MARK_PATH\s*=\s*'([^']+)'/)?.[1];
+  const faviconPath = (await readFile(join(root, 'public/favicon.svg'), 'utf8')).match(/<path[^>]*\sd="([^"]+)"/)?.[1];
+  if (!markPath || markPath !== faviconPath) {
+    problems.push('public/favicon.svg and MARK_PATH in src/lib/icon.ts no longer draw the same letter');
+  }
+  return problems;
+}
+
 // The downloadable CV PDF (scripts/cv-pdf.mjs) is made from the built /cv/
 // page, which carries no phone number, address or email. This checks the
 // file: it exists, is a PDF, is small, and holds no email address, UK phone
@@ -443,6 +506,13 @@ async function assertOutput() {
 
     problems.push(...(await ogProblems(html, name)));
 
+    if (!/<link\s[^>]*rel=["']apple-touch-icon["'][^>]*\shref=["']\/apple-touch-icon\.png["']/i.test(html)) {
+      fail(`${name}: no apple-touch-icon link to /apple-touch-icon.png`);
+    }
+    if (!/<link\s[^>]*rel=["']manifest["'][^>]*\shref=["']\/site\.webmanifest["']/i.test(html)) {
+      fail(`${name}: no manifest link to /site.webmanifest`);
+    }
+
     // Draft markers belong in source only. In .astro files they are JSX
     // comments ({/* UNVERIFIED: ask Brad */}), which the build drops; an HTML
     // comment would be published.
@@ -505,13 +575,14 @@ async function assertOutput() {
     }
   }
 
+  problems.push(...(await iconProblems()));
   problems.push(...(await cvPdfProblems()));
   problems.push(...(await activityProblems()));
   problems.push(...(await lighthouseProblems()));
   problems.push(...(await contrastProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
-  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; Lighthouse data holds only a date, a version and integer scores; colour contrast tables show every pair passing`);
+  if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card and links to the home-screen icon and manifest; home-screen icons present and small; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; Lighthouse data holds only a date, a version and integer scores; colour contrast tables show every pair passing`);
   return problems.length === 0;
 }
 
