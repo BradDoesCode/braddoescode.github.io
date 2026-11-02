@@ -79,6 +79,17 @@
   color: var(--accent);
 }
 
+/* The rail label for this section ("What every change goes through") wraps to
+   three lines in the 10rem rail, and while its slide-in is still pending axe
+   cannot work out the contrast of a three-line label and reports it as needing
+   review, which fails the accessibility stage of `npm run check`. Letting it
+   borrow some of the gap beside the rail keeps it to two lines. */
+@media (min-width: 52rem) {
+  #checks-heading {
+    margin-right: -1.5rem;
+  }
+}
+
 /* ---------- Colour and readability ---------- */
 
 .disclosure {
@@ -113,7 +124,14 @@
 
 /* ---------- Lighthouse scores ---------- */
 
-.scores-scroll {
+/* A labelled, focusable region so keyboard users can scroll the table, as for
+   the contrast tables. It is a <section>, which the site styles as a grid with a
+   label rail and a top rule, so this resets all of that (the doubled class wins
+   over `main section:not(.hero)`). */
+main section.scores-scroll.scores-scroll {
+  display: block;
+  border: 0;
+  padding: 0;
   max-width: 100%;
   overflow-x: auto;
   margin: var(--space-3) 0 var(--space-4);

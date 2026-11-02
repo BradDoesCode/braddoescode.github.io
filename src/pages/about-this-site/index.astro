@@ -288,7 +288,7 @@ const buildSteps = [
       optimisation). I ran it on my own machine against the built site, on every page except the page-not-found page.{' '}
       {modeNote} Scores can shift a little from one run to the next.
     </p>
-    <div class="scores-scroll" role="region" aria-labelledby="scores-caption" tabindex="0">
+    <section class="scores-scroll" aria-labelledby="scores-caption" tabindex="0">
       <table class="scores">
         <caption id="scores-caption">{`Lighthouse scores, measured on my machine on ${measuredOn}`}</caption>
         <thead>
@@ -308,6 +308,6 @@ const buildSteps = [
           }
         </tbody>
       </table>
-    </div>
+    </section>
   </section>
 </BaseLayout>
