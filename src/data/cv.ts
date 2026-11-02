@@ -103,7 +103,7 @@ export const cv: Cv = {
   },
 
   profile: [
-    "I'm the technical lead and only developer for one area of a new internal platform at Pollards Print, built with AI coding agents (Claude Code), with people making the design decisions and reviewing what ships. Before that I worked on the PHP backend of an established e-commerce print platform. Before that I built Laravel and Flutter apps at Digitwell Solutions.",
+    "I'm the technical lead and only developer for one area of a new internal platform at Pollards Print, built with AI coding agents (Claude Code), with people making the design decisions and reviewing what ships. Before that I worked on the PHP backend of an established e-commerce print platform. Earlier, I built Laravel and Flutter apps at Digitwell Solutions.",
   ],
 
   skills: [
@@ -112,7 +112,7 @@ export const cv: Cv = {
       items: ['Claude Code', 'Reviewing AI-written code'],
     },
     { group: 'Backend', items: ['PHP', 'Yii Framework', 'Laravel', 'MySQL'] },
-    { group: 'Frontend', items: ['Vue.js', 'Livewire', 'HTML', 'CSS', 'JavaScript'] },
+    { group: 'Frontend', items: ['Vue.js', 'Angular', 'Livewire', 'HTML', 'CSS', 'JavaScript'] },
     { group: 'Mobile', items: ['Flutter', 'Dart'] },
     { group: 'Tools & Platforms', items: ['GitHub', 'Bitbucket', 'Firebase', 'Google Maps API'] },
     {
@@ -123,23 +123,23 @@ export const cv: Cv = {
 
   experience: [
     {
-      title: 'Technical Lead, New Internal Platform',
+      title: 'Software Developer, New Internal Platform',
       organisation: 'Pollards Print',
       location: 'Exeter',
       start: 'April 2026',
       end: 'Present',
       intro:
-        'The only developer for my area, which runs from prepress to the customer receiving their order.',
+        'Technical lead and only developer for my area, which runs from prepress to the customer receiving their order.',
       bullets: [
-        'Build job milestone tracking and alerts, so the right person hears when a job is stuck.',
-        'Build a customer service dashboard, which is live: some of the team use it to see problems with jobs before the customer calls.',
-        'Build the customer portal and the production pipelines, which are in testing.',
-        'Build artwork handling from upload to proof, also in testing: customer upload, automatic file checks, proof generation and a connection to the preflight and proofing software the business uses.',
+        'Built job milestone tracking and alerts, so the right person hears when a job is stuck.',
+        'Built a customer service dashboard, which is live: some of the team use it to see problems with jobs before the customer calls.',
+        'Built the customer portal and the production pipelines, which are in testing.',
+        'Built artwork handling from upload to proof, also in testing: customer upload, automatic file checks, proof generation and a connection to the preflight and proofing software the business uses.',
         'Work with around a dozen people from across the business, from customer service to prepress, production and senior leadership, on what to build.',
       ],
     },
     {
-      title: 'Software Developer, E-commerce Platform',
+      title: 'Software Developer, E‑commerce Platform',
       organisation: 'Pollards Print',
       location: 'Exeter',
       start: 'June 2025',
@@ -149,7 +149,7 @@ export const cv: Cv = {
         'Cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.',
         'Refined workflows and interfaces, and improved page designs, so the platform was easier to use.',
         'Made small, steady changes to an established codebase, checking each one closely because clients use it to place orders.',
-        'Learned Vue.js and Angular on the job, by working in them while maintaining the app.',
+        'Learned Vue.js and Angular on the job, by working in them while maintaining the app, which used both side by side.',
       ],
     },
     {
@@ -160,9 +160,8 @@ export const cv: Cv = {
       end: '2025',
       bullets: [
         'Built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder.',
-        'Learned full-stack development, mainly in Laravel.',
-        'Learned Flutter and Dart from scratch.',
-        'Researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it. Development got faster and the apps performed better.',
+        'Learned full-stack development there, mainly in Laravel.',
+        'Learned Flutter and Dart from scratch, researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it. Development got faster and the apps performed better.',
         'Used Riverpod for state management and delivered a large-scale application.',
       ],
       note: "I started the role as an apprentice; the apprenticeship wasn't completed. The work was at junior-to-mid level.",
