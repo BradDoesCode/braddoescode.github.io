@@ -1,0 +1,147 @@
+/*
+  The "Colour and readability" section of /about-this-site/. The swatch panels
+  read --sw-* custom properties from /swatches.css (src/pages/swatches.css.ts),
+  which is generated from tokens.css, so each panel shows its mode's colours
+  whichever scheme the visitor is in. Everything else uses the live tokens.
+*/
+
+.swatches {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
+  margin: var(--space-3) 0 var(--space-5);
+}
+
+@media (min-width: 40rem) {
+  .swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.swatches__panel {
+  background: var(--sw-bg);
+  color: var(--sw-fg);
+  border: 1px solid var(--border);
+  padding: var(--space-3);
+}
+
+.swatches__panel h4 {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--sw-fg);
+}
+
+.swatches__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--step--1);
+}
+
+.swatches__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.swatch {
+  flex: none;
+  width: 2.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--sw-border);
+}
+
+.swatch--bg {
+  background: var(--sw-bg);
+}
+.swatch--surface {
+  background: var(--sw-surface);
+}
+.swatch--fg {
+  background: var(--sw-fg);
+}
+.swatch--muted {
+  background: var(--sw-muted);
+}
+.swatch--accent {
+  background: var(--sw-accent);
+}
+.swatch--hairline {
+  background: var(--sw-hairline);
+}
+.swatch--rule {
+  background: var(--sw-rule);
+}
+.swatch--border {
+  background: var(--sw-border);
+}
+
+.swatches__role {
+  color: var(--sw-fg);
+}
+
+.swatches__hex {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  color: var(--sw-muted);
+}
+
+/* A table that scrolls inside its own region, never the page. The wrapper is a
+   labelled, focusable region so keyboard users can scroll it. */
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: var(--space-3) 0 var(--space-5);
+}
+
+.contrast-table {
+  display: table;
+  width: 100%;
+  min-width: 30rem;
+  font-size: var(--step--1);
+  overflow: visible;
+}
+
+.contrast-table caption {
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  padding: 0 0 var(--space-2);
+}
+
+.contrast-table th[scope='col'] {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+
+.contrast-table th[scope='row'] {
+  font-weight: 500;
+}
+
+.contrast-table .use {
+  display: block;
+  color: var(--muted);
+}
+
+.contrast-table td {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.contrast-table .result {
+  font-weight: 600;
+}
