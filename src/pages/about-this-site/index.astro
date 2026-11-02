@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ExternalLink from '../../components/ExternalLink.astro';
+import lighthouse from '../../data/lighthouse.json';
 import { staticPages } from '../../data/pages';
 import { repoUrl } from '../../data/site';
+import { formatDate } from '../../lib/format';
+import { getWork } from '../../lib/work';
 import '../../styles/palette.css';
+import '../../styles/about.css';
 import { assertPalette, COLOUR_TOKENS, readResults, TOKEN_ROLES, TEXT_MIN, UI_MIN } from '../../lib/contrast';
 
 // Worked out from src/styles/tokens.css each time the site is built. If any text
@@ -17,128 +21,293 @@ const ratio = (value: number) => `${value.toFixed(2)}:1`;
 const standard = (kind: 'text' | 'ui') => (kind === 'text' ? `${TEXT_MIN}:1, text` : `${UI_MIN}:1, interface`);
 const palettePage =
   'https://www.realtimecolors.com/?colors=12203d-f4f3ee-8a5700-e7e6df-4a5470&fonts=Cormorant%20Garamond-Newsreader';
+
+// The Lighthouse table is read from src/data/lighthouse.json (written by
+// `npm run lighthouse`), never typed in. Rows are labelled from the page's own
+// title, so a renamed page cannot leave a stale label.
+const work = await getWork();
+const pageLabels: Record<string, string> = {
+  '/': staticPages.home.title,
+  '/cv/': staticPages.cv.title,
+  '/about-this-site/': staticPages['about-this-site'].title,
+  '/work/': staticPages.work.title,
+};
+for (const entry of work) pageLabels[`/work/${entry.id}/`] = entry.data.title;
+const scoreColumns = [
+  { key: 'performance', label: 'Performance' },
+  { key: 'accessibility', label: 'Accessibility' },
+  { key: 'bestPractices', label: 'Best practices' },
+  { key: 'seo', label: 'SEO' },
+] as const;
+const scoreRows = Object.entries(lighthouse.pages).map(([path, modes]) => ({
+  path,
+  label: pageLabels[path] ?? path,
+  scores: modes.mobile,
+}));
+const desktopScores = Object.values(lighthouse.pages).flatMap((modes) => Object.values(modes.desktop));
+const mobileScores = Object.values(lighthouse.pages).flatMap((modes) => Object.values(modes.mobile));
+const hasDesktop = lighthouse.modes.includes('desktop');
+const desktopSame = desktopScores.length === mobileScores.length && desktopScores.every((score, i) => score === mobileScores[i]);
+const desktopLow = Math.min(...desktopScores);
+const desktopHigh = Math.max(...desktopScores);
+const modeNote = !hasDesktop
+  ? 'The scores below are for its mobile settings.'
+  : desktopSame
+    ? 'The scores below are for its mobile settings, and its desktop settings gave the same scores.'
+    : `The scores below are for its mobile settings. Its desktop settings scored between ${desktopLow} and ${desktopHigh}.`;
+const measuredOn = formatDate(lighthouse.measuredAt);
+const buildSteps = [
+  'A change',
+  'Automated checks',
+  'Claims and privacy checks (for writing)',
+  'I review and decide',
+  'Published',
+];
 ---
 
-<BaseLayout
-  title={staticPages['about-this-site'].title}
-  description={staticPages['about-this-site'].description}
->
+<BaseLayout title={staticPages['about-this-site'].title} description={staticPages['about-this-site'].description}>
   <div class="page-head">
     <h1>About this site</h1>
+    {/* Source: Brad's approved intro, lightly edited. */}
+    <p class="lede">
+      How this site is put together: how I built it, what every change has to pass before it goes live, and the choices behind
+      how it looks and behaves.
+    </p>
   </div>
 
+  <section aria-labelledby="glance-heading">
+    <h2 id="glance-heading">At a glance</h2>
+    <dl class="glance">
+      {/* Source: CLAUDE.md, Stack. */}
+      <div class="glance__row">
+        <dt>Framework</dt>
+        <dd>Astro, as a static site</dd>
+      </div>
+      {/* Source: CLAUDE.md, Stack; checked against dist/, which holds no .js files and no script tags. */}
+      <div class="glance__row">
+        <dt>JavaScript</dt>
+        <dd>None sent to your browser</dd>
+      </div>
+      {/* Source: site-standards.md, Static and private by design. */}
+      <div class="glance__row">
+        <dt>Tracking</dt>
+        <dd>No cookies, analytics or tracking</dd>
+      </div>
+      {/* Source: CLAUDE.md, Deploy model. */}
+      <div class="glance__row">
+        <dt>Hosting</dt>
+        <dd>GitHub Pages</dd>
+      </div>
+      {/* Source: CLAUDE.md, non-negotiables: all builds and checks run locally. */}
+      <div class="glance__row">
+        <dt>Build and checks</dt>
+        <dd>On my own machine</dd>
+      </div>
+      {/* Source: CLAUDE.md, Purpose. */}
+      <div class="glance__row">
+        <dt>Built with</dt>
+        <dd>Claude Code</dd>
+      </div>
+    </dl>
+  </section>
+
   <section aria-labelledby="built-heading">
-    <h2 id="built-heading">How it is built</h2>
+    <h2 id="built-heading">How I built it</h2>
+    {/* Source: CLAUDE.md, Purpose: built with Claude Code, with Brad directing, reviewing and deciding what ships. The second and third sentences are confirmed by Brad. */}
+    <p>
+      I build this site with Claude Code, Anthropic's coding assistant. Claude Code wrote the code for this site. I chose what to
+      build, judged the designs and reviewed what came back.
+    </p>
     {/* Source: CLAUDE.md, Stack and Deploy model. */}
     <p>
-      This is a static site built with Astro. I build it on my own machine and publish the built files to GitHub Pages.
+      It is a static site made with Astro. I build it on my own machine and publish the built files to GitHub Pages. I decide what
+      is published, and I publish it myself.
     </p>
-    {/* Source: CLAUDE.md non-negotiables, and site-standards.md. */}
-    <p>
-      The checks also run on my machine. The site has no analytics and no cookie banner, and it loads no third-party scripts.
-    </p>
-  </section>
-
-  <section aria-labelledby="ai-heading">
-    <h2 id="ai-heading">How AI is involved</h2>
-    {/* Source: CLAUDE.md, Purpose: the site is built with Claude Code, with Brad directing, reviewing and deciding what ships. */}
-    <p>
-      I build this site with Claude Code, Anthropic's coding assistant. I direct the work, review the changes and decide what is
-      published.
-    </p>
-    {/* Source: confirmed in the build session with Brad. */}
-    <p>Claude Code wrote the code for this site. I chose what to build, judged the designs and reviewed what came back.</p>
-    {/* Source: CLAUDE.md, Working with Brad: Brad is the only source of truth for Brad's career. */}
-    <p>The facts about my career come from me. Claude Code is told not to invent details to fill a gap.</p>
-  </section>
-
-  <section id="colour" aria-labelledby="colour-heading">
-    <link rel="stylesheet" href="/swatches.css" />
-    <h2 id="colour-heading">Colour and readability</h2>
-    {/* Source: the ratios are worked out from src/styles/tokens.css at build time (src/lib/contrast.ts). */}
-    <p>
-      The tables below show how much each pair of colours on this site contrasts, in light and dark. The ratios are worked out
-      from the site's own colours whenever the site is built, so the numbers cannot drift from what you see.
-    </p>
-    {/* Source: WCAG 2.x: 4.5:1 for normal text, 3:1 for large text and user interface components. */}
-    <p>
-      Contrast compares how light two colours are. It runs from 1:1, no difference at all, to 21:1, which is black on white. The
-      Web Content Accessibility Guidelines (WCAG) ask for at least 4.5:1 for normal text, and 3:1 for large text and interface
-      parts such as the chart bars.
-    </p>
-    <p>
-      Contrast matters because it keeps text readable for people with low vision, on dim or cheap screens, and in bright sunlight.
-    </p>
-    {/* Source: Brad chose this palette in chat (2 November 2026) */}
-    <p>
-      I compared six palettes, in light and dark, using{' '}
-      <ExternalLink href="https://www.realtimecolors.com">Realtime Colors</ExternalLink> to see each one on a full page, and
-      chose navy with an ochre accent. You can{' '}
-      <ExternalLink href={palettePage}>see the chosen palette on Realtime Colors</ExternalLink>.
-    </p>
-
-    <h3 id="palette-heading">The palette</h3>
-    <div class="swatches" role="group" aria-labelledby="palette-heading">
-      {
-        modes.map((mode) => (
-          <div class={`swatches__panel swatches--${mode}`}>
-            <h4>{upper(mode)}</h4>
-            <ul class="swatches__list" aria-label={`${upper(mode)} colours`}>
-              {COLOUR_TOKENS.map((name) => (
-                <li>
-                  <span class={`swatch swatch--${name}`} aria-hidden="true" />
-                  <span class="swatches__role">{TOKEN_ROLES[name]}</span>
-                  <span class="swatches__hex">{palettes[mode][name]}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-
-    <h3 id="contrast-heading">Contrast results</h3>
-    {
-      modes.map((mode) => (
-        <section class="table-scroll" aria-labelledby={`contrast-${mode}-caption`} tabindex="0">
-          <table class="contrast-table">
-            <caption id={`contrast-${mode}-caption`}>{`Contrast ratios, ${mode} colours`}</caption>
-            <thead>
-              <tr>
-                <th scope="col">Pair</th>
-                <th scope="col">Ratio</th>
-                <th scope="col">Standard</th>
-                <th scope="col">Result</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results[mode].map((r) => (
-                <tr>
-                  <th scope="row">
-                    {r.label}
-                    <span class="use">{r.use}</span>
-                  </th>
-                  <td>{ratio(r.ratio)}</td>
-                  <td>{standard(r.kind)}</td>
-                  <td class="result">{r.pass ? 'Pass' : 'Fail'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      ))
-    }
-    {/* Source: assertPalette in src/lib/contrast.ts, called while this page is built. */}
-    <p>If a colour change ever drops a pair below the standard, the site won't build.</p>
-  </section>
-
-  <section aria-labelledby="public-heading">
-    <h2 id="public-heading">The setup is public</h2>
     {/* Source: the repository: CLAUDE.md and the .claude folder (rules and skills). */}
+    {/* UNVERIFIED: ask Brad. The last sentence: the rules and the site's code arrived in the same commit (22 October 2026), so "came before the code" is the brief's wording, not something the history shows. */}
     <p>
       The instructions Claude Code follows for this site are in the public{' '}
       <ExternalLink href={repoUrl}>repository on GitHub</ExternalLink>. They are a <code>CLAUDE.md</code> file, plus written rules
-      and skills in the <code>.claude</code> folder.
+      and skills in the <code>.claude</code> folder. The written rules came before the site's code.
     </p>
+    {/* Source: confirmed by Brad (Working with Brad in CLAUDE.md: Brad is the only source of truth for Brad's career). */}
+    <p>The facts about my career come from me. Claude Code is told not to invent details to fill a gap.</p>
+  </section>
+
+  <section aria-labelledby="checks-heading">
+    <h2 id="checks-heading">What every change goes through</h2>
+    {/* Source: CLAUDE.md, Commands: what `npm run check` runs. */}
+    <p>
+      Before anything is published, I run one command on my own machine, <code>npm run check</code>. It runs these stages in
+      order and fails if any of them does.
+    </p>
+    <ol class="check-list">
+      <li><strong>Type checks</strong> on the code.</li>
+      <li><strong>The build</strong>, and the CV PDF made from the built CV page.</li>
+      <li>
+        <strong>Output checks</strong> on what was built: the security policy on each page, no inline scripts, safe links to other
+        sites, the colour contrast tables, and no personal contact details in the CV PDF, among others.
+      </li>
+      <li><strong>HTML validation</strong> of every page.</li>
+      <li><strong>Internal links</strong>, including links to a place within a page.</li>
+      <li>
+        <strong>Accessibility</strong> against WCAG 2.2 AA, the web accessibility standard, in both light and dark colours.
+      </li>
+    </ol>
+    {/* Source: workflow.md and CLAUDE.md skills table (claims-check, privacy-check, pre-publish); Brad decides what ships and runs the deploy. */}
+    <p>
+      Writing goes through two more checks before it is published. One checks the claims are true and credit the team fairly. The
+      other checks that nothing private about my employer's work has slipped in. Then I review the change and decide whether it
+      ships.
+    </p>
+
+    <figure class="pipeline">
+      <ol class="flow__steps pipeline__steps" aria-label="The path a change takes">
+        {
+          buildSteps.map((step, index) => (
+            <li class:list={['flow__step', { 'pipeline__step--writing': index === 2 }]}>{step}</li>
+          ))
+        }
+      </ol>
+      <figcaption class="illus-caption">
+        The path a change takes on this site. A change that does not touch the writing skips the dashed step.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="design-heading">
+    <h2 id="design-heading">Design</h2>
+    {/* Source: CLAUDE.md, Stack: Design. */}
+    <p>
+      The body text and headings are set in Newsreader. My name and a few display lines are set in Cormorant Garamond. Both fonts
+      are served from this site, not from anyone else's.
+    </p>
+    <p>The colours are navy ink with an ochre accent, in light and dark.</p>
+    <p>
+      Motion is kept light. Sections slide in as you scroll, in browsers that support it, and links sweep to a new colour when you
+      hover over them. Both are done in CSS alone, and both switch off when your device asks for reduced motion.
+    </p>
+
+    <div id="colour">
+      <link rel="stylesheet" href="/swatches.css" />
+      <h3 id="colour-heading">Colour and readability</h3>
+      {/* Source: the ratios are worked out from src/styles/tokens.css at build time (src/lib/contrast.ts). */}
+      <p>
+        The tables below show how much each pair of colours on this site contrasts, in light and dark. The ratios are worked out
+        from the site's own colours whenever the site is built, so the numbers cannot drift from what you see.
+      </p>
+      {/* Source: WCAG 2.x: 4.5:1 for normal text, 3:1 for large text and user interface components. */}
+      <p>
+        Contrast compares how light two colours are. It runs from 1:1, no difference at all, to 21:1, which is black on white. The
+        Web Content Accessibility Guidelines (WCAG) ask for at least 4.5:1 for normal text, and 3:1 for large text and interface
+        parts such as the chart bars.
+      </p>
+      <p>
+        Contrast matters because it keeps text readable for people with low vision, on dim or cheap screens, and in bright
+        sunlight.
+      </p>
+      {/* Source: Brad chose this palette in chat (2 November 2026) */}
+      <p>
+        I compared six palettes, in light and dark, using{' '}
+        <ExternalLink href="https://www.realtimecolors.com">Realtime Colors</ExternalLink> to see each one on a full page, and
+        chose navy with an ochre accent. You can{' '}
+        <ExternalLink href={palettePage}>see the chosen palette on Realtime Colors</ExternalLink>.
+      </p>
+
+      <details class="disclosure">
+        <summary>Show the colour palette and contrast results</summary>
+
+        <h4 id="palette-heading">The palette</h4>
+        <div class="swatches" role="group" aria-labelledby="palette-heading">
+          {
+            modes.map((mode) => (
+              <div class={`swatches__panel swatches--${mode}`}>
+                <h5>{upper(mode)}</h5>
+                <ul class="swatches__list" aria-label={`${upper(mode)} colours`}>
+                  {COLOUR_TOKENS.map((name) => (
+                    <li>
+                      <span class={`swatch swatch--${name}`} aria-hidden="true" />
+                      <span class="swatches__role">{TOKEN_ROLES[name]}</span>
+                      <span class="swatches__hex">{palettes[mode][name]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+
+        <h4 id="contrast-heading">Contrast results</h4>
+        {
+          modes.map((mode) => (
+            <section class="table-scroll" aria-labelledby={`contrast-${mode}-caption`} tabindex="0">
+              <table class="contrast-table">
+                <caption id={`contrast-${mode}-caption`}>{`Contrast ratios, ${mode} colours`}</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Pair</th>
+                    <th scope="col">Ratio</th>
+                    <th scope="col">Standard</th>
+                    <th scope="col">Result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results[mode].map((r) => (
+                    <tr>
+                      <th scope="row">
+                        {r.label}
+                        <span class="use">{r.use}</span>
+                      </th>
+                      <td>{ratio(r.ratio)}</td>
+                      <td>{standard(r.kind)}</td>
+                      <td class="result">{r.pass ? 'Pass' : 'Fail'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          ))
+        }
+      </details>
+      {/* Source: assertPalette in src/lib/contrast.ts, called while this page is built. */}
+      <p>If a colour change ever drops a pair below the standard, the site won't build.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="privacy-heading">
+    <h2 id="privacy-heading">Privacy and performance</h2>
+    {/* Source: site-standards.md, Static and private by design (no analytics, trackers, cookies; no third-party runtime scripts, fonts, embeds or CDNs). */}
+    <p>This site does not track you. It sets no cookies, has no analytics, and loads nothing from other websites.</p>
+    {/* Source: CLAUDE.md, Stack; checked against dist/, which holds no .js files and no script tags. */}
+    <p>It sends no JavaScript to your browser: the pages are plain HTML and CSS.</p>
+    {/* Source: ExternalLink.astro and the output check in scripts/check.mjs. */}
+    <p>Links to other sites open in a new tab, and say so, including to screen readers.</p>
+    {/* Source: src/data/lighthouse.json, written by npm run lighthouse. */}
+    <p>
+      Lighthouse is a tool that scores a page out of 100 for performance, accessibility, best practices and SEO (search engine
+      optimisation). I ran it on my own machine against the built site, on every page except the page-not-found page.{' '}
+      {modeNote} Scores can shift a little from one run to the next.
+    </p>
+    <div class="scores-scroll" role="region" aria-labelledby="scores-caption" tabindex="0">
+      <table class="scores">
+        <caption id="scores-caption">{`Lighthouse scores, measured on my machine on ${measuredOn}`}</caption>
+        <thead>
+          <tr>
+            <th scope="col">Page</th>
+            {scoreColumns.map((column) => <th scope="col">{column.label}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            scoreRows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {scoreColumns.map((column) => <td>{row.scores[column.key]}</td>)}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
   </section>
 </BaseLayout>
