@@ -75,6 +75,42 @@
   margin-bottom: 0;
 }
 
+.role__intro {
+  margin-bottom: var(--space-2);
+}
+
+.role__bullets {
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+.role__bullets li + li {
+  margin-top: var(--space-1);
+}
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+}
+
+.project__links a {
+  display: inline-block;
+  padding-block: var(--space-2);
+}
+
+.project__links li + li::before {
+  content: '\00b7';
+  content: '\00b7' / '';
+  margin-inline: 0.6em;
+  color: var(--muted);
+}
+
 .role__note {
   color: var(--muted);
   font-size: var(--step--1);
@@ -222,9 +258,82 @@
     border-top: 0;
   }
 
+  .role__intro {
+    margin-bottom: 2pt;
+  }
+
+  .role__bullets {
+    margin: 0;
+    padding-left: 12pt;
+  }
+
+  .role__bullets li + li {
+    margin-top: 1.5pt;
+  }
+
+  /* Keep a role's heading and date line together with what follows, so the
+     heading is never left at the foot of a page, and keep each bullet whole. */
+  .role > .meta,
+  .role__intro {
+    break-after: avoid;
+  }
+
+  .role__bullets li {
+    break-inside: avoid;
+  }
+
+  .role__note {
+    margin-top: 3pt;
+  }
+
   /* Projects are short, so keep each one whole rather than splitting it. */
   .project {
     break-inside: avoid;
+  }
+
+  /* Each project link goes on its own line with its address after it, small,
+     so a long address (the Play Store one) wraps tidily. A same-site link
+     would print as a bare label with nothing to follow, so it is left out. */
+  /* A project's name and year share a line, which saves a line on each. */
+  .project h3,
+  .project .meta {
+    display: inline;
+  }
+
+  .project .meta::before {
+    content: '\00b7';
+    margin-inline: 0.5em;
+  }
+
+  .project > p:not(.meta) {
+    margin-top: 1pt;
+    margin-bottom: 0;
+  }
+
+  .project__links {
+    display: block;
+    margin: 1pt 0 0;
+    font-family: inherit;
+    font-size: 9pt;
+  }
+
+  .project__links li {
+    display: block;
+  }
+
+  .project__links li + li::before,
+  .project__links li:has(> a:not([href^='http'])) {
+    display: none;
+  }
+
+  .project__links a {
+    display: inline;
+    padding: 0;
+  }
+
+  .project__links a[href^='http']::after {
+    font-size: 8pt;
+    color: #333;
   }
 
   .skills__row {

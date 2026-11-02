@@ -36,8 +36,13 @@ export interface CvRole {
   start: string;
   /** Display string, or "Present". */
   end: string;
-  /** One entry per paragraph. */
-  summary: string[];
+  /** An optional one-line introduction, shown above the bullets. */
+  intro?: string;
+  /**
+   * What was done, one idea per bullet (2 to 5). Past tense for past roles,
+   * present tense for the current one.
+   */
+  bullets: string[];
   /** An extra line shown under the role, as written on the CV. */
   note?: string;
   /**
@@ -61,8 +66,11 @@ export interface CvProject {
   /** Display string, as written on the CV. */
   year: string;
   summary: string;
-  /** Internal path to the case study, if one is published. */
-  url?: string;
+  /**
+   * Links shown after the summary. An internal path (starting with "/") opens
+   * in the same tab; an https address is drawn through ExternalLink.
+   */
+  links?: CvLink[];
 }
 
 export interface CvEducation {
@@ -98,8 +106,7 @@ export const cv: Cv = {
   },
 
   profile: [
-    'I build software with AI coding agents, inside a structured engineering process where people make the design decisions and review what ships. The aim is speed without compromise on quality.',
-    "I'm part of the team building Pollards' new internal platform, working on customer-facing apps and internal tools. Before that I worked on the PHP backend of an established e-commerce print platform. Earlier, I did full-stack and Flutter mobile development.",
+    "I'm the technical lead and only developer for one area of a new internal platform at Pollards Print, built with AI coding agents (Claude Code), with people making the design decisions and reviewing what ships. Before that I worked on the PHP backend of an established e-commerce print platform. Earlier, I built Laravel and Flutter apps at Digitwell Solutions.",
   ],
 
   skills: [
@@ -108,7 +115,7 @@ export const cv: Cv = {
       items: ['Claude Code', 'Reviewing AI-written code'],
     },
     { group: 'Backend', items: ['PHP', 'Yii Framework', 'Laravel', 'MySQL'] },
-    { group: 'Frontend', items: ['Vue.js', 'Livewire', 'HTML', 'CSS', 'JavaScript'] },
+    { group: 'Frontend', items: ['Vue.js', 'Angular', 'Livewire', 'HTML', 'CSS', 'JavaScript'] },
     { group: 'Mobile', items: ['Flutter', 'Dart'] },
     { group: 'Tools & Platforms', items: ['GitHub', 'Bitbucket', 'Firebase', 'Google Maps API'] },
     {
@@ -119,15 +126,33 @@ export const cv: Cv = {
 
   experience: [
     {
-      title: 'Software Developer',
+      title: 'Software Developer, New Internal Platform',
+      organisation: 'Pollards Print',
+      location: 'Exeter',
+      start: 'April 2026',
+      end: 'Present',
+      intro:
+        'Technical lead and only developer for my area, which runs from prepress to the customer receiving their order.',
+      bullets: [
+        'Built job milestone tracking and alerts, so the right person hears when a job is stuck.',
+        'Built a customer service dashboard, which is live: some of the team use it to see problems with jobs before the customer calls.',
+        'Built the customer portal and the production pipelines, which are in testing.',
+        'Built artwork handling from upload to proof, also in testing: customer upload, automatic file checks, proof generation and a connection to the preflight and proofing software the business uses.',
+        'Work with around a dozen people from across the business, from customer service to prepress, production and senior leadership, on what to build.',
+      ],
+    },
+    {
+      title: 'Software Developer, E-commerce Platform',
       organisation: 'Pollards Print',
       location: 'Exeter',
       start: 'June 2025',
-      end: 'Present',
-      summary: [
-        "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code).",
-        "The work is split by area of the business. My area runs from prepress to the customer receiving their order. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor. One is a customer service dashboard: some of the team use it to see problems with jobs before the customer calls.",
-        "Before that, from June 2025, I worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js. I cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.",
+      end: 'April 2026',
+      intro: 'Worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js.',
+      bullets: [
+        'Cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.',
+        'Refined workflows and interfaces, and improved page designs, so the platform was easier to use.',
+        'Made small, steady changes to an established codebase, checking each one closely because clients use it to place orders.',
+        'Learned Vue.js and Angular on the job, by working in them while maintaining the app, which used both side by side.',
       ],
     },
     {
@@ -136,9 +161,12 @@ export const cv: Cv = {
       location: 'Devon',
       start: '2022',
       end: '2025',
-      summary: [
-        'I built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder. I learned full-stack development there, mainly in Laravel.',
-        'I learned Flutter and Dart from scratch. I researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it, which made development faster and the apps perform better. I used Riverpod for state management and delivered a large-scale application.',
+      bullets: [
+        'Built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder.',
+        'Learned full-stack development there, mainly in Laravel.',
+        'Learned Flutter and Dart from scratch, researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it. Development got faster and the apps performed better.',
+        'Used Riverpod for state management in Flutter.',
+        'Helped build Map Your Event, a large-scale Laravel application and the backend for the Find Your Event app.',
       ],
       note: "I started the role as an apprentice; the apprenticeship wasn't completed. The work was at junior-to-mid level.",
     },
@@ -156,11 +184,34 @@ export const cv: Cv = {
 
   projects: [
     {
+      name: 'Portfolio site',
+      year: '2026',
+      summary:
+        'Built with Claude Code, with me choosing what to build and reviewing what came back. Every page scores 100 in all four Lighthouse categories, on mobile and desktop, and passes automated WCAG 2.2 AA accessibility checks in light and dark mode. The repo is public, including the rules and checks the agents work under.',
+      links: [{ label: 'Code on GitHub', url: 'https://github.com/BradDoesCode/braddoescode.github.io' }],
+    },
+    {
       name: 'Runedex',
       year: '2025',
       summary:
-        'A Flutter app for Android and iOS that I built on my own in about five months, from April to August 2025.',
-      url: '/work/runedex/',
+        'A completion tracker for RuneScape: Dragonwilds, built on my own in Flutter for Android and iOS, from April to August 2025. It tracks quests and collectibles with a live completion percentage, and stores progress on the device with Riverpod and Hive. It got as far as being ready for closed testing on Google Play.',
+      links: [
+        { label: 'Case study', url: '/work/runedex/' },
+        { label: 'Code on GitHub', url: 'https://github.com/BradDoesCode/Rundex' },
+      ],
+    },
+    {
+      name: 'Find Your Event',
+      year: '2024–2025',
+      summary:
+        "The attendee app for Map Your Event, an in-house start-up project at Digitwell Solutions. I built the Flutter mobile app, with event listings, an interactive site map, a personalised schedule, push notifications and QR code scanning, and helped build the Laravel backend. It never got the funding to reach the market, but it's still on the Play Store.",
+      links: [
+        { label: 'Case study', url: '/work/find-your-event/' },
+        {
+          label: 'Play Store',
+          url: 'https://play.google.com/store/apps/details?id=uk.co.myeenterprises.findyourevent&hl=en_GB',
+        },
+      ],
     },
     {
       name: 'FiveM roleplay server',
