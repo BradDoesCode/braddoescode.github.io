@@ -66,8 +66,11 @@ export interface CvProject {
   /** Display string, as written on the CV. */
   year: string;
   summary: string;
-  /** Internal path to the case study, if one is published. */
-  url?: string;
+  /**
+   * Links shown after the summary. An internal path (starting with "/") opens
+   * in the same tab; an https address is drawn through ExternalLink.
+   */
+  links?: CvLink[];
 }
 
 export interface CvEducation {
@@ -184,7 +187,7 @@ export const cv: Cv = {
       year: '2025',
       summary:
         'A Flutter app for Android and iOS that I built on my own in about five months, from April to August 2025.',
-      url: '/work/runedex/',
+      links: [{ label: 'Case study', url: '/work/runedex/' }],
     },
     {
       name: 'FiveM roleplay server',
