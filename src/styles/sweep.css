@@ -1,0 +1,140 @@
+/*
+  Link hover and focus: the new colour sweeps across the text diagonally, from
+  the bottom left to the top right, instead of switching at once. CSS only.
+
+  The colours do not change. A link rests in its usual colour and ends in the
+  colour the rules in global.css already give it on hover and focus; only the
+  way it gets there is new. Nothing here sets a colour of its own: the gradient
+  reads --sweep-from (the resting colour) and --sweep-to (the hover colour),
+  which are set below to match global.css.
+
+  How it works: while a link is hovered or focused (and only then), the text is
+  filled by a two-tone gradient (background-clip: text with a transparent text
+  fill) and the gradient's position is transitioned. The gradient is 210% of
+  the link's box on both axes, at a true 45 degrees, so the hard edge between
+  the two colours starts clear of the bottom-left corner and ends clear of the
+  top-right one, whatever the shape of the link. The 220% is the geometry: the
+  edge has to travel the box's width plus its height.
+
+  Rules of the house:
+    - At rest a link is ordinary coloured text. The gradient and the
+      transparent fill exist only on :hover and :focus-visible, so axe (used by
+      `npm run check`) reads the resting colour as it always has, and a page
+      that is never hovered is untouched. Only background-size and
+      background-position are set at rest, and with no image they paint nothing.
+    - Everything is inside four guards, so each case below gets the plain
+      colour change in global.css (instant, or the short fade there):
+        screen                          print is plain black text
+        prefers-reduced-motion          no sweep for anyone who asked for less
+        forced-colors: none             High Contrast keeps system colours
+        @supports background-clip: text without it, transparent text would be
+                                        invisible, so the sweep never starts
+    - The text fill is made transparent only in the same rule that adds the
+      gradient, inside the @supports block, so the two cannot come apart.
+    - A link that wraps onto several lines is cloned (box-decoration-break), so
+      each line carries a whole gradient and the lines sweep together.
+    - The gradient sizes itself to the box it is on, so it goes on the text,
+      not on a wide box around it: on the link itself when that is as wide as
+      its text, and on an inner span where the link is a full-width row
+      (.link-list__text) or a block (.case-nav__name).
+    - The little arrow after a new-tab link (and the arrows in the "Elsewhere"
+      rows) stay in the accent colour throughout; they are not part of the sweep.
+*/
+
+@media screen and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    :root {
+      --sweep-time: 480ms;
+      --sweep-ease: cubic-bezier(0.37, 0, 0.45, 1);
+    }
+
+    /* ----- The colours each kind of link moves between (as in global.css) ----- */
+
+    a {
+      --sweep-from: var(--fg);
+      --sweep-to: var(--accent);
+    }
+
+    .site-nav a,
+    .eyebrow a,
+    .meta a,
+    .case-nav__all a {
+      --sweep-from: var(--muted);
+    }
+
+    .site-nav a,
+    .eyebrow a {
+      --sweep-to: var(--fg);
+    }
+
+    /* The current page's link is already in its hover colour. */
+    .site-nav a[aria-current='page'] {
+      --sweep-from: var(--fg);
+    }
+
+    /* ----- At rest: ordinary text, with the gradient's size and start place ----- */
+
+    a:not(.link-list a, .case-nav__item a, .skip-link, .site-name),
+    .link-list__text,
+    .case-nav__name {
+      background-repeat: no-repeat;
+      background-size: 210% 210%;
+      background-position: 100% 0;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    /* A block would sweep across its whole width; sized to its text it sweeps
+       across the title. A title that wraps still fills the width. */
+    .case-nav__name {
+      width: fit-content;
+      max-width: 100%;
+      transition: color 0.2s ease;
+    }
+
+    .case-nav__item--next .case-nav__name {
+      margin-left: auto;
+    }
+
+    /* An underline that arrives on hover is drawn in a transparent colour. The
+       gradient shows through the underline as it does through the letters
+       (background-clip: text includes the decoration), so the underline
+       sweeps in with the text and ends in the same accent. It looks identical
+       to the plain accent underline at rest and once the sweep is done. */
+    .work-list .work-item :is(h2, h3) a {
+      text-decoration-line: underline;
+      text-decoration-color: transparent;
+      transition: color 0.2s ease;
+    }
+
+    /* ----- On hover and keyboard focus ----- */
+
+    a:is(:hover, :focus-visible):not(.link-list a, .case-nav__item a, .skip-link, .site-name),
+    .work-item:hover :is(h2, h3) a,
+    .link-list a:is(:hover, :focus-visible) .link-list__text,
+    .case-nav__item a:is(:hover, :focus-visible) .case-nav__name {
+      background-image: linear-gradient(
+        45deg,
+        var(--sweep-to) 50%,
+        var(--sweep-from) 50%
+      );
+      background-position: 0 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position var(--sweep-time) var(--sweep-ease);
+    }
+
+    /* The case-study name's underline does the same (global.css gives it the
+       accent colour on hover; here it stays transparent for the sweep). */
+    .case-nav .case-nav__item a:is(:hover, :focus-visible) .case-nav__name {
+      text-decoration-color: transparent;
+    }
+
+    /* The arrows keep their own colour. */
+    a[target='_blank']::after,
+    .link-list a::after {
+      -webkit-text-fill-color: var(--accent);
+    }
+  }
+}

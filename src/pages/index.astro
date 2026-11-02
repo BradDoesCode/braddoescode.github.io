@@ -102,10 +102,10 @@ const featured = (await getWork()).slice(0, 3);
   <section aria-labelledby="elsewhere-heading">
     <h2 id="elsewhere-heading" class="section-title">Elsewhere</h2>
     <ul class="link-list">
-      <li><a href="/cv/">Read my CV</a></li>
-      <li><ExternalLink href={githubUrl}>My GitHub profile</ExternalLink></li>
-      <li><ExternalLink href={linkedinUrl}>My LinkedIn profile</ExternalLink></li>
-      <li><a href="/about-this-site/">How this site is built</a></li>
+      <li><a href="/cv/"><span class="link-list__text">Read my CV</span></a></li>
+      <li><ExternalLink href={githubUrl}><span class="link-list__text">My GitHub profile</span></ExternalLink></li>
+      <li><ExternalLink href={linkedinUrl}><span class="link-list__text">My LinkedIn profile</span></ExternalLink></li>
+      <li><a href="/about-this-site/"><span class="link-list__text">How this site is built</span></a></li>
     </ul>
   </section>
 </BaseLayout>
