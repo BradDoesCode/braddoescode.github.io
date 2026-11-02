@@ -19,7 +19,7 @@ import lore from '../../assets/runedex-lore.jpg';
 
 ## What it was
 
-This one is a side project from 2025. I built it before I used AI coding tools, so it sits alongside [Find Your Event](/work/find-your-event/) as a marker for how differently I work now.
+This one is a side project from 2025. Like [Find Your Event](/work/find-your-event/), I built it before I used AI coding tools.
 
 Runedex is a completion tracker for the game RuneScape: Dragonwilds, which I was playing at the time. It tracks quests, side quests and collectibles, which the game calls lore scraps, and shows a live completion percentage. Progress is stored on your device, and the app collects no personal data.
 
@@ -61,7 +61,7 @@ Runedex is an unofficial fan app. It isn't affiliated with or endorsed by Jagex,
 
 ## Why I built it
 
-Two reasons. I wanted a tracker while I played, and I wanted a project to practise Flutter on, on my own terms.
+I wanted a tracker while I played, and I wanted a project to practise Flutter on, on my own terms.
 
 ## My part
 
@@ -79,13 +79,11 @@ So I split the picture into two pieces myself: the dragon, and its arm. In a lay
 
 <LayeredCard />
 
-Two things had to be true for it to work.
+The pieces had to line up on every screen size, so both are sized as the same fraction of the screen's width and pinned to the same corner. They scale together on a small phone and a large one.
 
-**The pieces had to line up on every screen size.** Two halves only look like one picture while they stay together. Both are sized as the same fraction of the screen's width and pinned to the same corner, so they scale together on a small phone and a large one.
+Taps also had to pass through the arm. An image drawn on top of the card catches any touch that lands on it, and the card underneath never hears about it. I told the arm to ignore touches, so a tap on it goes through to the card.
 
-**Taps had to pass through the arm.** An image drawn on top of the card catches any touch that lands on it, and the card underneath never hears about it. I told the arm to ignore touches, so a tap on it goes through to the card.
-
-The other hard part wasn't code. Runedex is for people playing one particular game, and I found it hard to find people willing to test an app for such a niche market.
+I also found it hard to find people willing to test an app for such a niche market. Runedex is only for people playing one particular game.
 
 ## Where it got to
 

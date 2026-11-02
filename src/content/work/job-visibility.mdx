@@ -16,15 +16,13 @@ import PullQuote from '../../components/PullQuote.astro';
 
 ## The problem
 
-Before this work, the business usually didn't know a job had a problem until a customer chased it. A job might be stuck in production. It might be waiting on artwork from the customer. Either way, there was no real way to find out unless someone went digging.
-
-That's a reactive way to run a print business. The customer notices first, and the business then has to catch up.
+Before this work, the business usually didn't know a job had a problem until a customer chased it. A job could be stuck in production or waiting on artwork from the customer, and there was no real way to find out unless someone went digging.
 
 The drawing below shows the idea with a made-up job. It's a generic print workflow, not taken from any real system. One step has stalled, and the person who needs to know is told.
 
 <JobJourney />
 
-The aim was to move from that reactive model to a proactive one. The system should tell people where a job is, and highlight any issue to the person who needs to know about it.
+The aim was to move from a reactive model, where the customer notices first and the business has to catch up, to a proactive one. The system should tell people where a job is, and highlight any issue to the person who needs to know about it.
 
 <ReactiveProactive />
 
@@ -46,17 +44,17 @@ Milestone tracking and alerts are the most direct answer to the problem above. T
 
 ## How we approached it
 
-I started by listening. I talked to people in production, prepress, customer service and account management about what was going wrong for them. I wanted their input on what we should build.
+I talked to people in production, prepress, customer service and account management about what was going wrong for them, and I wanted their input on what we should build.
 
 Around a dozen people from across the business are involved, from customer service and account managers to prepress, production and senior leadership. They join in when we're building something that touches their work, and they shape what we build.
 
-We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships. For me, the point is speed without compromise on quality: better planning, better security and quicker building.
+We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships. For me, the point is to build more quickly without compromising on quality, with better planning and better security along the way.
 
 ## What was hard
 
-The hardest part wasn't the building. It was defining the issues people were having and turning them into real solutions.
+The hardest part was defining the issues people were having and turning them into real solutions.
 
-Someone describes a problem from their day-to-day work. My job is to turn that into a feature that actually fixes it, which is a different thing from a feature that sounds like it should. Getting from the first to the second took the most care.
+Someone describes a problem from their day-to-day work, and my job is to turn that into a feature that fixes it. Getting that right took the most care.
 
 <ProblemToFeature />
 
@@ -68,8 +66,8 @@ It's not fully in use yet.
 
 Some screens are live and in daily use. The customer service dashboard is one: it gives better visibility of jobs going through the business. The customer portal and the production pipelines are built and in testing.
 
-Because people use the live screens, we hear quickly what works and what doesn't, and we change them quickly in response. A screen that isn't quite right doesn't have to stay that way for long.
+Because people use the live screens, we hear quickly what works and what doesn't, and we change them quickly in response.
 
 <PullQuote>The business should hear about a problem with a job from its own systems, not from a customer who had to chase.</PullQuote>
 
-It's too early to say how much the platform as a whole has changed things, and I'd rather say that than guess. But we're already seeing benefits from the customer service dashboard and the alerts: customer service can now see a stuck job before the customer asks about it, and they're alerted to it. And the aim hasn't changed: the business should hear about a problem with a job from its own systems, not from a customer who had to chase.
+It's too early to say how much the platform as a whole has changed things, and I'd rather say that than guess. We're already seeing benefits from the customer service dashboard and the alerts: customer service can now see a stuck job before the customer asks about it, and they're alerted to it.

@@ -11,7 +11,7 @@ This is the source of my portfolio site. If you are here to see my work, start w
 
 The site is made with [Astro](https://astro.build) and is static: plain HTML and CSS, with no JavaScript sent to the browser. The fonts are served from the site itself. A strict Content-Security-Policy is set on every page, and there are no cookies, analytics or trackers.
 
-I build the site with Claude Code, Anthropic's coding assistant. Claude Code writes the code. I choose what to build, judge the designs, review what comes back and decide what is published.
+I build the site with Claude Code, Anthropic's coding assistant. Claude Code writes the code. I choose what to build and judge the designs, and I review what comes back before I decide what is published.
 
 The instructions Claude Code works under are in this repository: [`CLAUDE.md`](CLAUDE.md), the written rules in [`.claude/rules/`](.claude/rules/) and the skills in [`.claude/skills/`](.claude/skills/). `CLAUDE.md` is the best place to see the stack, the commands and the non-negotiables, so I have not repeated them here.
 
