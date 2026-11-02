@@ -102,6 +102,19 @@ const flagged = cv.experience.filter((role) => role.needsUpdate);
       }
     </section>
 
+    <section aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="section-title">Projects</h2>
+      {
+        cv.projects.map((project) => (
+          <article class="role project">
+            <h3>{project.url ? <a href={project.url}>{project.name}</a> : project.name}</h3>
+            <p class="meta">{project.year}</p>
+            <p>{project.summary}</p>
+          </article>
+        ))
+      }
+    </section>
+
     <section aria-labelledby="education-heading">
       <h2 id="education-heading" class="section-title">Education</h2>
       {

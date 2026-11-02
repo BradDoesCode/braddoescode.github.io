@@ -222,6 +222,11 @@
     border-top: 0;
   }
 
+  /* Projects are short, so keep each one whole rather than splitting it. */
+  .project {
+    break-inside: avoid;
+  }
+
   .skills__row {
     display: grid;
     grid-template-columns: 7.5rem 1fr;

@@ -56,6 +56,15 @@ export interface CvEarlierRole {
   summary: string;
 }
 
+export interface CvProject {
+  name: string;
+  /** Display string, as written on the CV. */
+  year: string;
+  summary: string;
+  /** Internal path to the case study, if one is published. */
+  url?: string;
+}
+
 export interface CvEducation {
   institution: string;
   qualification: string;
@@ -71,6 +80,7 @@ export interface Cv {
   /** Reverse chronological order. */
   experience: CvRole[];
   earlierExperience: CvEarlierRole[];
+  projects: CvProject[];
   education: CvEducation[];
   interests: string[];
   /** ISO date (YYYY-MM-DD) of the last edit to this file. */
@@ -89,13 +99,13 @@ export const cv: Cv = {
 
   profile: [
     'I build software with AI coding agents, inside a structured engineering process where people make the design decisions and review what ships. The aim is speed without compromise on quality.',
-    "I'm part of the team building Pollards' new internal platform, and I work across the stack, from customer-facing apps to internal tools. Before that I worked on the PHP backend of an established e-commerce print platform, with earlier experience in full-stack and Flutter mobile development.",
+    "I'm part of the team building Pollards' new internal platform, working on customer-facing apps and internal tools. Before that I worked on the PHP backend of an established e-commerce print platform. Earlier, I did full-stack and Flutter mobile development.",
   ],
 
   skills: [
     {
       group: 'AI-assisted engineering',
-      items: ['Claude Code', 'AI-assisted development', 'Reviewing AI-written code'],
+      items: ['Claude Code', 'Reviewing AI-written code'],
     },
     { group: 'Backend', items: ['PHP', 'Yii Framework', 'Laravel', 'MySQL'] },
     { group: 'Frontend', items: ['Vue.js', 'Livewire', 'HTML', 'CSS', 'JavaScript'] },
@@ -115,9 +125,9 @@ export const cv: Cv = {
       start: 'June 2025',
       end: 'Present',
       summary: [
-        "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code) inside a structured engineering process, with people making the design decisions and reviewing what ships.",
-        "The work is split by area of the business. My area runs from prepress to the customer receiving their order, giving staff and customers a clearer view of where every job is. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor.",
-        "Before that, from June 2025, I maintained and improved the PHP backend of an established e-commerce print platform, working in Yii2 and Vue.js.",
+        "Since April 2026 I've been part of the team building Pollards' new internal platform. It's still in development. We build it with AI coding agents (Claude Code).",
+        "The work is split by area of the business. My area runs from prepress to the customer receiving their order. I've worked across the stack, on customer-facing apps such as the customer portal and on internal tools for customer service and the shop floor. One is a customer service dashboard: some of the team use it to see problems with jobs before the customer calls.",
+        "Before that, from June 2025, I worked on the PHP backend of an established e-commerce print platform, in Yii2 and Vue.js. I cut about 400ms from every page load by removing some of the data each page loaded and speeding up how the rest was fetched.",
       ],
     },
     {
@@ -127,20 +137,36 @@ export const cv: Cv = {
       start: '2022',
       end: '2025',
       summary: [
-        'I gained rounded experience building and maintaining applications and websites across multiple frameworks and environments. I designed and developed applications for iOS and Android, desktop applications, and full-stack projects, while collaborating closely with the founder and taking on a broad range of responsibilities to meet project goals. I learned full-stack development there, mainly in Laravel.',
-        'Flutter development became a key focus, learning the framework and Dart language from scratch. After researching and advocating for modern alternatives, I led the adoption of Flutter to replace a long-standing legacy platform, resulting in improved development speed and application performance. I worked extensively with state management, including Riverpod, to deliver a fully completed large-scale application.',
+        'I built mobile apps for iOS and Android, desktop applications and full-stack projects, working closely with the founder. I learned full-stack development there, mainly in Laravel.',
+        'I learned Flutter and Dart from scratch. I researched modern alternatives to a long-standing legacy platform, made the case for Flutter and led the move to it, which made development faster and the apps perform better. I used Riverpod for state management and delivered a large-scale application.',
       ],
-      note: 'Role originally undertaken as part of an apprenticeship programme (not completed). Responsibilities and output were equivalent to a junior-to-mid level software developer.',
+      note: "I started the role as an apprentice; the apprenticeship wasn't completed. The work was at junior-to-mid level.",
     },
   ],
 
   earlierExperience: [
     {
-      title: 'Various Technical & Leadership Roles',
+      title: 'Retail and team-leading roles',
       start: '2012',
       end: '2022',
       summary:
-        'Including Apple Authorised Reseller (Dixons Travel) and Team Leader (Co-op). These roles developed strong customer communication, problem-solving, and leadership skills that continue to support my software development work.',
+        "Including Apple Authorised Reseller (Dixons Travel) and Team Leader (Co-op). I still use what I learned there about talking to customers and leading a team.",
+    },
+  ],
+
+  projects: [
+    {
+      name: 'Runedex',
+      year: '2025',
+      summary:
+        'A Flutter app for Android and iOS that I built on my own in about five months, from April to August 2025.',
+      url: '/work/runedex/',
+    },
+    {
+      name: 'FiveM roleplay server',
+      year: '2022',
+      summary:
+        'A British-themed roleplay server for GTA V. I wrote its scripts in Lua and ran the community, which grew to more than 1,000 members. At its peak it was full at 64 players every night.',
     },
   ],
 
@@ -153,13 +179,9 @@ export const cv: Cv = {
     },
   ],
 
-  interests: [
-    'Building and experimenting with Flutter applications',
-    'Gaming (competitive and cooperative)',
-    'Camping, mountain biking, and outdoor activities',
-  ],
+  interests: ['Flutter apps', 'Gaming', 'Camping and mountain biking'],
 
   // The date of the last real update to this file. The update-cv skill sets
   // it each time the content changes.
-  lastUpdated: '2026-10-23',
+  lastUpdated: '2026-11-02',
 };

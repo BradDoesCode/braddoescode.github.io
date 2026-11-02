@@ -20,6 +20,11 @@ The site is in Brad's voice. It should read like a thoughtful colleague explaini
 - Em dashes as a habit. Use at most one in a paragraph, and prefer a full stop, comma or colon. Do not use them as a stylistic tic.
 - Stacks of three adjectives or a rhythm of triplets in every paragraph.
 - Rhetorical questions as headings.
+- Lists of exactly three, or three-part parallel sentences, unless there really are three things and the sentence is not built around the rhythm. In CV text, name the specific thing instead of listing qualities.
+- Tacked-on result clauses ("..., resulting in", "..., ensuring", "..., enabling") and generic CV phrases ("rounded experience", "key focus", "broad range of responsibilities", "meet project goals", "strong ... skills").
+- Closing a paragraph with a line that restates it, and "not X, it was Y" set-ups. Say the thing once, in its positive form.
+- Repeating a stock sentence across pages. Say it in one place.
+- Signposting lead-ins such as "Two reasons." or "So I did two things."
 - Emoji.
 - Exclamation marks.
 
