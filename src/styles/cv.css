@@ -248,9 +248,19 @@
     margin-top: 1.5pt;
   }
 
-  /* A bullet may not be the last or first line of a role on its own. */
+  /* Keep a role's heading and date line together with what follows, so the
+     heading is never left at the foot of a page, and keep each bullet whole. */
+  .role > .meta,
+  .role__intro {
+    break-after: avoid;
+  }
+
   .role__bullets li {
     break-inside: avoid;
+  }
+
+  .role__note {
+    margin-top: 3pt;
   }
 
   /* Projects are short, so keep each one whole rather than splitting it. */
