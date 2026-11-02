@@ -107,7 +107,7 @@ const palettePage =
     <h3 id="contrast-heading">Contrast results</h3>
     {
       modes.map((mode) => (
-        <div class="table-scroll" role="region" aria-labelledby={`contrast-${mode}-caption`} tabindex="0">
+        <section class="table-scroll" aria-labelledby={`contrast-${mode}-caption`} tabindex="0">
           <table class="contrast-table">
             <caption id={`contrast-${mode}-caption`}>{`Contrast ratios, ${mode} colours`}</caption>
             <thead>
@@ -132,7 +132,7 @@ const palettePage =
               ))}
             </tbody>
           </table>
-        </div>
+        </section>
       ))
     }
     {/* Source: assertPalette in src/lib/contrast.ts, called while this page is built. */}

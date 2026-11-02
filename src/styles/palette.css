@@ -94,8 +94,13 @@
 }
 
 /* A table that scrolls inside its own region, never the page. The wrapper is a
-   labelled, focusable region so keyboard users can scroll it. */
-.table-scroll {
+   labelled, focusable <section> (the region role) so keyboard users can scroll
+   it. The site styles every `main section` as a grid with a label rail, a heavy
+   top rule and spacing, so this resets all of that with a selector that wins. */
+#colour section.table-scroll {
+  display: block;
+  border: 0;
+  padding: 0;
   max-width: 100%;
   overflow-x: auto;
   margin: var(--space-3) 0 var(--space-5);
