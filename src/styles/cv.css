@@ -91,7 +91,8 @@
 .project__links {
   display: flex;
   flex-wrap: wrap;
-  margin: var(--space-2) 0 0;
+  align-items: baseline;
+  margin: 0;
   padding: 0;
   list-style: none;
   font-family: var(--font-sans);
@@ -293,9 +294,25 @@
   /* Each project link goes on its own line with its address after it, small,
      so a long address (the Play Store one) wraps tidily. A same-site link
      would print as a bare label with nothing to follow, so it is left out. */
+  /* A project's name and year share a line, which saves a line on each. */
+  .project h3,
+  .project .meta {
+    display: inline;
+  }
+
+  .project .meta::before {
+    content: '\00b7';
+    margin-inline: 0.5em;
+  }
+
+  .project > p:not(.meta) {
+    margin-top: 1pt;
+    margin-bottom: 0;
+  }
+
   .project__links {
     display: block;
-    margin: 2pt 0 0;
+    margin: 1pt 0 0;
     font-family: inherit;
     font-size: 9pt;
   }
