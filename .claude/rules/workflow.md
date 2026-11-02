@@ -38,7 +38,7 @@ Run checks in proportion to the change, then report the verdicts to Brad.
 | Change | Run |
 | --- | --- |
 | Typo, punctuation, or wording with no new claim | Nothing beyond `npm run check` |
-| New or changed prose, a case study, or CV entries | `claims-check` and `privacy-check` |
+| New or changed prose, a case study, a note, or CV entries | `claims-check` and `privacy-check` |
 | New or changed images, screenshots or alt text | `privacy-check` and `site-security-check` (metadata) |
 | Layout, CSS, components, accessibility | `site-quality-check` |
 | Dependencies, scripts, CSP, build config, new external link or asset | `site-security-check` and `site-quality-check` |

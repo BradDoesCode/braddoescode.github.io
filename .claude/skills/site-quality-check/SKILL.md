@@ -12,7 +12,7 @@ If the site has not been scaffolded yet (no `package.json`), say so and review o
 ## Setup
 
 1. `npm run build`, then `npm run preview` in the background. Note the local URL.
-2. Make a list of page types: landing, work listing, one case study, CV (on screen and in print preview), 404. Review each, not only the home page.
+2. Make a list of page types: landing, work listing, one case study, Notes listing and one note (when a note is published; with none, check that `npm run build` outputs nothing about notes), CV (on screen and in print preview), 404. Review each, not only the home page.
 3. Stop the preview server when done.
 
 ## Checks

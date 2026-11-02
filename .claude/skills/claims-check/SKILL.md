@@ -9,7 +9,7 @@ A check with one question: would every sentence survive a hiring manager asking 
 
 ## Scope
 
-Review the changed content only (use `git diff main...HEAD` plus untracked files), unless asked for the whole site. Include page copy, front matter summaries, alt text, the CV data file, and commit messages if they make claims.
+Review the changed content only (use `git diff main...HEAD` plus untracked files), unless asked for the whole site. Include page copy, front matter summaries and note descriptions, alt text, the CV data file, and commit messages if they make claims.
 
 ## Layer 1: phrase scan
 
