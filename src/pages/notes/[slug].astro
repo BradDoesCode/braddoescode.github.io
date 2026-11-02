@@ -1,0 +1,43 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MarkdownLink from '../../components/MarkdownLink.astro';
+import { formatDate, isoDate } from '../../lib/format';
+import { getNotes } from '../../lib/notes';
+
+export const getStaticPaths = (async () => {
+  const entries = await getNotes();
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { title, description, date, updated, draft } = entry.data;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={title} description={description} ogType="article">
+  <article>
+    <header class="page-head">
+      <p class="eyebrow"><a href="/notes/">All notes</a></p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+      <p class="meta">
+        {draft && <><strong>Draft, not published</strong><span aria-hidden="true">·</span></>}
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        {
+          updated && (
+            <>
+              <span aria-hidden="true">·</span>
+              Updated <time datetime={isoDate(updated)}>{formatDate(updated)}</time>
+            </>
+          )
+        }
+      </p>
+    </header>
+    <div class="prose">
+      <Content components={{ a: MarkdownLink }} />
+    </div>
+  </article>
+  <p><a href="/notes/">All notes</a></p>
+</BaseLayout>

@@ -9,6 +9,7 @@ export const repoUrl = 'https://github.com/BradDoesCode/braddoescode.github.io';
 export const nav = [
   { label: 'Home', href: '/' },
   { label: 'Work', href: '/work/' },
+  { label: 'Notes', href: '/notes/' },
   { label: 'CV', href: '/cv/' },
   { label: 'About this site', href: '/about-this-site/' },
 ] as const;

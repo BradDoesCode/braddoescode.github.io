@@ -19,6 +19,8 @@
 //                         and the activity data holds only dates, relative levels and rounded multipliers,
 //                         and src/data/lighthouse.json (written by `npm run lighthouse`) holds only an
 //                         ISO date, a version, the modes and four integer scores from 0 to 100 per built page,
+//                         and, when a note is published, a well-formed RSS feed whose item links all exist in dist/
+//                         (and no trace of notes when none is),
 //                         and the colour contrast tables on /about-this-site/ (worked out from
 //                         src/styles/tokens.css by src/lib/contrast.ts) are present, with every
 //                         text pair at 4.5:1 or more and every UI pair at 3:1 or more, light and dark
@@ -470,6 +472,54 @@ async function contrastProblems() {
   return problems;
 }
 
+// Notes exist only once one is published (src/lib/notes.ts). With none, nothing
+// about them may be built. With some, the Notes page, the feed and its link in
+// every page head must agree, and each item in the feed must point at a page
+// that exists in dist/.
+async function notesProblems() {
+  const problems = [];
+  const feed = join(dist, 'notes', 'rss.xml');
+  const index = join(dist, 'notes', 'index.html');
+  if (existsSync(feed) !== existsSync(index)) {
+    return ['dist/notes/: the Notes page and rss.xml must both exist or both be absent'];
+  }
+  const feedLink = /<link\s[^>]*type=["']application\/rss\+xml["']/i;
+  if (!existsSync(feed)) {
+    for (const file of await htmlFiles(dist)) {
+      const html = await readFile(file, 'utf8');
+      if (feedLink.test(html)) problems.push(`${relative(root, file)}: links to a notes feed that was not built`);
+      if (/href=["']\/notes\//.test(html)) problems.push(`${relative(root, file)}: links to /notes/, which was not built`);
+    }
+    return problems;
+  }
+  const xml = await readFile(feed, 'utf8');
+  const name = 'dist/notes/rss.xml';
+  if (!xml.startsWith('<?xml') || !/<rss\s[^>]*version="2\.0"/.test(xml)) problems.push(`${name}: not an RSS 2.0 document`);
+  const open = (tag) => (xml.match(new RegExp(`<${tag}[\\s>]`, 'g')) ?? []).length;
+  const close = (tag) => (xml.match(new RegExp(`</${tag}>`, 'g')) ?? []).length;
+  for (const tag of ['rss', 'channel', 'item', 'title', 'link', 'description']) {
+    if (open(tag) !== close(tag)) problems.push(`${name}: <${tag}> tags do not balance`);
+  }
+  if (/&(?!(amp|lt|gt|quot|apos|#\d+);)/.test(xml)) problems.push(`${name}: contains an unescaped ampersand`);
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
+  if (items.length === 0) problems.push(`${name}: has no items`);
+  for (const item of items) {
+    for (const tag of ['title', 'link', 'guid', 'pubDate', 'description']) {
+      if (!new RegExp(`<${tag}[^>]*>[^<]+</${tag}>`).test(item)) problems.push(`${name}: an item is missing <${tag}>`);
+    }
+    const link = item.match(/<link>([^<]*)<\/link>/)?.[1];
+    if (link) {
+      const path = new URL(link).pathname;
+      if (!existsSync(join(dist, path, 'index.html'))) problems.push(`${name}: item link ${link} has no page in dist/`);
+    }
+  }
+  for (const file of await htmlFiles(dist)) {
+    const html = await readFile(file, 'utf8');
+    if (!feedLink.test(html)) problems.push(`${relative(root, file)}: has no link to the notes feed`);
+  }
+  return problems;
+}
+
 async function assertOutput() {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -580,6 +630,7 @@ async function assertOutput() {
   problems.push(...(await activityProblems()));
   problems.push(...(await lighthouseProblems()));
   problems.push(...(await contrastProblems()));
+  problems.push(...(await notesProblems()));
 
   for (const problem of problems) out(`  ${problem}`);
   if (!problems.length) out(`  ${pages.length} pages checked, each with a ${OG_WIDTH}x${OG_HEIGHT} link-preview card and links to the home-screen icon and manifest; home-screen icons present and small; CV PDF present and free of contact details and local paths; activity data holds only dates, relative levels and rounded multipliers; Lighthouse data holds only a date, a version and integer scores; colour contrast tables show every pair passing`);

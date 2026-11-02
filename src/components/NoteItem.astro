@@ -1,0 +1,25 @@
+---
+// One note in the listing. It reuses the case-study list styles (`.work-list`,
+// `.work-item`) so Notes looks like Work; the date sits in the meta line, not
+// the right-hand column, so a long date cannot squeeze the title at 320px.
+import { formatDate, isoDate } from '../lib/format';
+import type { NoteEntry } from '../lib/notes';
+
+interface Props {
+  entry: NoteEntry;
+}
+
+const { entry } = Astro.props;
+const { title, description, date, draft } = entry.data;
+---
+
+<li class="work-item">
+  <div class="work-item__head">
+    <h2><a href={`/notes/${entry.id}/`}>{title}</a></h2>
+  </div>
+  <p class="work-item__summary">{description}</p>
+  <p class="meta">
+    {draft && <><strong>Draft</strong><span aria-hidden="true">·</span></>}
+    <time datetime={isoDate(date)}>{formatDate(date)}</time>
+  </p>
+</li>

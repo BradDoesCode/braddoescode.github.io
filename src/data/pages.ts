@@ -20,6 +20,11 @@ export const staticPages = {
     title: 'Work',
     description: 'Case studies by Bradley Barbrook, listed newest first, and a chart of how my weekly pace changed.',
   },
+  // UNVERIFIED: ask Brad (the description is a suggestion). Only built when a note is published.
+  notes: {
+    title: 'Notes',
+    description: "Short notes on what I'm learning about building software with AI coding agents.",
+  },
   '404': {
     title: 'Page not found',
     description: 'The page you asked for does not exist on this site.',

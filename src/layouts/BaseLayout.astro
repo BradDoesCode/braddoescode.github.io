@@ -7,6 +7,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { contentSecurityPolicy, siteName, siteShortName } from '../data/site';
 import { OG_HEIGHT, OG_WIDTH } from '../lib/ogSize';
+import { hasPublishedNotes } from '../lib/notes';
 import { cardPath } from '../lib/ogPath';
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
    * the CV, 'both' for the home hero, which also sets the surname in italic.
    */
   displayName?: 'roman' | 'both';
-  /** Open Graph type: 'article' for a case study, 'website' for everything else. */
+  /** Open Graph type: 'article' for a case study or note, 'website' for everything else. */
   ogType?: 'website' | 'article';
 }
 
@@ -35,6 +36,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // Built from the `site` config, so a custom domain changes in one place only.
 const cardTitle = isHome ? siteName : title;
 const ogImage = new URL(cardPath(Astro.url.pathname), Astro.site);
+// The feed is advertised only when there is one to read.
+const hasNotes = await hasPublishedNotes();
 const ogImageAlt = `Preview card titled "${cardTitle}". ${description}`;
 ---
 
@@ -65,6 +68,7 @@ const ogImageAlt = `Preview card titled "${cardTitle}". ${description}`;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="apple-mobile-web-app-title" content={siteShortName} />
+    {hasNotes && <link rel="alternate" type="application/rss+xml" title={`Notes | ${siteName}`} href="/notes/rss.xml" />}
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={fullTitle} />
