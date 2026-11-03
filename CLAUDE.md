@@ -53,6 +53,8 @@ Kept in one place so it is easy to change. If you change the stack, edit this se
 
 Agents do not run step 2. Brad does. The `pre-publish` skill hands over the command.
 
+`public/google871e2035b66c9698.html` is the Google Search Console ownership file. It must stay exactly as Google issued it. `npm run check` leaves it out of the page checks (and out of `html-validate`, through `.htmlvalidateignore`) but asserts that it reaches `dist/` unchanged.
+
 ## Commands
 
 These exist now, as scripts in `package.json`. Report what they actually output, and never describe a failing run as passing.
