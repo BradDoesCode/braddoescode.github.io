@@ -26,9 +26,11 @@ interface Props {
   displayName?: 'roman' | 'both';
   /** Open Graph type: 'article' for a case study or note, 'website' for everything else. */
   ogType?: 'website' | 'article';
+  /** Serialised JSON-LD for the page head (src/lib/person.ts). The home page only. */
+  jsonLd?: string;
 }
 
-const { title, description, isHome = false, noindex = false, displayName, ogType = 'website' } = Astro.props;
+const { title, description, isHome = false, noindex = false, displayName, ogType = 'website', jsonLd } = Astro.props;
 
 const fullTitle = isHome ? `${siteName}, software developer` : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -80,6 +82,7 @@ const ogImageAlt = `Preview card titled "${cardTitle}". ${description}`;
     <meta property="og:image:height" content={String(OG_HEIGHT)} />
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>

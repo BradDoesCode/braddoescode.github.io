@@ -8,6 +8,7 @@ import { cv } from '../data/cv';
 import { staticPages } from '../data/pages';
 import { githubUrl, linkedinUrl } from '../data/site';
 import { formatMonth, now } from '../data/now';
+import { personJsonLd } from '../lib/person';
 import { getWork, hasPublishedWork } from '../lib/work';
 
 // Years and wording follow src/data/cv.ts, apart from the FiveM line.
@@ -32,6 +33,7 @@ const featured = (await getWork()).slice(0, 3);
   description={staticPages.home.description}
   isHome
   displayName="both"
+  jsonLd={personJsonLd(Astro.site!)}
 >
   <Hero title={cv.basics.name} eyebrow={`Software developer, ${cv.basics.location}`}>
     {/* Source: the case studies' wording. The CV profile has its own, shorter text. */}
