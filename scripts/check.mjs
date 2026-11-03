@@ -80,10 +80,14 @@ async function stage(name, fn, { fatal = false } = {}) {
   return ok || !fatal;
 }
 
+const GOOGLE_VERIFICATION = /^google[0-9a-f]{16}\.html$/;
+
 async function htmlFiles(dir) {
   const found = [];
   for (const entry of await readdir(dir, { withFileTypes: true, recursive: true })) {
     if (entry.isFile() && entry.name.endsWith('.html')) {
+      // Search Console verification file at the root of dist/: not a page.
+      if (entry.parentPath === dir && GOOGLE_VERIFICATION.test(entry.name)) continue;
       found.push(join(entry.parentPath, entry.name));
     }
   }
@@ -529,6 +533,16 @@ async function assertOutput() {
   }
   for (const needed of ['404.html', 'robots.txt', 'sitemap-index.xml']) {
     if (!existsSync(join(dist, needed))) fail(`dist/${needed} is missing`);
+  }
+
+  // A Search Console verification file in public/ must reach dist/ byte for byte.
+  for (const entry of await readdir(join(root, 'public'))) {
+    if (!GOOGLE_VERIFICATION.test(entry)) continue;
+    const copied = join(dist, entry);
+    if (!existsSync(copied)) fail(`dist/${entry} is missing`);
+    else if (!(await readFile(copied)).equals(await readFile(join(root, 'public', entry)))) {
+      fail(`dist/${entry} differs from public/${entry}`);
+    }
   }
 
   const pages = await htmlFiles(dist);
