@@ -5,7 +5,8 @@
 //   2. astro build        static build into dist/, then the CV PDF
 //                         (scripts/cv-pdf.mjs), as `npm run build` does
 //   3. output assertions  .nojekyll, CSP meta on every page, no inline
-//                         script/style, no third-party runtime resources,
+//                         script (apart from the home page's JSON-LD Person data,
+//                         which is checked) or style, no third-party runtime resources,
 //                         a link-preview card (og:image) on every page that
 //                         exists in dist/ as a 1200x630 PNG under 300 KB,
 //                         the home-screen icons (apple-touch-icon.png and the web manifest's icons)
@@ -524,6 +525,52 @@ async function notesProblems() {
   return problems;
 }
 
+// The one inline <script> the site allows is a JSON-LD data block: the schema.org
+// Person data on the home page (src/lib/person.ts). It is data, not code, so the
+// CSP does not block it. Nothing else may be inline, so this finds the blocks,
+// checks them, and the caller removes them before the inline-script test.
+const LD_JSON_BLOCK = /<script(?=[^>]*\stype=["']application\/ld\+json["'])(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/gi;
+const PERSON_KEYS = ['@context', '@type', 'name', 'alternateName', 'jobTitle', 'worksFor', 'address', 'url', 'sameAs'];
+const PERSON_ORGANISATION_KEYS = ['@type', 'name'];
+const PERSON_ADDRESS_KEYS = ['@type', 'addressLocality', 'addressRegion', 'addressCountry'];
+
+function structuredDataProblems(html, name, isHome) {
+  const problems = [];
+  const blocks = [...html.matchAll(LD_JSON_BLOCK)].map((m) => m[1]);
+  if (blocks.length === 0) return problems;
+  if (!isHome) problems.push(`${name}: JSON-LD structured data is allowed on the home page only`);
+  if (blocks.length > 1) problems.push(`${name}: expected at most one JSON-LD block, found ${blocks.length}`);
+
+  let data;
+  try {
+    data = JSON.parse(blocks[0]);
+  } catch (error) {
+    problems.push(`${name}: the JSON-LD block is not valid JSON (${error.message})`);
+    return problems;
+  }
+  if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+    problems.push(`${name}: the JSON-LD block is not an object`);
+    return problems;
+  }
+  if (data['@context'] !== 'https://schema.org') problems.push(`${name}: JSON-LD @context is not https://schema.org`);
+  if (data['@type'] !== 'Person') problems.push(`${name}: JSON-LD @type is not Person`);
+  if (!sameKeys(data, PERSON_KEYS)) problems.push(`${name}: JSON-LD keys are not within the approved set`);
+  if (typeof data.name !== 'string' || data.name === '') problems.push(`${name}: JSON-LD name is missing`);
+  if (typeof data.url !== 'string' || !data.url.startsWith('https://')) problems.push(`${name}: JSON-LD url is not an https URL`);
+  if (!Array.isArray(data.sameAs) || !data.sameAs.every((url) => typeof url === 'string' && url.startsWith('https://'))) {
+    problems.push(`${name}: JSON-LD sameAs is not a list of https URLs`);
+  }
+  if (!data.worksFor || data.worksFor['@type'] !== 'Organization' || !sameKeys(data.worksFor, PERSON_ORGANISATION_KEYS)) {
+    problems.push(`${name}: JSON-LD worksFor is not a plain Organization`);
+  }
+  if (!data.address || data.address['@type'] !== 'PostalAddress' || !sameKeys(data.address, PERSON_ADDRESS_KEYS)) {
+    problems.push(`${name}: JSON-LD address is not a town, county and country only`);
+  }
+  if (EMAIL_PATTERN.test(blocks[0])) problems.push(`${name}: an email address appears in the JSON-LD`);
+  if (UK_PHONE_PATTERN.test(blocks[0])) problems.push(`${name}: a UK phone number appears in the JSON-LD`);
+  return problems;
+}
+
 async function assertOutput() {
   const problems = [];
   const fail = (message) => problems.push(message);
@@ -584,7 +631,9 @@ async function assertOutput() {
     if (/<!--\s*Source:/i.test(html)) fail(`${name}: contains a "Source:" HTML comment`);
 
     // Anything the CSP above would block, or a third party would receive.
-    if (/<script(?![^>]*\ssrc=)/i.test(html)) fail(`${name}: inline <script>`);
+    // The home page's JSON-LD data block is the one exception, checked on its own.
+    problems.push(...structuredDataProblems(html, name, file === join(dist, 'index.html')));
+    if (/<script(?![^>]*\ssrc=)/i.test(html.replace(LD_JSON_BLOCK, ''))) fail(`${name}: inline <script>`);
     if (/<style[\s>]/i.test(html)) fail(`${name}: inline <style>`);
     if (/\sstyle=["']/i.test(html)) fail(`${name}: inline style attribute`);
     if (/\son[a-z]+=["']/i.test(html)) fail(`${name}: inline event handler`);
