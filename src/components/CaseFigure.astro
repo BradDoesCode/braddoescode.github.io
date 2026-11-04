@@ -18,6 +18,16 @@
 // pictures that are close to square. A panel in a pair can set 'focus' to
 // 'left' or 'right' to keep that side of the picture when it is cropped (the
 // default is the centre), for a wider picture whose subject is off to one side.
+//
+// Every picture opens full size. Its <Picture> sits inside a button that points
+// (popovertarget) at a popover, a native top-layer panel that needs no script:
+// the whole uncropped image, a Close button, Escape or a tap anywhere on the dark
+// area (a hidden full-size button behind the image) to dismiss, and focus back on
+// the picture afterwards. The large image is lazy and sits
+// inside a closed popover (display: none), so it is not fetched until the viewer
+// opens. Where the Popover API is missing the button does nothing and the inline
+// picture still shows. The viewers sit just before the caption, outside the
+// scroll region and the pair grid, so they never affect the layout.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -52,6 +62,20 @@ const { panels, scroll = false, regionLabel, eager = false, fit = false } = Astr
 const pair = fit && !scroll && panels.length > 1;
 const imgClass = (p: Panel) =>
   p.focus ? `case-figure__img case-figure__img--focus-${p.focus}` : 'case-figure__img';
+
+// A stable id for each panel's viewer, from the image file name with the folder,
+// the build hash and the extension removed, plus the panel's position.
+const slug = (p: Panel) => {
+  const file = p.image.src.split(/[?#]/)[0]?.split('/').pop() ?? '';
+  const name = (file.split('.')[0] ?? '').toLowerCase();
+  return name.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'image';
+};
+const viewerIds = panels.map((p, i) => `case-figure-view-${slug(p)}-${i + 1}`);
+
+// Widths for the full-size copy: never wider than the source, which is always
+// the largest.
+const fullWidths = (p: Panel) =>
+  [...new Set([...[480, 960, 1440, 1920, 2560].filter((w) => w < p.image.width), p.image.width])];
 ---
 
 <figure
@@ -66,37 +90,77 @@ const imgClass = (p: Panel) =>
   {
     scroll ? (
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">
-        {panels.map((p) => (
-          <Picture
-            class={imgClass(p)}
-            src={p.image}
-            alt={p.alt}
-            widths={p.widths}
-            sizes={p.sizes}
-            formats={['avif', 'webp']}
-            fallbackFormat="jpg"
-            loading={eager ? 'eager' : 'lazy'}
-            pictureAttributes={{ class: 'case-figure__picture' }}
-          />
+        {panels.map((p, i) => (
+          <button type="button" class="case-figure__open" popovertarget={viewerIds[i]}>
+            <Picture
+              class={imgClass(p)}
+              src={p.image}
+              alt={p.alt}
+              widths={p.widths}
+              sizes={p.sizes}
+              formats={['avif', 'webp']}
+              fallbackFormat="jpg"
+              loading={eager ? 'eager' : 'lazy'}
+              pictureAttributes={{ class: 'case-figure__picture' }}
+            />
+            <span class="visually-hidden">View full size</span>
+          </button>
         ))}
       </section>
     ) : (
       <div class={pair ? 'case-figure__pair' : undefined}>
-        {panels.map((p) => (
-          <Picture
-            class={imgClass(p)}
-            src={p.image}
-            alt={p.alt}
-            widths={p.widths}
-            sizes={p.sizes}
-            formats={['avif', 'webp']}
-            fallbackFormat="jpg"
-            loading={eager ? 'eager' : 'lazy'}
-            pictureAttributes={{ class: 'case-figure__picture' }}
-          />
+        {panels.map((p, i) => (
+          <button type="button" class="case-figure__open" popovertarget={viewerIds[i]}>
+            <Picture
+              class={imgClass(p)}
+              src={p.image}
+              alt={p.alt}
+              widths={p.widths}
+              sizes={p.sizes}
+              formats={['avif', 'webp']}
+              fallbackFormat="jpg"
+              loading={eager ? 'eager' : 'lazy'}
+              pictureAttributes={{ class: 'case-figure__picture' }}
+            />
+            <span class="visually-hidden">View full size</span>
+          </button>
         ))}
       </div>
     )
+  }
+  {
+    panels.map((p, i) => (
+      <div popover id={viewerIds[i]} class="case-figure__viewer" role="dialog" aria-label={p.alt}>
+        <button
+          type="button"
+          class="case-figure__dismiss"
+          popovertarget={viewerIds[i]}
+          popovertargetaction="hide"
+          tabindex="-1"
+          aria-hidden="true"
+        />
+        <Picture
+          class="case-figure__zoom"
+          src={p.image}
+          alt={p.alt}
+          widths={fullWidths(p)}
+          sizes="100vw"
+          formats={['avif', 'webp']}
+          fallbackFormat="jpg"
+          loading="lazy"
+          pictureAttributes={{ class: 'case-figure__zoom-picture' }}
+        />
+        <button
+          type="button"
+          class="case-figure__close"
+          popovertarget={viewerIds[i]}
+          popovertargetaction="hide"
+          autofocus
+        >
+          Close
+        </button>
+      </div>
+    ))
   }
   <figcaption class="illus-caption"><slot /></figcaption>
 </figure>
