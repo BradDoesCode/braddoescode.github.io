@@ -73,13 +73,19 @@ At that size we had a full staff team, with a hierarchy running from moderators 
     {
       image: community,
       alt: 'An in-game screenshot of a group of player characters in police-style uniforms posing on a prison staircase, one of them playing an acoustic guitar.',
-      widths: [720, 858],
-      sizes: '(min-width: 64rem) 760px, (min-width: 52rem) calc(100vw - 16.5rem), (min-width: 40rem) calc(100vw - 4rem), calc(100vw - 2.5rem)',
+      widths: [400, 800],
+      sizes: '(min-width: 64rem) 376px, (min-width: 52rem) calc((100vw - 17rem) / 2), (min-width: 40rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2.5rem)',
+    },
+    {
+      image: helicopter,
+      alt: 'An in-game screenshot of a police helicopter flying over a city at night, with lit buildings and a busy road below.',
+      widths: [400, 800],
+      sizes: '(min-width: 64rem) 376px, (min-width: 52rem) calc((100vw - 17rem) / 2), (min-width: 40rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2.5rem)',
     },
   ]}
   fit
 >
-  Players posing for a group photo.
+  Players posing for a group photo, and a police helicopter over the city at night.
 </CaseFigure>
 
 ## What was hard
@@ -89,20 +95,6 @@ Cheaters were always something to watch. Cheat tools existed for ESX, and some o
 My co-owner and I built a custom anticheat, and I wrote most of it, including the detection system. The cheat menus worked by calling certain functions in the framework. We rewrote those functions so they could spot a call that should not happen, and so catch the cheater.
 
 Performance needed the same attention, on the server and in the scripts running on each player's own machine. We used developer tools to look at latency and at how much each script was using.
-
-<CaseFigure
-  panels={[
-    {
-      image: helicopter,
-      alt: 'An in-game screenshot of a police helicopter flying over a city at night, with lit buildings and a busy road below.',
-      widths: [720, 1113],
-      sizes: '(min-width: 64rem) 760px, (min-width: 52rem) calc(100vw - 16.5rem), (min-width: 40rem) calc(100vw - 4rem), calc(100vw - 2.5rem)',
-    },
-  ]}
-  fit
->
-  A police helicopter over the city at night.
-</CaseFigure>
 
 ## How it ended
 
