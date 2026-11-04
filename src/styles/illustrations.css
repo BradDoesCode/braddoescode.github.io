@@ -530,6 +530,32 @@ main .case-figure section.case-figure__scroll {
   object-fit: contain;
 }
 
+/* Two or more pictures side by side (the 'fit' prop with several panels). One
+   column below 40rem, so each is a decent size at 320px, and two equal columns
+   from there. Each box is a square set by CSS, so the space is reserved before
+   the image loads, and object-fit crops the small excess of a near-square
+   picture so both line up at the same height. */
+.case-figure__pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.case-figure--fit.case-figure--pair .case-figure__img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 40rem) {
+  .case-figure__pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 40rem) {
   .case-figure--strip .case-figure__img {
     height: 28rem;

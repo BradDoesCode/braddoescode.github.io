@@ -12,7 +12,10 @@
 // 'fit' is for a single picture that should simply fill the column, such as
 // a screenshot. It drops the fixed strip height: the image fills the column, up
 // to a maximum height, scales down on narrow screens and never scrolls sideways.
-// Use it instead of 'scroll', not with it.
+// Use it instead of 'scroll', not with it. With 'fit' and two or more panels the
+// pictures sit side by side in a row of equal squares (two columns from 40rem,
+// one column below), cropped slightly to match, under one caption. Use it for
+// pictures that are close to square.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -41,9 +44,18 @@ interface Props {
 }
 
 const { panels, scroll = false, regionLabel, eager = false, fit = false } = Astro.props;
+const pair = fit && !scroll && panels.length > 1;
 ---
 
-<figure class={fit ? 'case-figure case-figure--fit' : 'case-figure case-figure--strip'}>
+<figure
+  class={
+    fit
+      ? pair
+        ? 'case-figure case-figure--fit case-figure--pair'
+        : 'case-figure case-figure--fit'
+      : 'case-figure case-figure--strip'
+  }
+>
   {
     scroll ? (
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">
@@ -62,19 +74,21 @@ const { panels, scroll = false, regionLabel, eager = false, fit = false } = Astr
         ))}
       </section>
     ) : (
-      panels.map((p) => (
-        <Picture
-          class="case-figure__img"
-          src={p.image}
-          alt={p.alt}
-          widths={p.widths}
-          sizes={p.sizes}
-          formats={['avif', 'webp']}
-          fallbackFormat="jpg"
-          loading={eager ? 'eager' : 'lazy'}
-          pictureAttributes={{ class: 'case-figure__picture' }}
-        />
-      ))
+      <div class={pair ? 'case-figure__pair' : undefined}>
+        {panels.map((p) => (
+          <Picture
+            class="case-figure__img"
+            src={p.image}
+            alt={p.alt}
+            widths={p.widths}
+            sizes={p.sizes}
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            loading={eager ? 'eager' : 'lazy'}
+            pictureAttributes={{ class: 'case-figure__picture' }}
+          />
+        ))}
+      </div>
     )
   }
   <figcaption class="illus-caption"><slot /></figcaption>
