@@ -1,25 +1,47 @@
 ---
 title: "The game server that taught me to code"
-summary: "A British-themed roleplay server for GTA V that I ran with a co-owner, and how running it turned a player into a developer."
+summary: "A British-themed roleplay server for GTA V that I ran with a co-owner, and how running it led me into software development."
 date: 2026-11-04
-years: "2022" # UNVERIFIED: ask Brad
+years: "2019" # UNVERIFIED: ask Brad, the end year
 order: 6
-role: "Co-owner and developer"
+role: "Owner and developer"
 tech: ["Lua", "ESX", "MySQL"]
 draft: true
 ---
 
+import CaseFigure from '../../components/CaseFigure.astro';
+import emergency from '../../assets/roleplay-server-emergency.webp';
+import pursuit from '../../assets/roleplay-server-pursuit.webp';
+import community from '../../assets/roleplay-server-community.webp';
+import helicopter from '../../assets/roleplay-server-helicopter.webp';
+
 ## What it was
 
-This is a personal project, and it is where my coding started. I ran a British-themed roleplay server with a co-owner, on FiveM, a platform for running your own modded multiplayer servers for GTA V. {/* UNVERIFIED: ask Brad, what the British theme meant in practice, in a sentence or two */}
+This is a personal project, and it is where my coding started. I owned a British-themed roleplay server with a co-owner, on FiveM, a platform for running your own modded multiplayer servers for GTA V. We were both developers. The theme meant British emergency services, food and drink, cars and so on.
 
-Before it I had spent about ten years in retail and team-leading roles. The server was my way into code.
+<CaseFigure
+  panels={[
+    {
+      image: emergency,
+      alt: 'An in-game screenshot from the server: a British-style police van, a fire engine and an ambulance parked side by side at sunset, with a police officer character standing in front of them. The number plates are blurred.',
+      widths: [1017, 1787],
+      sizes: '(min-width: 40rem) 1017px, 872px',
+    },
+  ]}
+  scroll
+  eager
+  regionLabel="In-game screenshot of emergency vehicles, scrolls sideways"
+>
+  An in-game screenshot from the server, with the number plates blurred. Scroll sideways to see all of it.
+</CaseFigure>
+
+Before it I had spent about ten years in retail and team-leading roles.
 
 ## How it started
 
 I was a player first, on someone else's server. I became friends with its owner, and I started by making custom vehicles for it.
 
-That server shut down because the running costs were too high. So I started my own, and I learned Lua as I went. The server was live while I learned, so I was picking up the language on something real people were playing on.
+That server shut down because the running costs were too high. So I started my own, and I learned Lua as I went. We built it from a base, so it was live quickly, and we had a test server where we did the coding.
 
 ## What I built
 
@@ -29,17 +51,64 @@ My first fully custom Lua script was a forklift worker job. Pallets spawn in, th
 
 The server ran on the ESX framework, with a large MySQL database holding all of the player data. My co-owner could code too, and helped with bug fixes. Mostly we each worked on our own things.
 
+<CaseFigure
+  panels={[
+    {
+      image: pursuit,
+      alt: 'An in-game screenshot from a helicopter camera view: several British-style police cars have boxed in a red sports car on a pavement, with officer characters standing around it.',
+      widths: [669, 1272],
+      sizes: '(min-width: 40rem) 669px, 572px',
+    },
+  ]}
+  scroll
+  regionLabel="In-game screenshot of a police pursuit, scrolls sideways"
+>
+  An in-game screenshot from the server. Scroll sideways to see all of it.
+</CaseFigure>
+
 ## Running the community
 
 The community grew past 1,000 members, and at its peak the server was full at 64 players every night.
 
 At that size we had a full staff team, with a hierarchy running from moderators up to staff managers. Each role had different permissions, both on the game server and on Discord.
 
+<CaseFigure
+  panels={[
+    {
+      image: community,
+      alt: 'An in-game screenshot of a group of player characters in police-style uniforms posing on a prison staircase, one of them playing an acoustic guitar.',
+      widths: [406, 812],
+      sizes: '(min-width: 40rem) 406px, 348px',
+    },
+  ]}
+  scroll
+  regionLabel="In-game screenshot of players on a staircase, scrolls sideways"
+>
+  An in-game screenshot from the server: a group of players posing on a prison staircase.
+</CaseFigure>
+
 ## What was hard
 
-Cheaters were always something to watch. Cheat tools existed for ESX, and some of them let a player give themselves player-owned vehicles, money and the like. We built a custom anticheat to catch that kind of thing.
+Cheaters were always something to watch. Cheat tools existed for ESX, and some of them let a player give themselves player-owned vehicles, money and the like.
+
+My co-owner and I built a custom anticheat, and I wrote most of it, including the detection system. The cheat menus worked by calling certain functions in the framework. We rewrote those functions so they could spot a call that should not happen, and so catch the cheater.
 
 Performance needed the same attention, on the server and in the scripts running on each player's own machine. We used developer tools to look at latency and at how much each script was using.
+
+<CaseFigure
+  panels={[
+    {
+      image: helicopter,
+      alt: 'An in-game screenshot of a police helicopter flying over a city at night, with lit buildings and a busy road below.',
+      widths: [508, 1016],
+      sizes: '(min-width: 40rem) 508px, 436px',
+    },
+  ]}
+  scroll
+  regionLabel="In-game screenshot of a police helicopter at night, scrolls sideways"
+>
+  An in-game screenshot from the server.
+</CaseFigure>
 
 ## How it ended
 
@@ -49,4 +118,4 @@ My son was born, and I no longer had the time to run the server. I stepped away,
 
 There was no single moment where it clicked. I was enjoying building things for the server, and then I realised I could do this as a job.
 
-It got me to where I am today, working as a software developer. {/* UNVERIFIED: ask Brad, how the server led to his first developer job, and what he took from it into that role */}
+My interest in coding grew. I searched for entry-level jobs and found an apprenticeship, and I started as an apprentice at Digitwell Solutions in 2022. The server got me to where I am today, working as a software developer.
