@@ -572,6 +572,132 @@ main .case-figure section.case-figure__scroll {
   }
 }
 
+/* Each picture is a button that opens it full size (a popover, so no script).
+   The button is reset so every mode lays out exactly as the bare picture did. */
+.case-figure__open {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  cursor: zoom-in;
+}
+
+.case-figure--fit .case-figure__open {
+  width: 100%;
+}
+
+.case-figure__scroll .case-figure__open {
+  flex: none;
+}
+
+/* The scroll region clips what falls outside it, so draw its focus ring inside. */
+.case-figure__scroll .case-figure__open:focus-visible {
+  outline-offset: -4px;
+}
+
+/* The full-size viewer. It is hidden unless open, so a browser without the
+   Popover API never shows it (and never loads its image). Dark in both themes,
+   from the page tokens: the ink colour in light, the page colour in dark. Its
+   own text and focus ring take the opposite one. */
+.case-figure__viewer {
+  --viewer-bg: var(--fg);
+  --viewer-fg: var(--bg);
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--space-6) var(--space-3) var(--space-3);
+  border: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--viewer-bg);
+  color: var(--viewer-fg);
+}
+
+.case-figure__viewer:popover-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-figure__viewer::backdrop {
+  background: var(--viewer-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  .case-figure__viewer {
+    --viewer-bg: var(--bg);
+    --viewer-fg: var(--fg);
+  }
+}
+
+/* The picture element goes out of the box tree so the image can size itself
+   against the viewer. The whole picture is shown, never cropped or enlarged. */
+.case-figure__zoom-picture {
+  display: contents;
+}
+
+.case-figure__zoom {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.case-figure__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--viewer-fg);
+  border-radius: 2px;
+  background: var(--viewer-bg);
+  color: var(--viewer-fg);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.case-figure__close:is(:hover, :focus-visible) {
+  background: var(--viewer-fg);
+  color: var(--viewer-bg);
+}
+
+.case-figure__close:focus-visible {
+  outline-color: var(--viewer-fg);
+}
+
+/* On paper the pictures are plain pictures and the viewers are gone. */
+@media print {
+  .case-figure__viewer {
+    display: none !important;
+  }
+
+  .case-figure__open {
+    cursor: auto;
+  }
+
+  .case-figure__open .visually-hidden {
+    display: none;
+  }
+}
+
 /* ---------- A page load, before and after (components/PageLoad.astro) ----------
    Reuses the .flows / .flow styles above. The blocks and wait bars are drawn in
    CSS, carry no text and are hidden from screen readers. */
