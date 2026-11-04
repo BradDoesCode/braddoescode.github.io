@@ -620,6 +620,7 @@ main .case-figure section.case-figure__scroll {
   padding: var(--space-6) var(--space-3) var(--space-3);
   border: 0;
   overflow: hidden;
+  overscroll-behavior: contain;
   box-sizing: border-box;
   background: var(--viewer-bg);
   color: var(--viewer-fg);
@@ -629,6 +630,15 @@ main .case-figure section.case-figure__scroll {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* The page does not scroll behind an open viewer. The gutter is kept so the page
+   does not shift sideways when the scrollbar goes. Screen only. */
+@media screen {
+  html:has(.case-figure__viewer:popover-open) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
 }
 
 .case-figure__viewer::backdrop {
