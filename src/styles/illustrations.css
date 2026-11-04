@@ -513,6 +513,59 @@ main .case-figure section.case-figure__scroll {
   height: 24rem;
 }
 
+/* A single picture that fills the column (the 'fit' prop). No fixed height and
+   no scroll region: it scales down with the column, down to 320px. The width
+   and height attributes reserve the box at the right ratio before the image
+   loads, so nothing shifts. The height is capped so a tall picture does not
+   dominate the page, and object-fit centres it in the box without stretching. */
+.case-figure--fit .case-figure__picture {
+  width: 100%;
+}
+
+.case-figure--fit .case-figure__img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 32rem;
+  object-fit: contain;
+}
+
+/* Two or more pictures side by side (the 'fit' prop with several panels). One
+   column below 40rem, so each is a decent size at 320px, and two equal columns
+   from there. Each box is a square set by CSS, so the space is reserved before
+   the image loads, and object-fit crops the small excess of a near-square
+   picture so both line up at the same height. */
+.case-figure__pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.case-figure--fit.case-figure--pair .case-figure__img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* A paired picture whose subject is off to one side keeps that side when it is
+   cropped (the 'focus' field on a panel). */
+.case-figure--fit.case-figure--pair .case-figure__img--focus-left {
+  object-position: left center;
+}
+
+.case-figure--fit.case-figure--pair .case-figure__img--focus-right {
+  object-position: right center;
+}
+
+@media (min-width: 40rem) {
+  .case-figure__pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 40rem) {
   .case-figure--strip .case-figure__img {
     height: 28rem;

@@ -1,0 +1,123 @@
+---
+title: "The game server that taught me to code"
+summary: "A British-themed roleplay server for GTA V that I ran with a co-owner, and how running it led me into software development."
+date: 2026-11-04
+years: "2019–2022"
+order: 6
+role: "Owner and developer"
+tech: ["Lua", "ESX", "MySQL"]
+draft: false
+---
+
+import CaseFigure from '../../components/CaseFigure.astro';
+import emergency from '../../assets/roleplay-server-emergency.webp';
+import pursuit from '../../assets/roleplay-server-pursuit.webp';
+import community from '../../assets/roleplay-server-community.webp';
+import extinguisher from '../../assets/roleplay-server-extinguisher.webp';
+import carMeet from '../../assets/roleplay-server-car-meet.webp';
+
+## What it was
+
+This is a personal project, and it is where my coding started. I ran a British-themed roleplay server with a co-owner, on FiveM, a platform for running your own modded multiplayer servers for GTA V. We were both developers. The theme meant British emergency services, food and drink, cars and so on. I was working in retail and team-leading roles at the time.
+
+<CaseFigure
+  panels={[
+    {
+      image: emergency,
+      alt: 'An in-game screenshot from the server: a British-style police van, a fire engine and an ambulance parked side by side at sunset, with a police officer character standing in front of them.',
+      widths: [720, 1440],
+      sizes: '(min-width: 64rem) 760px, (min-width: 52rem) calc(100vw - 16.5rem), (min-width: 40rem) calc(100vw - 4rem), calc(100vw - 2.5rem)',
+    },
+  ]}
+  fit
+  eager
+>
+  In-game screenshot. Police, fire and ambulance were a big part of the British theme.
+</CaseFigure>
+
+## How it started
+
+I was a player first, on someone else's server. I became friends with its owner, and I started by making custom vehicles for it.
+
+That server shut down because the running costs were too high. So I started my own, and I learned Lua as I went. We built it from a base, so it was live quickly, and we had a test server where we did the coding.
+
+## What I built
+
+I began by fixing bugs in scripts that already existed, and by changing them to fit the theme of our server. As my knowledge and confidence grew, I started writing scripts of my own.
+
+My first fully custom Lua script was a forklift worker job. Pallets spawn in, the player picks them up and delivers them to a location, and they are rewarded on every delivery. It is a small job, but it was the first one I wrote from nothing.
+
+The server ran on the ESX framework, with a large MySQL database holding all of the player data. My co-owner could code too, and helped with bug fixes. Mostly we each worked on our own things.
+
+<CaseFigure
+  panels={[
+    {
+      image: pursuit,
+      alt: 'An in-game screenshot from a helicopter camera view: several British-style police cars have boxed in a red sports car on a pavement, with officer characters standing around it.',
+      widths: [720, 1272],
+      sizes: '(min-width: 64rem) 760px, (min-width: 52rem) calc(100vw - 16.5rem), (min-width: 40rem) calc(100vw - 4rem), calc(100vw - 2.5rem)',
+    },
+  ]}
+  fit
+>
+  A police chase, seen through the helicopter camera.
+</CaseFigure>
+
+## Running the community
+
+The community grew past 1,000 members, and at its peak the server was full at 64 players every night.
+
+At that size we had a full staff team, with a hierarchy running from moderators up to staff managers. Each role had different permissions, both on the game server and on Discord.
+
+<CaseFigure
+  panels={[
+    {
+      image: community,
+      alt: 'An in-game screenshot of a group of player characters in police-style uniforms posing on a prison staircase, one of them playing an acoustic guitar.',
+      widths: [400, 800],
+      sizes: '(min-width: 64rem) 376px, (min-width: 52rem) calc((100vw - 17rem) / 2), (min-width: 40rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2.5rem)',
+    },
+    {
+      image: extinguisher,
+      alt: 'An in-game screenshot of a police officer character using a fire extinguisher on the smoking front wheel of a white rally-style car, while a man in a red tartan outfit looks on.',
+      focus: 'left',
+      widths: [400, 800],
+      sizes: '(min-width: 64rem) 376px, (min-width: 52rem) calc((100vw - 17rem) / 2), (min-width: 40rem) calc((100vw - 4.5rem) / 2), calc(100vw - 2.5rem)',
+    },
+  ]}
+  fit
+>
+  Players posing for a group photo, and an officer dealing with a smoking car.
+</CaseFigure>
+
+## What was hard
+
+Cheaters were always something to watch. Cheat tools existed for ESX, and some of them let a player give themselves player-owned vehicles, money and the like.
+
+My co-owner and I built a custom anticheat, and I wrote most of it, including the detection system. The cheat menus worked by calling certain functions in the framework. We rewrote those functions so they could spot a call that should not happen, and so catch the cheater.
+
+Performance needed the same attention, on the server and in the scripts running on each player's own machine. We used developer tools to look at latency and at how much each script was using.
+
+<CaseFigure
+  panels={[
+    {
+      image: carMeet,
+      alt: "An in-game screenshot of a car park at night full of players' cars, including a pink coupé, a vintage black saloon and two white hatchbacks, with the city lit up behind them.",
+      widths: [720, 1440],
+      sizes: '(min-width: 64rem) 760px, (min-width: 52rem) calc(100vw - 16.5rem), (min-width: 40rem) calc(100vw - 4rem), calc(100vw - 2.5rem)',
+    },
+  ]}
+  fit
+>
+  Players' cars gathered in a car park at night.
+</CaseFigure>
+
+## How it ended
+
+My son was born, and I no longer had the time to run the server. I stepped away, and it closed down shortly after.
+
+## What it led to
+
+There was no single moment where it clicked. I was enjoying building things for the server, and then I realised I could do this as a job.
+
+My interest in coding grew. I searched for entry-level jobs and found an apprenticeship, and I started as an apprentice at Digitwell Solutions in 2022. The server got me to where I am today, working as a software developer.

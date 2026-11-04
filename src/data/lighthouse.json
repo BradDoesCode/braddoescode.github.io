@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-11-02",
+  "measuredAt": "2026-11-04",
   "lighthouseVersion": "13.6.0",
   "modes": [
     "mobile",
@@ -105,6 +105,20 @@
       }
     },
     "/work/page-speed/": {
+      "mobile": {
+        "performance": 100,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "desktop": {
+        "performance": 100,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      }
+    },
+    "/work/roleplay-server/": {
       "mobile": {
         "performance": 100,
         "accessibility": 100,
