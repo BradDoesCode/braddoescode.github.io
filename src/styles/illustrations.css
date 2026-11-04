@@ -550,6 +550,16 @@ main .case-figure section.case-figure__scroll {
   object-position: center;
 }
 
+/* A paired picture whose subject is off to one side keeps that side when it is
+   cropped (the 'focus' field on a panel). */
+.case-figure--fit.case-figure--pair .case-figure__img--focus-left {
+  object-position: left center;
+}
+
+.case-figure--fit.case-figure--pair .case-figure__img--focus-right {
+  object-position: right center;
+}
+
 @media (min-width: 40rem) {
   .case-figure__pair {
     grid-template-columns: repeat(2, minmax(0, 1fr));

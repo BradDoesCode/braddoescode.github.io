@@ -15,7 +15,9 @@
 // Use it instead of 'scroll', not with it. With 'fit' and two or more panels the
 // pictures sit side by side in a row of equal squares (two columns from 40rem,
 // one column below), cropped slightly to match, under one caption. Use it for
-// pictures that are close to square.
+// pictures that are close to square. A panel in a pair can set 'focus' to
+// 'left' or 'right' to keep that side of the picture when it is cropped (the
+// default is the centre), for a wider picture whose subject is off to one side.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -26,6 +28,9 @@ interface Panel {
   widths: number[];
   /** The 'sizes' attribute: how wide the image is shown. */
   sizes: string;
+  /** In a pair, which side to keep when the picture is cropped to a square.
+   *  Defaults to the centre. */
+  focus?: 'left' | 'right';
 }
 
 interface Props {
@@ -45,6 +50,8 @@ interface Props {
 
 const { panels, scroll = false, regionLabel, eager = false, fit = false } = Astro.props;
 const pair = fit && !scroll && panels.length > 1;
+const imgClass = (p: Panel) =>
+  p.focus ? `case-figure__img case-figure__img--focus-${p.focus}` : 'case-figure__img';
 ---
 
 <figure
@@ -61,7 +68,7 @@ const pair = fit && !scroll && panels.length > 1;
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">
         {panels.map((p) => (
           <Picture
-            class="case-figure__img"
+            class={imgClass(p)}
             src={p.image}
             alt={p.alt}
             widths={p.widths}
@@ -77,7 +84,7 @@ const pair = fit && !scroll && panels.length > 1;
       <div class={pair ? 'case-figure__pair' : undefined}>
         {panels.map((p) => (
           <Picture
-            class="case-figure__img"
+            class={imgClass(p)}
             src={p.image}
             alt={p.alt}
             widths={p.widths}
