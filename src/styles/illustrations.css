@@ -642,23 +642,45 @@ main .case-figure section.case-figure__scroll {
   }
 }
 
-/* The picture element goes out of the box tree so the image can size itself
-   against the viewer. The whole picture is shown, never cropped or enlarged. */
+/* The picture element goes out of the box tree. The image fills the viewer's
+   content box from the start (so lazy loading fires when the viewer opens, even
+   on a phone) and object-fit shows the whole picture, centred, never cropped. */
 .case-figure__zoom-picture {
   display: contents;
 }
 
 .case-figure__zoom {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  /* Taps on the picture reach the dismiss layer beneath, so they close it. */
+  pointer-events: none;
+}
+
+/* A transparent button over the whole viewer, behind the picture, so a tap on
+   the dark area (or the picture) closes it. Not in the tab order or the
+   accessibility tree: the Close button is the one for keyboard and screen
+   reader users. */
+.case-figure__dismiss {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: zoom-out;
 }
 
 .case-figure__close {
   position: absolute;
+  z-index: 2;
   top: var(--space-3);
   right: var(--space-3);
   min-width: 1.5rem;

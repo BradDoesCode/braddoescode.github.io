@@ -21,8 +21,9 @@
 //
 // Every picture opens full size. Its <Picture> sits inside a button that points
 // (popovertarget) at a popover, a native top-layer panel that needs no script:
-// the whole uncropped image, a Close button, Escape or a click outside to dismiss,
-// and focus back on the picture afterwards. The large image is lazy and sits
+// the whole uncropped image, a Close button, Escape or a tap anywhere on the dark
+// area (a hidden full-size button behind the image) to dismiss, and focus back on
+// the picture afterwards. The large image is lazy and sits
 // inside a closed popover (display: none), so it is not fetched until the viewer
 // opens. Where the Popover API is missing the button does nothing and the inline
 // picture still shows. The viewers sit just before the caption, outside the
@@ -130,6 +131,14 @@ const fullWidths = (p: Panel) =>
   {
     panels.map((p, i) => (
       <div popover id={viewerIds[i]} class="case-figure__viewer" role="dialog" aria-label={p.alt}>
+        <button
+          type="button"
+          class="case-figure__dismiss"
+          popovertarget={viewerIds[i]}
+          popovertargetaction="hide"
+          tabindex="-1"
+          aria-hidden="true"
+        />
         <Picture
           class="case-figure__zoom"
           src={p.image}
