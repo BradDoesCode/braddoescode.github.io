@@ -218,6 +218,7 @@ export const cv: Cv = {
       year: '2019–2022',
       summary:
         'A British-themed roleplay server for GTA V. I wrote its scripts in Lua and ran the community, which grew to more than 1,000 members. At its peak it was full at 64 players every night.',
+      links: [{ label: 'Case study', url: '/work/roleplay-server/' }],
     },
   ],
 
