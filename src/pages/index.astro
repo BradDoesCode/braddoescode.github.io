@@ -11,10 +11,10 @@ import { formatMonth, now } from '../data/now';
 import { personJsonLd } from '../lib/person';
 import { getWork, hasPublishedWork } from '../lib/work';
 
-// Years and wording follow src/data/cv.ts, apart from the FiveM line.
+// Years and wording follow src/data/cv.ts, apart from the wording of the FiveM line.
 const timeline = [
   { years: '2012\u20132022', text: 'Retail and team-leading roles' },
-  { years: '2022', text: 'Ran a FiveM roleplay server and learned to code' },
+  { years: '2019\u20132022', text: 'Ran a FiveM roleplay server and learned to code' },
   // Source: confirmed by Brad in chat
   {
     years: '2022\u20132025',
@@ -60,13 +60,13 @@ const featured = (await getWork()).slice(0, 3);
 
   <section aria-labelledby="how-heading">
     <h2 id="how-heading" class="section-title">How I got here</h2>
-    {/* Source: confirmed by Brad in chat (23 October 2026) */}
+    {/* Source: confirmed by Brad in chat (23 October 2026); the FiveM dates, 2019 to 2022, confirmed by Brad in chat on 4 November 2026 */}
     <p>
-      After ten years in retail and team-leading roles, I got into code in 2022 by running a British-themed FiveM
-      roleplay server for GTA V. I wrote its scripts in Lua and ran the community, which grew to more than 1,000
+      While I was working in retail and team-leading roles, I got into code by running a British-themed FiveM
+      roleplay server for GTA V, from 2019 to 2022. I wrote its scripts in Lua and ran the community, which grew to more than 1,000
       members. At its peak, the server was full at 64 players every night. It's what made me want to code for a living.
     </p>
-    {/* Source: dates match src/data/cv.ts; the FiveM line is confirmed by Brad in chat (23 October 2026) */}
+    {/* Source: dates match src/data/cv.ts; the FiveM line is confirmed by Brad in chat (23 October 2026), and its dates on 4 November 2026 */}
     <ol class="timeline" aria-label="Career timeline">
       {
         timeline.map((item) => (
