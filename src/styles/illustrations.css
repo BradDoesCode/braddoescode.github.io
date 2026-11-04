@@ -513,6 +513,18 @@ main .case-figure section.case-figure__scroll {
   height: 24rem;
 }
 
+/* A single picture that fills the column (the 'fit' prop). No fixed height and
+   no scroll region: it scales down with the column, down to 320px. */
+.case-figure--fit .case-figure__picture {
+  width: 100%;
+}
+
+.case-figure--fit .case-figure__img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
 @media (min-width: 40rem) {
   .case-figure--strip .case-figure__img {
     height: 28rem;

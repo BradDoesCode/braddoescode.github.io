@@ -8,6 +8,11 @@
 // keyboard can focus, so the page itself never
 // scrolls sideways at 320px. The strip is shown at a fixed height and keeps its
 // proportions, so it is scrolled at every width, not squeezed to fit.
+//
+// 'fit' is for a single picture that should simply fill the column, such as
+// a screenshot. It drops the fixed strip height: the image takes the full width
+// of the column, scales down on narrow screens and never scrolls sideways.
+// Use it instead of 'scroll', not with it.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -30,12 +35,15 @@ interface Props {
   regionLabel?: string;
   /** Load straight away, for an image near the top of the page. */
   eager?: boolean;
+  /** Fill the column width at its own proportions, with no fixed height and
+   *  no sideways scroll. For a single picture. */
+  fit?: boolean;
 }
 
-const { panels, scroll = false, regionLabel, eager = false } = Astro.props;
+const { panels, scroll = false, regionLabel, eager = false, fit = false } = Astro.props;
 ---
 
-<figure class="case-figure case-figure--strip">
+<figure class={fit ? 'case-figure case-figure--fit' : 'case-figure case-figure--strip'}>
   {
     scroll ? (
       <section class="case-figure__scroll" aria-label={regionLabel} tabindex="0">
