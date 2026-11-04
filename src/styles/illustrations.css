@@ -514,18 +514,20 @@ main .case-figure section.case-figure__scroll {
 }
 
 /* A single picture that fills the column (the 'fit' prop). No fixed height and
-   no scroll region: it scales down with the column, down to 320px, and is
-   capped in height so a tall picture does not dominate the page. */
+   no scroll region: it scales down with the column, down to 320px. The width
+   and height attributes reserve the box at the right ratio before the image
+   loads, so nothing shifts. The height is capped so a tall picture does not
+   dominate the page, and object-fit centres it in the box without stretching. */
 .case-figure--fit .case-figure__picture {
   width: 100%;
 }
 
 .case-figure--fit .case-figure__img {
-  width: auto;
+  width: 100%;
   max-width: 100%;
   height: auto;
   max-height: 32rem;
-  margin-inline: auto;
+  object-fit: contain;
 }
 
 @media (min-width: 40rem) {
