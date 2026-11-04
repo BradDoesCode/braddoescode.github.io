@@ -605,7 +605,8 @@ main .case-figure section.case-figure__scroll {
 /* The full-size viewer. It is hidden unless open, so a browser without the
    Popover API never shows it (and never loads its image). Dark in both themes,
    from the page tokens: the ink colour in light, the page colour in dark. Its
-   own text and focus ring take the opposite one. */
+   own text and focus ring take the opposite one. The background is solid unless
+   the browser can blur what is behind it (see below). */
 .case-figure__viewer {
   --viewer-bg: var(--fg);
   --viewer-fg: var(--bg);
@@ -642,13 +643,34 @@ main .case-figure section.case-figure__scroll {
 }
 
 .case-figure__viewer::backdrop {
-  background: var(--viewer-bg);
+  background: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
   .case-figure__viewer {
     --viewer-bg: var(--bg);
     --viewer-fg: var(--fg);
+  }
+}
+
+/* Where the browser can blur what is behind it, the viewer is translucent: the
+   page shows through as soft shapes, too blurred to read, so the picture stays
+   the focus. Reduced transparency and forced colours keep it solid, as does a
+   browser with no backdrop blur (it never gets this rule), so text never shows
+   through sharp. The Close button keeps its own solid background. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .case-figure__viewer {
+    background: color-mix(in srgb, var(--viewer-bg) 75%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .case-figure__viewer {
+    background: var(--viewer-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
