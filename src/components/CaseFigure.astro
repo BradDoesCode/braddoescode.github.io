@@ -64,12 +64,11 @@ const imgClass = (p: Panel) =>
 
 // A stable id for each panel's viewer, from the image file name with the folder,
 // the build hash and the extension removed, plus the panel's position.
-const slug = (p: Panel) =>
-  (p.image.src.split(/[?#]/)[0].split('/').pop() ?? 'image')
-    .split('.')[0]
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '') || 'image';
+const slug = (p: Panel) => {
+  const file = p.image.src.split(/[?#]/)[0]?.split('/').pop() ?? '';
+  const name = (file.split('.')[0] ?? '').toLowerCase();
+  return name.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'image';
+};
 const viewerIds = panels.map((p, i) => `case-figure-view-${slug(p)}-${i + 1}`);
 
 // Widths for the full-size copy: never wider than the source, which is always
